@@ -1,9 +1,9 @@
-package org.fiiiiive.zippop.popup_goods;
+package com.fiiiiive.zippop.popup_goods;
 
-import org.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
-import org.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import org.fiiiiive.zippop.popup_store.PopupStore;
-import org.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import com.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

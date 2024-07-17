@@ -1,9 +1,9 @@
-package org.fiiiiive.zippop.popup_store.res;
+package com.fiiiiive.zippop.popup_store.res;
 
 
-import org.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import org.fiiiiive.zippop.popup_review.res.PopupReviewRes;
-import org.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_store.PopupStore;
 import lombok.*;
 
 import java.util.ArrayList;

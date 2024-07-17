@@ -1,4 +1,4 @@
-package org.fiiiiive.zippop.popup_review;
+package com.fiiiiive.zippop.popup_review;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

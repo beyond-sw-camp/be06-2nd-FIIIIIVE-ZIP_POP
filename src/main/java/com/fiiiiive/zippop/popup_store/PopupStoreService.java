@@ -1,11 +1,11 @@
-package org.fiiiiive.zippop.popup_store;
+package com.fiiiiive.zippop.popup_store;
 
-import org.fiiiiive.zippop.popup_goods.PopupGoods;
-import org.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import org.fiiiiive.zippop.popup_review.PopupReview;
-import org.fiiiiive.zippop.popup_review.res.PopupReviewRes;
-import org.fiiiiive.zippop.popup_store.req.PopupStoreReq;
-import org.fiiiiive.zippop.popup_store.res.PopupStoreRes;
+import com.fiiiiive.zippop.popup_goods.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_review.PopupReview;
+import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_store.req.PopupStoreReq;
+import com.fiiiiive.zippop.popup_store.res.PopupStoreRes;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

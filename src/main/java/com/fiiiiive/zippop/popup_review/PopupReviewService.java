@@ -1,10 +1,10 @@
-package org.fiiiiive.zippop.popup_review;
+package com.fiiiiive.zippop.popup_review;
 
 
-import org.fiiiiive.zippop.popup_review.req.PopupReviewReq;
-import org.fiiiiive.zippop.popup_review.res.PopupReviewRes;
-import org.fiiiiive.zippop.popup_store.PopupStore;
-import org.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import com.fiiiiive.zippop.popup_review.req.PopupReviewReq;
+import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
