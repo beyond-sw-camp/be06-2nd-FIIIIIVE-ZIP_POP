@@ -1,7 +1,7 @@
-package com.fiiiiive.zippop.popup_goods;
+package com.fiiiiive.zippop.popup_goods.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import jakarta.persistence.*;
 import lombok.*;
 

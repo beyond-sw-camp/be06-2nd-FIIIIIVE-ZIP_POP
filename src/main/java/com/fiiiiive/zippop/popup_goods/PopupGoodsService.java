@@ -1,8 +1,9 @@
 package com.fiiiiive.zippop.popup_goods;
 
-import com.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
-import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.model.req.PopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,8 @@ public class PopupGoodsService {
         }
         List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
         for (PopupGoods popupGoods : popupGoodsList) {
-            PopupGoodsRes popupGoodsRes = convertToPopupGoodsRes(popupGoods);
+            PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
+            popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
             popupGoodsResList.add(popupGoodsRes);
         }
 
@@ -64,7 +66,8 @@ public class PopupGoodsService {
         }
         List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
         for (PopupGoods popupGoods : popupGoodsList) {
-            PopupGoodsRes popupGoodsRes = convertToPopupGoodsRes(popupGoods);
+            PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
+            popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
             popupGoodsResList.add(popupGoodsRes);
         }
 

@@ -1,4 +1,4 @@
-package com.fiiiiive.zippop.popup_store.req;
+package com.fiiiiive.zippop.popup_store.model.req;
 
 import lombok.*;
 
@@ -13,5 +13,5 @@ public class PopupStoreReq {
     private String storeAddr;
     private String storeDate;
     private String category;
-    private Integer companyIdx;
+    private Long companyIdx;
 }

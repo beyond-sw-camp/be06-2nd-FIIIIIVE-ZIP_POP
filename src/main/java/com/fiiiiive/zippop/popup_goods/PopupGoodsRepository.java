@@ -1,5 +1,6 @@
 package com.fiiiiive.zippop.popup_goods;
 
+import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

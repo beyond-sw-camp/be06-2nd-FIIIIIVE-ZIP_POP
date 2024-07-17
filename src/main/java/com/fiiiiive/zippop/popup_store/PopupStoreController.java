@@ -1,7 +1,7 @@
 package com.fiiiiive.zippop.popup_store;
 
-import com.fiiiiive.zippop.popup_store.req.PopupStoreReq;
-import com.fiiiiive.zippop.popup_store.res.PopupStoreRes;
+import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
+import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,4 +65,10 @@ public class PopupStoreController {
 //        Optional<List<PopupStoreRes>> popupStoreResList = popupStoreService.findByStoreDate(store_date);
 //        return ResponseEntity.ok(popupStoreResList);
 //    }
+
+    @GetMapping("/search_company_idx")
+    public ResponseEntity<Optional<List<PopupStoreRes>>> search_company_idx(@RequestParam Long company_idx) {
+        Optional<List<PopupStoreRes>> popupStoreResList = popupStoreService.findByCompanyIdx(company_idx);
+        return ResponseEntity.ok(popupStoreResList);
+    }
 }
