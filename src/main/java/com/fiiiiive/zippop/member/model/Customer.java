@@ -1,10 +1,11 @@
 package com.fiiiiive.zippop.member.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fiiiiive.zippop.post.model.Post;
+import com.fiiiiive.zippop.post.model.res.PostRes;
+import jakarta.persistence.*;
 import lombok.*;
+import java.util.*;
 
 @Entity
 @Getter
@@ -25,4 +26,7 @@ public class Customer {
     private Integer point;
     private String role;
     private Boolean enabled;
+    @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
+    private List<Post> postsList = new ArrayList<>();
 }

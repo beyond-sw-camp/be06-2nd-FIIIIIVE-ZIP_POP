@@ -1,10 +1,11 @@
 package com.fiiiiive.zippop.member.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fiiiiive.zippop.popup_store.model.PopupStore;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.*;
 
 @Entity
 @Getter
@@ -23,4 +24,7 @@ public class Company {
     private String crn;
     private Boolean enabled;
     private String role;
+    @OneToMany(mappedBy = "company")
+    @JsonManagedReference
+    private List<PopupStore> popupStoreList = new ArrayList<>();
 }

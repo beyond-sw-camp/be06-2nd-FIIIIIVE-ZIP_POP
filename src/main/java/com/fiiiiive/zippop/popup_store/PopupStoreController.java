@@ -1,8 +1,10 @@
 package com.fiiiiive.zippop.popup_store;
 
-import com.fiiiiive.zippop.popup_store.req.PopupStoreReq;
-import com.fiiiiive.zippop.popup_store.res.PopupStoreRes;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
+import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
+import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class PopupStoreController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody PopupStoreReq popupStoreReq) {
-        popupStoreService.register(popupStoreReq);
+    public ResponseEntity<String> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody PopupStoreReq popupStoreReq) {
+        popupStoreService.register(customUserDetails,popupStoreReq);
         return ResponseEntity.ok("등록성공");
     }
 
@@ -65,4 +67,10 @@ public class PopupStoreController {
 //        Optional<List<PopupStoreRes>> popupStoreResList = popupStoreService.findByStoreDate(store_date);
 //        return ResponseEntity.ok(popupStoreResList);
 //    }
+
+    @GetMapping("/search_company_idx")
+    public ResponseEntity<Optional<List<PopupStoreRes>>> search_company_idx(@RequestParam Long company_idx) {
+        Optional<List<PopupStoreRes>> popupStoreResList = popupStoreService.findByCompanyIdx(company_idx);
+        return ResponseEntity.ok(popupStoreResList);
+    }
 }
