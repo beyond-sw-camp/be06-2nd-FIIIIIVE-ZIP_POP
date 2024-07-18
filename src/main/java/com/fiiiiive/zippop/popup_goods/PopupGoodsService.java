@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.fiiiiive.zippop.common.baseresponse.BaseResponseMessage.GOODS_NULL;
+
 @Service
 public class PopupGoodsService {
     private final PopupGoodsRepository popupGoodsRepository;
@@ -89,5 +91,10 @@ public class PopupGoodsService {
         popupGoodsRes.setProductImg(popupGoods.getProductImg());
         popupGoodsRes.setProductAmount(popupGoods.getProductAmount());
         return popupGoodsRes;
+    }
+    public Integer getPopupGoodsPrice(Long id) throws BaseException {
+        PopupGoods popupGoods = popupGoodsRepository.findById(id).orElseThrow(() -> new BaseException(GOODS_NULL));
+
+        return popupGoods.getProductPrice();
     }
 }
