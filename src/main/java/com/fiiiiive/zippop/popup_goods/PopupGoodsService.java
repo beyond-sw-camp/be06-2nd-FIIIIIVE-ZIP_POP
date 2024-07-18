@@ -1,7 +1,5 @@
 package com.fiiiiive.zippop.popup_goods;
 
-import com.fiiiiive.zippop.common.baseresponse.BaseException;
-
 import com.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
 import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
 import com.fiiiiive.zippop.popup_store.PopupStore;
@@ -94,7 +92,6 @@ public class PopupGoodsService {
         popupGoodsRes.setProductAmount(popupGoods.getProductAmount());
         return popupGoodsRes;
     }
-
     public Integer getPopupGoodsPrice(Long id) throws BaseException {
         PopupGoods popupGoods = popupGoodsRepository.findById(id).orElseThrow(() -> new BaseException(GOODS_NULL));
 

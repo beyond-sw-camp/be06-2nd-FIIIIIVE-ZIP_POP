@@ -1,7 +1,7 @@
-package com.fiiiiive.zippop.popup_review.res;
+package com.fiiiiive.zippop.popup_review.model.res;
 
-import com.fiiiiive.zippop.popup_review.PopupReview;
-import com.fiiiiive.zippop.popup_store.res.PopupStoreRes;
+import com.fiiiiive.zippop.popup_review.model.PopupReview;
+import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
 import lombok.*;
 
 @Getter
@@ -17,7 +17,7 @@ public class PopupReviewRes {
     private PopupStoreRes popupStoreRes;
     private String storeName;
 
-    private PopupReviewRes convertToReviewRes(PopupReview review) {
+    public PopupReviewRes convertToReviewRes(PopupReview review) {
         PopupReviewRes popupReviewRes = new PopupReviewRes();
         popupReviewRes.setReviewTitle(review.getReviewTitle());
         popupReviewRes.setReviewContent(review.getReviewContent());

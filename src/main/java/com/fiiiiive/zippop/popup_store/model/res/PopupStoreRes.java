@@ -1,9 +1,9 @@
-package com.fiiiiive.zippop.popup_store.res;
+package com.fiiiiive.zippop.popup_store.model.res;
 
 
-import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
-import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class PopupStoreRes {
     private String storeImage;
     private Integer totalPeople;
 
-    private PopupStoreRes convertToPopupStoreRes(PopupStore popupStore) {
+    public PopupStoreRes convertToPopupStoreRes(PopupStore popupStore) {
         PopupStoreRes popupStoreRes = PopupStoreRes.builder()
                 .storeName(popupStore.getStoreName())
                 .storeAddr(popupStore.getStoreAddr())

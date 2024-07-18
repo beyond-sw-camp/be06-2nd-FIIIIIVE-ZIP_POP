@@ -1,8 +1,8 @@
 package com.fiiiiive.zippop.popup_review;
 
 
-import com.fiiiiive.zippop.popup_review.req.PopupReviewReq;
-import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_review.model.req.PopupReviewReq;
+import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
