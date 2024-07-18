@@ -1,14 +1,17 @@
-package org.fiiiiive.zippop.popup_goods;
+package com.fiiiiive.zippop.popup_goods;
 
-import org.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
-import org.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
-import org.fiiiiive.zippop.popup_store.PopupStore;
-import org.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import com.fiiiiive.zippop.common.baseresponse.BaseException;
+import com.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.fiiiiive.zippop.common.baseresponse.BaseResponseStatus.COURSE_NULL;
 
 @Service
 public class PopupGoodsService {
@@ -89,5 +92,11 @@ public class PopupGoodsService {
         popupGoodsRes.setProductImg(popupGoods.getProductImg());
         popupGoodsRes.setProductAmount(popupGoods.getProductAmount());
         return popupGoodsRes;
+    }
+
+    public Integer getPopupGoodsPrice(Long id) throws BaseException {
+        PopupGoods popupGoods = popupGoodsRepository.findById(id).orElseThrow(() -> new BaseException(COURSE_NULL));
+
+        return popupGoods.getProductPrice();
     }
 }

@@ -1,7 +1,8 @@
-package org.fiiiiive.zippop.popup_goods;
+package com.fiiiiive.zippop.popup_goods;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.orders.model.Orders;
+import com.fiiiiive.zippop.popup_store.PopupStore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,7 @@ public class PopupGoods {
     @JsonBackReference
     private PopupStore popupStore;
     private String storeName; // 추가된 필드
+
+
+
 }

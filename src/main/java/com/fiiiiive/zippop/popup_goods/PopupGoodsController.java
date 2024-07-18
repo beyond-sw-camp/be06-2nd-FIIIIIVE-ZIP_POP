@@ -1,8 +1,8 @@
-package org.fiiiiive.zippop.popup_goods;
+package com.fiiiiive.zippop.popup_goods;
 
 
-import org.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
-import org.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_goods.req.PopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.res.PopupGoodsRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +48,7 @@ public class PopupGoodsController {
         Optional<List<PopupGoods>> popupGoodsList = popupGoodsService.findByProductPrice(product_price);
         return ResponseEntity.ok(popupGoodsList);
     }
+
+
 
 }
