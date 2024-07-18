@@ -1,9 +1,11 @@
-package com.fiiiiive.zippop.popup_store;
+package com.fiiiiive.zippop.popup_store.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fiiiiive.zippop.popup_goods.PopupGoods;
-import com.fiiiiive.zippop.popup_review.PopupReview;
+import com.fiiiiive.zippop.member.model.Company;
+import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_review.model.PopupReview;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,8 +35,12 @@ public class PopupStore {
     private String storeContent;
     private String storeDate;
     private String category;
-    private Integer companyIdx;
+//    private Integer companyIdx;
     private Integer rating;
     private String storeImage;
     private Integer totalPeople;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_idx")
+    @JsonBackReference
+    private Company company;
 }

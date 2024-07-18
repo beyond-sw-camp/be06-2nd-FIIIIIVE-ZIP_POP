@@ -1,9 +1,10 @@
 package com.fiiiiive.zippop.popup_review;
 
 
-import com.fiiiiive.zippop.popup_review.req.PopupReviewReq;
-import com.fiiiiive.zippop.popup_review.res.PopupReviewRes;
-import com.fiiiiive.zippop.popup_store.PopupStore;
+import com.fiiiiive.zippop.popup_review.model.PopupReview;
+import com.fiiiiive.zippop.popup_review.model.req.PopupReviewReq;
+import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,8 @@ public class PopupReviewService {
         }
         List<PopupReviewRes> popupReviewResList = new ArrayList<>();
         for (PopupReview popupReview : popupReviewList) {
-            PopupReviewRes popupReviewRes = convertToReviewRes(popupReview);
+            PopupReviewRes popupReviewRes = new PopupReviewRes();
+            popupReviewRes = popupReviewRes.convertToReviewRes(popupReview);
             popupReviewRes.setStoreName(store_name);
             popupReviewResList.add(popupReviewRes);
         }
@@ -70,13 +72,13 @@ public class PopupReviewService {
         return Optional.of(popupReviewResList);
     }
 
-    private PopupReviewRes convertToReviewRes(PopupReview review) {
-        PopupReviewRes popupReviewRes = new PopupReviewRes();
-        popupReviewRes.setReviewTitle(review.getReviewTitle());
-        popupReviewRes.setReviewContent(review.getReviewContent());
-        popupReviewRes.setRating(review.getRating());
-        popupReviewRes.setReviewDate(review.getReviewDate());
-        popupReviewRes.setStoreName(review.getStoreName());
-        return popupReviewRes;
-    }
+//    private PopupReviewRes convertToReviewRes(PopupReview review) {
+//        PopupReviewRes popupReviewRes = new PopupReviewRes();
+//        popupReviewRes.setReviewTitle(review.getReviewTitle());
+//        popupReviewRes.setReviewContent(review.getReviewContent());
+//        popupReviewRes.setRating(review.getRating());
+//        popupReviewRes.setReviewDate(review.getReviewDate());
+//        popupReviewRes.setStoreName(review.getStoreName());
+//        return popupReviewRes;
+//    }
 }
