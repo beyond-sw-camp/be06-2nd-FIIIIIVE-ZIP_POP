@@ -1,6 +1,7 @@
 package com.fiiiiive.zippop.popup_store;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 
 public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
