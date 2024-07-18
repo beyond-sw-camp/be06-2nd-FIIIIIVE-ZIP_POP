@@ -39,6 +39,7 @@ public class PopupStore {
     private Integer rating;
     private String storeImage;
     private Integer totalPeople;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_idx")
     @JsonBackReference

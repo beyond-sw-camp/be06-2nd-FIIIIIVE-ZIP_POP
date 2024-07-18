@@ -1,8 +1,19 @@
-package com.fiiiiive.zippop.common.baseresponse;
+package com.fiiiiive.zippop.common.responses;
 
 public enum BaseResponseMessage {
+
+    // 프로토콜
+    // 인증 실패()
+    INTERNAL_SERVER_ERROR(false, 500, "내부 서버 오류"),
+    // REQUEST_FAIL(false, 500, "내부 서버 오류"),
+    TOKEN_EXPIRED(false, 403, "JWT 토큰이 만료되었습니다."),
+    TOKEN_NULL(false, 403, "JWT 토큰이 없습니다."),
+    TOKEN_INVALID(false, 404, "JWT 토큰이 유효하지 않습니다."),
+
+
     // 요청 성공 1000
-    REQUEST_SUCCESS(true, 1000, "요청이 정상적으로 처리되었습니다"),
+    REQUEST_SUCCESS(true, 200, "요청이 정상적으로 처리되었습니다"),
+    REQUEST_FAIL(false, 405, "요청을 실패했습니다."),
 
     // 회원 기능
     // 회원가입 2000
@@ -59,23 +70,27 @@ public enum BaseResponseMessage {
     // 팝업 굿즈 삭제(D)
     POPUP_GOODS_DELETE_SUCCESS(true, 4300, "팝업 굿즈 삭제에 성공했습니다."),
     POPUP_GOODS_DELETE_FAIL(false, 4301, "팝업 굿즈 삭제에 실패했습니다."),
-    // 팝업 굿즈 구매
-    POPUP_GOODS_PAY_SUCCESS(true, 4400, "결제에 성공했습니다."),
-    POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4401, "결제 수단을 입력해주세요"),
-    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다."),
 
-    /**
-     * 5000 : 주문 및 결제 에러
-     */
-    ORDERS_VALIDATION_FAIL(false, 5001, "결제 정보가 잘못되었습니다."),
+    // 팝업 굿즈 구매
+
+
+    // 5000 : 주문 및 결제 에러
+    // 주문 실패 500
     IAMPORT_ERROR(false, 5002, "결제 금액이 잘못되었습니다."),
     ORDERS_NOT_ORDERED(false, 5003, "결제 정보가 없습니다. 구해 후 이용해주세요."),
-    GOODS_NULL(false, 5004, "굿즈가 존재하지 않습니다.");
+    GOODS_NULL(false, 5004, "굿즈가 존재하지 않습니다."),
+    ORDERS_VALIDATION_SUCCESS(true, 5000, "결제 검증에 실패했습니다."),
+    ORDERS_VALIDATION_FAIL(false, 5001, "결제 정보가 잘못되었습니다."),
+    ORDERS_VALIDATION_ERROR(false, 5002, "결제 금액이 잘못되었습니다."),
+    POPUP_GOODS_NULL(false, 5004, "굿즈가 존재하지 않습니다."),
 
-    // 지금은 code 4402이런식인데 나중엔 요구사항번호로 code값 넣기
-    // 커뮤니티 기능 5000
-    // 게시글
-    // 댓글
+    POPUP_GOODS_PAY_SUCCESS(true, 4400, "결제에 성공했습니다."),
+    POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4401, "결제 수단을 입력해주세요"),
+    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다.");
+
+    // 6000 : 게시글
+    // 7000 : 댓글
+
     private Boolean success;
     private Integer code;
     private String message;
@@ -85,16 +100,13 @@ public enum BaseResponseMessage {
         this.code = code;
         this.message = message;
     }
-
-    public Boolean getSuccess() {
-        return success;
+    public static BaseResponseMessage findByCode(Integer code) {
+        for (BaseResponseMessage message : values()) { if (message.getCode().equals(code)) { return message; }}
+        return null;
     }
+    public Boolean getSuccess() { return success; }
 
-    public Integer getCode() {
-        return code;
-    }
+    public Integer getCode() { return code; }
 
-    public String getMessage() {
-        return message;
-    }
+    public String getMessage() { return message; }
 }

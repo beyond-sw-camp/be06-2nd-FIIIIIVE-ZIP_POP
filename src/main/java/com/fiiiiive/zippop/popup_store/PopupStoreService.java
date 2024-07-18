@@ -10,6 +10,7 @@ import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
 import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,14 +18,10 @@ import java.util.List;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final CompanyRepository companyRepository;
-
-    public PopupStoreService(PopupStoreRepository popupStoreRepository, CompanyRepository companyRepository) {
-        this.popupStoreRepository = popupStoreRepository;
-        this.companyRepository = companyRepository;
-    }
 
     public void register(CustomUserDetails customUserDetails,PopupStoreReq popupStoreReq) {
         Company company = companyRepository.findById(customUserDetails.getIdx())

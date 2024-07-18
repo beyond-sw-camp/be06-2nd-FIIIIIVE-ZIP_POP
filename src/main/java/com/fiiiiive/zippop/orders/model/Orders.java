@@ -1,7 +1,6 @@
 package com.fiiiiive.zippop.orders.model;
 
 import com.fiiiiive.zippop.member.model.Customer;
-import com.fiiiiive.zippop.popup_goods.PopupGoods;
 import jakarta.persistence.*;
 import lombok.*;
 

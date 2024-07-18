@@ -1,14 +1,15 @@
 package com.fiiiiive.zippop.orders;
 
 
-import com.fiiiiive.zippop.common.baseresponse.BaseException;
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.orders.model.Orders;
 import com.fiiiiive.zippop.orders.model.OrdersDetail;
 import com.fiiiiive.zippop.orders.model.response.GetOrdersRes;
-import com.fiiiiive.zippop.popup_goods.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsRepository;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsService;
+import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.google.gson.Gson;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -21,9 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import static com.fiiiiive.zippop.common.baseresponse.BaseResponseMessage.ORDERS_VALIDATION_FAIL;
 
 
 @Service
@@ -87,7 +85,7 @@ public class OrdersService {
 
             return GetOrdersRes.builder().impUid(impUid).build();
         } else {
-            throw new BaseException(ORDERS_VALIDATION_FAIL);
+            throw new BaseException(BaseResponseMessage.ORDERS_VALIDATION_FAIL);
         }
     }
 

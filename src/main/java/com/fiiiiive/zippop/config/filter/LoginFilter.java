@@ -42,8 +42,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         catch (IOException e) { throw new RuntimeException(e); }
         String username = dto.getEmail();
         String password = dto.getPassword();
-//        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, authorities);
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
         return authenticationManager.authenticate(authToken);
     }

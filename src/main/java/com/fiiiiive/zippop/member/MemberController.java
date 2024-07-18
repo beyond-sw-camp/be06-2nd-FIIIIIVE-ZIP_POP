@@ -1,6 +1,6 @@
 package com.fiiiiive.zippop.member;
-import com.fiiiiive.zippop.common.baseresponse.BaseResponse;
-import com.fiiiiive.zippop.common.baseresponse.BaseResponseMessage;
+import com.fiiiiive.zippop.common.responses.BaseResponse;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "member-service-api", description = "Member Application")
+@Tag(name = "member-service-api", description = "Member")
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/member")
@@ -24,7 +24,7 @@ public class MemberController {
         String uuid = memberService.sendEmail(request.getEmail(), request.getRole());
         PostSignupRes response = memberService.signup(request);
         emailVerifyService.save(request.getEmail(), uuid);
-        return ResponseEntity.ok(new BaseResponse(response, BaseResponseMessage.MEMBER_REGISTER_SUCCESS));
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_REGISTER_SUCCESS, response));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/verify")
