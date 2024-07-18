@@ -1,9 +1,12 @@
+imp:
+  imp_key: 5657554032853018
+  imp_secret: GqLIePegZt4w0QKvBt1NZ4eKie8tNoILe9oVbhgbVegQJawM5ciwsCXzswRJAqb8NTgpTQBtWdQ2Stym
 spring:
   jwt:
     secret: 12345678901234567890123456789012
   datasource:
-    url:  jdbc:mariadb://123.123.123.127:3306/zippop
-    username: root
+    url:  jdbc:mariadb://123.123.123.124:3306/FIIIIIVE
+    username: snk
     password: qwer1234
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:

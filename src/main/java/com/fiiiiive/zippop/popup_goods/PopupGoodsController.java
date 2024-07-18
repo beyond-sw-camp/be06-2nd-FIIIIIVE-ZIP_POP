@@ -49,4 +49,6 @@ public class PopupGoodsController {
         return ResponseEntity.ok(popupGoodsList);
     }
 
+
+
 }

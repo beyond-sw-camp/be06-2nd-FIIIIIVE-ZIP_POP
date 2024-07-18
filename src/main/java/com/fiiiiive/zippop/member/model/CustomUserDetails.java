@@ -1,9 +1,6 @@
 package com.fiiiiive.zippop.member.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,8 +9,9 @@ import java.util.Collection;
 
 @Getter
 @Builder
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
     @Getter
     private final Long idx;
     private final String email;

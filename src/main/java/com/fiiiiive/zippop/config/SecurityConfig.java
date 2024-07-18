@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:3000"); // 허용할 출처
+        config.addAllowedOrigin("http://localhost:80"); // 허용할 출처
         config.addAllowedOrigin("http://localhost:8080"); // 허용할 출처
         config.addAllowedMethod("*"); // 허용할 메서드 (GET, POST, PUT 등)
         config.addAllowedHeader("*"); // 허용할 헤더
@@ -49,9 +49,9 @@ public class SecurityConfig {
         http.sessionManagement((auth) -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests((auth) ->
                         auth
-                            .requestMatchers("/api/v1/test/**").authenticated()
-                            .requestMatchers("/api/v1/member/**").permitAll()
-                            .anyRequest().authenticated()
+//                            .requestMatchers("/api/v1/test/**").authenticated()
+//                            .requestMatchers("/api/v1/member/**").permitAll()
+                            .anyRequest().permitAll()
         );
         http.addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
         LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration));
