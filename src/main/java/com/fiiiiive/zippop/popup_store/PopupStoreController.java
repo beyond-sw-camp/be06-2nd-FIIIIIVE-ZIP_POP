@@ -1,8 +1,10 @@
 package com.fiiiiive.zippop.popup_store;
 
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
 import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,8 @@ public class PopupStoreController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody PopupStoreReq popupStoreReq) {
-        popupStoreService.register(popupStoreReq);
+    public ResponseEntity<String> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody PopupStoreReq popupStoreReq) {
+        popupStoreService.register(customUserDetails,popupStoreReq);
         return ResponseEntity.ok("등록성공");
     }
 

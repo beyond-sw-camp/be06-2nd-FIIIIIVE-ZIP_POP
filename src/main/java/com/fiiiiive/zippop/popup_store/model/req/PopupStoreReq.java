@@ -13,5 +13,5 @@ public class PopupStoreReq {
     private String storeAddr;
     private String storeDate;
     private String category;
-    private Long companyIdx;
+//    private Long companyIdx;
 }

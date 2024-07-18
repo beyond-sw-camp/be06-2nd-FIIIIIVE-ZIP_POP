@@ -2,6 +2,7 @@ package com.fiiiiive.zippop.popup_store;
 
 import com.fiiiiive.zippop.member.CompanyRepository;
 import com.fiiiiive.zippop.member.model.Company;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
@@ -25,10 +26,9 @@ public class PopupStoreService {
         this.companyRepository = companyRepository;
     }
 
-    public void register(PopupStoreReq popupStoreReq) {
-        Company company = companyRepository.findById(popupStoreReq.getCompanyIdx())
+    public void register(CustomUserDetails customUserDetails,PopupStoreReq popupStoreReq) {
+        Company company = companyRepository.findById(customUserDetails.getIdx())
                 .orElseThrow(() -> new RuntimeException("Company not found"));
-
 
         PopupStore popupStore = PopupStore.builder()
                 .storeName(popupStoreReq.getStoreName())
