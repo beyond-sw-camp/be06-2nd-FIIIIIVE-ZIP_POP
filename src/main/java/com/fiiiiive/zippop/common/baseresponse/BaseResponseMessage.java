@@ -62,7 +62,15 @@ public enum BaseResponseMessage {
     // 팝업 굿즈 구매
     POPUP_GOODS_PAY_SUCCESS(true, 4400, "결제에 성공했습니다."),
     POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4401, "결제 수단을 입력해주세요"),
-    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다.");
+    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다."),
+
+    /**
+     * 5000 : 주문 및 결제 에러
+     */
+    ORDERS_VALIDATION_FAIL(false, 5001, "결제 정보가 잘못되었습니다."),
+    IAMPORT_ERROR(false, 5002, "결제 금액이 잘못되었습니다."),
+    ORDERS_NOT_ORDERED(false, 5003, "결제 정보가 없습니다. 구해 후 이용해주세요."),
+    GOODS_NULL(false, 5004, "굿즈가 존재하지 않습니다.");
 
     // 지금은 code 4402이런식인데 나중엔 요구사항번호로 code값 넣기
     // 커뮤니티 기능 5000
@@ -89,5 +97,4 @@ public enum BaseResponseMessage {
     public String getMessage() {
         return message;
     }
-
 }

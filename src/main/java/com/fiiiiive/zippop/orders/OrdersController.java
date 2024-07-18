@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-import static com.fiiiiive.zippop.common.baseresponse.BaseResponseStatus.IAMPORT_ERROR;
+import static com.fiiiiive.zippop.common.baseresponse.BaseResponseMessage.IAMPORT_ERROR;
 
 @RestController
 @CrossOrigin("*")

@@ -23,12 +23,6 @@ public class BaseResponse<T> {
         this.message = baseResponseMessage.getMessage();
     }
 
-    public BaseResponse(BaseResponseStatus baseResponseStatus) {
-        this.success = baseResponseStatus.isSuccess();
-        this.code = baseResponseStatus.getCode();
-        this.message = baseResponseStatus.getMessage();
-    }
-
     public BaseResponse(T result, BaseResponseMessage baseResponseMessage) {
         this.success = baseResponseMessage.getSuccess();
         this.code = baseResponseMessage.getCode();

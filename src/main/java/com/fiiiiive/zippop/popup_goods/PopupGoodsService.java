@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.fiiiiive.zippop.common.baseresponse.BaseResponseStatus.COURSE_NULL;
+import static com.fiiiiive.zippop.common.baseresponse.BaseResponseMessage.GOODS_NULL;
 
 @Service
 public class PopupGoodsService {
@@ -96,7 +96,7 @@ public class PopupGoodsService {
     }
 
     public Integer getPopupGoodsPrice(Long id) throws BaseException {
-        PopupGoods popupGoods = popupGoodsRepository.findById(id).orElseThrow(() -> new BaseException(COURSE_NULL));
+        PopupGoods popupGoods = popupGoodsRepository.findById(id).orElseThrow(() -> new BaseException(GOODS_NULL));
 
         return popupGoods.getProductPrice();
     }
