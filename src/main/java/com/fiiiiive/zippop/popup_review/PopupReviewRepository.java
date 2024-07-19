@@ -6,9 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PopupReviewRepository extends JpaRepository<PopupReview, Long> {
 
-    @Query("SELECT pr FROM PopupReview pr JOIN pr.popupStore ps WHERE ps.storeName = :storeName")
-    public List<PopupReview> findByStoreName(@Param("storeName") String storeName);
+    Optional<List<PopupReview>> findByStoreName(String storeName);
+
+    @Query("SELECT pr FROM PopupReview pr JOIN FETCH pr.popupStore ps WHERE ps.storeName = :storeName")
+    Optional<List<PopupReview>> findByStoreNameWithStore(String storeName);
 }
