@@ -2,6 +2,7 @@ package com.fiiiiive.zippop.common.exception;
 
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -22,11 +23,18 @@ public class GlobalExceptionHandler {
         BaseResponse<String> baseResponse = new BaseResponse<>(BaseResponseMessage.EMAIL_SEND_FAIL, e.getMessage());
         return ResponseEntity.badRequest().body(baseResponse);
     }
-
+    @ExceptionHandler(IamportResponseException.class)
+    public ResponseEntity<BaseResponse<String>> handleBaseException(IamportResponseException e){
+        BaseResponse<String> baseResponse = new BaseResponse<>(BaseResponseMessage.IAMPORT_ERROR, e.getMessage());
+        return ResponseEntity.badRequest().body(baseResponse);
+    }
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<BaseResponse<String>> handleBaseException(BaseException e){
         return ResponseEntity.badRequest().body(new BaseResponse(BaseResponseMessage.findByCode(e.getCode())));
     }
+
+
+
 
 }
