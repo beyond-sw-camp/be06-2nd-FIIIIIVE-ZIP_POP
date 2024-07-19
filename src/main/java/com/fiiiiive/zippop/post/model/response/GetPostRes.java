@@ -1,6 +1,6 @@
-package com.fiiiiive.zippop.post.model.req;
+package com.fiiiiive.zippop.post.model.response;
 
-
+import com.fiiiiive.zippop.post.model.Post;
 import lombok.*;
 
 @Getter
@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostReq {
+public class GetPostRes {
     private String postTitle;
     private String postContent;
     private String postDate;

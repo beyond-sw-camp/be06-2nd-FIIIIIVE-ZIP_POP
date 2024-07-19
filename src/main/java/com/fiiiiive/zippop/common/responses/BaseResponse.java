@@ -22,4 +22,6 @@ public class BaseResponse<T> {
         this.message = baseResponseMessage.getMessage();
         this.result = result;
     }
+
+
 }

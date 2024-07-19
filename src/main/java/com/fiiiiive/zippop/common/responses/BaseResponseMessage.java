@@ -86,10 +86,34 @@ public enum BaseResponseMessage {
 
     POPUP_GOODS_PAY_SUCCESS(true, 4400, "결제에 성공했습니다."),
     POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4401, "결제 수단을 입력해주세요"),
-    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다.");
+    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4402,"해당 상품은 품절되었습니다."),
 
     // 6000 : 게시글
     // 7000 : 댓글
+    // 8000: 채팅
+    //메세지 전송
+    CHAT_MESSAGE_SEND_SUCCESS(true, 8000, "채팅 메시지 전송에 성공했습니다."),
+    CHAT_MESSAGE_SEND_FAIL(false, 8001, "채팅 메시지 전송에 실패했습니다."),
+    //채팅방 생성
+    CHAT_ROOM_CREATE_SUCCESS(true, 8100, "채팅방 생성에 성공했습니다."),
+    CHAT_ROOM_CREATE_FAIL(false, 8101, "채팅방 생성에 실패했습니다."),
+    //채팅방 참여
+    CHAT_ROOM_JOIN_SUCCESS(true, 8200, "채팅방에 성공적으로 참여했습니다."),
+    CHAT_ROOM_JOIN_FAIL(false, 8201, "채팅방 참여에 실패했습니다."),
+    //채팅방 나가기
+    CHAT_ROOM_LEAVE_SUCCESS(true, 8300, "채팅방에서 성공적으로 나갔습니다."),
+    CHAT_ROOM_LEAVE_FAIL(false, 8301, "채팅방 나가기에 실패했습니다."),
+    //채팅방 사용자 조회
+    CHAT_USER_COUNT_SEARCH_SUCCESS(true, 8400, "채팅방 사용자 수 조회에 성공했습니다."),
+    CHAT_USER_COUNT_SEARCH_FAIL(false, 8401, "채팅방 사용자 수 조회에 실패했습니다."),
+    //채팅방 기록 조회
+    CHAT_HISTORY_SEARCH_SUCCESS(true, 8500, "채팅 기록 조회에 성공했습니다."),
+    CHAT_HISTORY_SEARCH_FAIL(false, 8501, "채팅 기록 조회에 실패했습니다."),
+    //채팅방 조회
+    CHAT_ROOM_SEARCH_SUCCESS(true, 8600, "채팅방 목록 조회에 성공했습니다."),
+    CHAT_ROOM_SEARCH_FAIL(false, 8601, "채팅 기록 조회에 실패했습니다.");
+
+
 
     private Boolean success;
     private Integer code;

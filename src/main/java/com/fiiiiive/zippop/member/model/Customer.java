@@ -2,9 +2,11 @@ package com.fiiiiive.zippop.member.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.post.model.Post;
-import com.fiiiiive.zippop.post.model.res.PostRes;
+import com.fiiiiive.zippop.post.model.response.GetPostRes;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.util.*;
 
 @Entity
@@ -26,7 +28,9 @@ public class Customer {
     private Integer point;
     private String role;
     private Boolean enabled;
-    @OneToMany(mappedBy = "customer")
+
+    @BatchSize(size=10)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Post> postsList = new ArrayList<>();
 }
