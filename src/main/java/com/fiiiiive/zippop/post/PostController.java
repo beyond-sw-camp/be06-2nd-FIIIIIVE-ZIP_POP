@@ -1,8 +1,7 @@
 package com.fiiiiive.zippop.post;
 
-import com.fiiiiive.zippop.post.model.Post;
-import com.fiiiiive.zippop.post.model.req.PostReq;
-import com.fiiiiive.zippop.post.model.res.PostRes;
+import com.fiiiiive.zippop.post.model.request.PostReq;
+import com.fiiiiive.zippop.post.model.response.PostRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;

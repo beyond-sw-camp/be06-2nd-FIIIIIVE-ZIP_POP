@@ -1,6 +1,7 @@
 package com.fiiiiive.zippop.config.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,7 +34,7 @@ public class ExceptionFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
-          filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e){
             log.error("Bearer 토큰이 만료되었습니다.");
             setErrorResponse(response, BaseResponseMessage.TOKEN_EXPIRED, e.getMessage());

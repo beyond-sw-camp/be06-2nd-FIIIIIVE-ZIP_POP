@@ -2,7 +2,6 @@ package com.fiiiiive.zippop.member.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.post.model.Post;
-import com.fiiiiive.zippop.post.model.res.PostRes;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -17,13 +16,16 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
+    @Column(nullable = false, length = 100, unique = true)
     private String password;
     private String name;
     private String phoneNumber;
     private String address1;
     private String address2;
     private Integer point;
+    @Column(nullable = false, length = 100, unique = true)
     private String role;
     private Boolean enabled;
     @OneToMany(mappedBy = "customer")

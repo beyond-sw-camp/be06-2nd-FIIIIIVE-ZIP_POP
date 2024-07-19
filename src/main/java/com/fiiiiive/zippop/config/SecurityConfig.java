@@ -49,17 +49,16 @@ public class SecurityConfig {
         http.sessionManagement((auth) -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests((auth) ->
                         auth
-//                            .requestMatchers("/api/v1/test/**").authenticated()
+                            .requestMatchers("/api/v1/test/**").authenticated()
 //                            .requestMatchers("/api/v1/member/**").permitAll()
                             .anyRequest().permitAll()
         );
 
         http.addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
-        http.addFilterBefore(new ExceptionFilter(),  JwtFilter.class);
+        http.addFilterBefore(new ExceptionFilter(), LoginFilter.class);
         LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration));
         loginFilter.setFilterProcessesUrl("/api/v1/member/login");
         http.addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
     @Bean

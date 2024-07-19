@@ -1,9 +1,11 @@
 package com.fiiiiive.zippop.popup_review;
 
 
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
-import com.fiiiiive.zippop.popup_review.model.req.PopupReviewReq;
-import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_review.model.request.PopupReviewReq;
+import com.fiiiiive.zippop.popup_review.model.response.PopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class PopupReviewService {
         this.popupStoreRepository = popupStoreRepository;
     }
 
-    public void register(PopupReviewReq popupReviewReq) {
+    public void register(PopupReviewReq popupReviewReq) throws BaseException{
         PopupReview popupReview = PopupReview.builder()
                 .reviewTitle(popupReviewReq.getReviewTitle())
                 .reviewContent(popupReviewReq.getReviewContent())
@@ -38,7 +40,7 @@ public class PopupReviewService {
 
             optionalStore.getReviews().add(popupReview);
         } else {
-            throw new RuntimeException("store not found");
+            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_CONTENTS_EMPTY);
         }
     }
 
@@ -57,6 +59,8 @@ public class PopupReviewService {
 //    }
 
     public Optional<List<PopupReviewRes>> findByStoreName(String store_name) {
+//        Optional<PopupReview> result = popupReviewRepository.findByStoreName(store_name);
+//        PopupReview popupReview = result.get();
         List<PopupReview> popupReviewList = popupReviewRepository.findByStoreName(store_name);
         if (popupReviewList.isEmpty()) {
             return Optional.empty();

@@ -4,12 +4,12 @@ import com.fiiiiive.zippop.member.CompanyRepository;
 import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
-import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_goods.model.response.PopupGoodsRes;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
-import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_review.model.response.PopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
-import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
-import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
+import com.fiiiiive.zippop.popup_store.model.request.PopupStoreReq;
+import com.fiiiiive.zippop.popup_store.model.response.PopupStoreRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,14 +1,18 @@
 package com.fiiiiive.zippop.member;
 
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Provider;
 import java.util.Optional;
 
 @Service
@@ -40,10 +44,8 @@ public class CustomUserDetailService implements UserDetailsService {
                         .role(company.getRole())
                         .enabled(company.getEnabled())
                         .build();
-            } else {return null;}
+            }
+            return null;
         }
     }
-
-
-
 }

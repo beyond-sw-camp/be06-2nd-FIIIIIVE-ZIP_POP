@@ -18,6 +18,7 @@ public enum BaseResponseMessage {
     // 회원 기능
     // 회원가입 2000
     MEMBER_REGISTER_SUCCESS(true, 2000, "이메일 인증을 완료해주세요"),
+    MEMBER_REGISTER_FAIL(false, 2001, "회원가입에 실패했습니다. 입력값을 검증해주세요"),
     MEMBER_REGISTER_FAIL_ID_EMPTY(false, 2001, "아이디를 입력해주세요"),
     MEMBER_REGISTER_FAIL_ID_FORMAT(false, 2002, "아이디 형식이 맞지 않습니다."),
     MEMBER_REGISTER_FAIL_ID_DUPLICATION(false, 2003, "아이디가 중복되었습니다."),
@@ -29,11 +30,13 @@ public enum BaseResponseMessage {
     // 이메일 인증 2010
     MEMBER_EMAIL_VERIFY_SUCCESS(true, 2010, "이메일 인증을 완료했습니다."),
     MEMBER_EMAIL_VERIFY_FAIL(false, 2011, "이메일 인증에 실패했습니다."),
+    EMAIL_SEND_FAIL(false, 2012, "이메일 전송에 실패했습니다."),
+    EMAIL_VERIFY_SAVE_FAIL(false, 2013, "이메일 인증 값 저장에 실패했습니다."),
 
     // 로그인 2100
     MEMBER_LOGIN_SUCCESS(true, 2100, "로그인에 성공했습니다."),
     MEMBER_LOGIN_FAIL(false, 2101, "아이디 또는 비밀번호를 확인해주세요"),
-    //    MEMBER_LOGIN_FAIL(false, 2101, "사용자 인증에 실패했습니다."),
+    MEMBER_LOGIN_FAIL_NOT_FOUND(false, 2102, "사용자를 찾을 수 없습니다"),
 
     // 팝업 3000
     // 팝업 스토어 등록(C)
@@ -43,6 +46,7 @@ public enum BaseResponseMessage {
     // 팝업 스토어 목록 조회(R)
     POPUP_STORE_SEARCH_SUCCESS(true, 3100, "팝업 스토어 목록 조회에 성공했습니다."),
     POPUP_STORE_SEARCH_FAIL_NOT_EXIST(false, 3101, "해당 팝업 스토어가 존재하지 않습니다."),
+
     // POPUP_STORE_VIEW_DETAIL, 팝업 스토어 상세 정보 보기
 
     // 팝업 스토어 예약
@@ -52,6 +56,7 @@ public enum BaseResponseMessage {
     // 팝업 스토어 리뷰 등록
     POPUP_STORE_REVIEW_SUCCESS(true, 3300, "팝업 스토어 리뷰 등록에 성공했습니다."),
     POPUP_STORE_REVIEW_FAIL_CONTENTS_EMPTY(false, 3301, "팝업 스토어 리뷰 내용을 작성해주세요"),
+    POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST(false, 3301, "팝업 스토어 리뷰 내용을 작성해주세요"),
 
     // 팝업 굿즈 4000
     // 팝업 굿즈 등록(C)

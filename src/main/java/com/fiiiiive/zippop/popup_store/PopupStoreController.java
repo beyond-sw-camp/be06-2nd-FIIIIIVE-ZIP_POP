@@ -1,8 +1,8 @@
 package com.fiiiiive.zippop.popup_store;
 
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
-import com.fiiiiive.zippop.popup_store.model.req.PopupStoreReq;
-import com.fiiiiive.zippop.popup_store.model.res.PopupStoreRes;
+import com.fiiiiive.zippop.popup_store.model.request.PopupStoreReq;
+import com.fiiiiive.zippop.popup_store.model.response.PopupStoreRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
