@@ -3,13 +3,15 @@ package com.fiiiiive.zippop.popup_store;
 import com.fiiiiive.zippop.member.CompanyRepository;
 import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
+
+
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
-import com.fiiiiive.zippop.popup_goods.model.response.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
-import com.fiiiiive.zippop.popup_review.model.response.PopupReviewRes;
+import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
-import com.fiiiiive.zippop.popup_store.model.request.PopupStoreReq;
-import com.fiiiiive.zippop.popup_store.model.response.PopupStoreRes;
+import com.fiiiiive.zippop.popup_store.model.request.CreatePopupStoreReq;
+import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,245 +25,349 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final CompanyRepository companyRepository;
 
-    public void register(CustomUserDetails customUserDetails,PopupStoreReq popupStoreReq) {
+    public void register(CustomUserDetails customUserDetails, CreatePopupStoreReq createPopupStoreReq) {
         Company company = companyRepository.findById(customUserDetails.getIdx())
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         PopupStore popupStore = PopupStore.builder()
-                .storeName(popupStoreReq.getStoreName())
-                .storeAddr(popupStoreReq.getStoreAddr())
-                .storeDate(popupStoreReq.getStoreDate())
-                .category(popupStoreReq.getCategory())
+                .storeName(createPopupStoreReq.getStoreName())
+                .storeAddr(createPopupStoreReq.getStoreAddr())
+                .storeDate(createPopupStoreReq.getStoreDate())
+                .category(createPopupStoreReq.getCategory())
                 .company(company)
                 .build();
         System.out.println(popupStore);
         popupStoreRepository.save(popupStore);
     }
 
-    public Optional<List<PopupStoreRes>> findAll() {
-        List<PopupStore> popupStores = popupStoreRepository.findAll();
-        if (popupStores.isEmpty()) {
-            return Optional.empty();
-        }
-        List<PopupStoreRes> popupStoreResList = new ArrayList<>();
-        for (PopupStore popupStore : popupStores) {
-            PopupStoreRes popupStoreRes = new PopupStoreRes();
-            popupStoreRes = popupStoreRes.convertToPopupStoreRes(popupStore);
-            List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-            for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-                PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-                popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
-                popupGoodsResList.add(popupGoodsRes);
-            }
-            popupStoreRes.setPopupGoodsList(popupGoodsResList);
+    public List<GetPopupStoreRes> findAll() {
+        Optional<List<PopupStore>> result = Optional.of(popupStoreRepository.findAll());
+        if (result.isPresent()) {
+            List<GetPopupStoreRes> getPopupStoreResList = new ArrayList<>();
+            for (PopupStore popupStore : result.get()) {
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeName(popupStore.getStoreName())
+                        .storeAddr(popupStore.getStoreAddr())
+                        .storeDate(popupStore.getStoreDate())
+                        .category(popupStore.getCategory())
+                        .build();
+                List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+                for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
+                    GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                            .productIdx(popupGoods.getProductIdx())
+                            .productName(popupGoods.getProductName())
+                            .productPrice(popupGoods.getProductPrice())
+                            .productContent(popupGoods.getProductContent())
+                            .productImg(popupGoods.getProductImg())
+                            .productAmount(popupGoods.getProductAmount())
+                            .storeName(popupGoods.getStoreName())
+                            .build();
+                    getPopupGoodsResList.add(getPopupGoodsRes);
+                }
+                getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
 
-            List<PopupReviewRes> reviewResList = new ArrayList<>();
-            for (PopupReview review : popupStore.getReviews()) {
-                PopupReviewRes reviewRes = new PopupReviewRes();
-                reviewRes = reviewRes.convertToReviewRes(review);
+                List<GetPopupReviewRes> reviewResList = new ArrayList<>();
+                for (PopupReview popupReview : popupStore.getReviews()) {
+                    GetPopupReviewRes popupReviewRes = GetPopupReviewRes.builder()
+                            .reviewTitle(popupReview.getReviewTitle())
+                            .reviewContent(popupReview.getReviewContent())
+                            .rating(popupReview.getRating())
+                            .reviewDate(popupReview.getReviewDate())
+                            .storeName(popupReview.getStoreName())
+                            .build();
+                    reviewResList.add(popupReviewRes);
+                }
+                getPopupStoreRes.setReviews(reviewResList);
+                getPopupStoreResList.add(getPopupStoreRes);
+            }
+            return getPopupStoreResList;
+        } else {
+            throw new RuntimeException("No popup stores found");
+        }
+    }
+
+    public List<GetPopupStoreRes> findByCategory(String category) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupStore>> result = popupStoreRepository.findByCategory(category);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupStoreRes> getPopupStoreResList = new ArrayList<>();
+            for (PopupStore popupStore : result.get()) {
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeName(popupStore.getStoreName())
+                        .storeAddr(popupStore.getStoreAddr())
+                        .storeDate(popupStore.getStoreDate())
+                        .category(popupStore.getCategory())
+                        .build();
+                List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+                for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
+                    GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                            .productIdx(popupGoods.getProductIdx())
+                            .productName(popupGoods.getProductName())
+                            .productPrice(popupGoods.getProductPrice())
+                            .productContent(popupGoods.getProductContent())
+                            .productImg(popupGoods.getProductImg())
+                            .productAmount(popupGoods.getProductAmount())
+                            .storeName(popupGoods.getStoreName())
+                            .build();
+                    getPopupGoodsResList.add(getPopupGoodsRes);
+                }
+                getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
+                List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
+                for (PopupReview popupReview : popupStore.getReviews()) {
+                    GetPopupReviewRes popupReviewRes = GetPopupReviewRes.builder()
+                            .reviewTitle(popupReview.getReviewTitle())
+                            .reviewContent(popupReview.getReviewContent())
+                            .rating(popupReview.getRating())
+                            .reviewDate(popupReview.getReviewDate())
+                            .storeName(popupReview.getStoreName())
+                            .build();
+                    popupReviewResList.add(popupReviewRes);
+                }
+                getPopupStoreRes.setReviews(popupReviewResList);
+
+                getPopupStoreResList.add(getPopupStoreRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+
+            start = System.currentTimeMillis();
+            result = popupStoreRepository.findByCategoryWithGoods(category);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupStoreResList;
+        } else {
+            throw new RuntimeException("No popup stores found");
+        }
+    }
+
+    public GetPopupStoreRes findByStoreName(String storeName) {
+        Long start = System.currentTimeMillis();
+        Optional<PopupStore> result = popupStoreRepository.findByStoreName(storeName);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                    .storeName(result.get().getStoreName())
+                    .storeAddr(result.get().getStoreAddr())
+                    .storeDate(result.get().getStoreDate())
+                    .category(result.get().getCategory())
+                    .build();
+            List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+            for (PopupGoods popupGoods : result.get().getPopupGoodsList()) {
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productImg(popupGoods.getProductImg())
+                        .productAmount(popupGoods.getProductAmount())
+                        .storeName(popupGoods.getStoreName())
+                        .build();
+                getPopupGoodsResList.add(getPopupGoodsRes);
+            }
+            getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
+
+            List<GetPopupReviewRes> reviewResList = new ArrayList<>();
+            for (PopupReview review : result.get().getReviews()) {
+                GetPopupReviewRes reviewRes = GetPopupReviewRes.builder()
+                        .reviewTitle(review.getReviewTitle())
+                        .reviewContent(review.getReviewContent())
+                        .rating(review.getRating())
+                        .reviewDate(review.getReviewDate())
+                        .storeName(review.getPopupStore().getStoreName())
+                        .build();
                 reviewResList.add(reviewRes);
             }
-            popupStoreRes.setReviews(reviewResList);
-
-            popupStoreResList.add(popupStoreRes);
+            getPopupStoreRes.setReviews(reviewResList);
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+            start = System.currentTimeMillis();
+            result = popupStoreRepository.findByStoreNameWithGoods(storeName);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupStoreRes;
+        } else {
+            throw new RuntimeException("No popup stores found");
         }
-
-        return Optional.of(popupStoreResList);
     }
 
-//    public PopupStoreRes find_with_goods(String store_name) {
-//        PopupStore popupStore = popupStoreRepository.findByStoreName(store_name);
-//        PopupStoreRes popupStoreRes = convertToPopupStoreRes(popupStore);
-//        List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-//        for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-//            PopupGoodsRes popupGoodsRes = convertToPopupGoodsRes(popupGoods);
-//            popupGoodsResList.add(popupGoodsRes);
-//        }
-//        popupStoreRes.setPopupGoodsList(popupGoodsResList);
-//
-//        List<PopupReviewRes> reviewResList = new ArrayList<>();
-//        for (PopupReview review : popupStore.getReviews()) {
-//            PopupReviewRes reviewRes = convertToReviewRes(review);
-//            reviewResList.add(reviewRes);
-//        }
-//        popupStoreRes.setReviews(reviewResList);
-//
-//        return popupStoreRes;
-//    }
+    public List<GetPopupStoreRes> findByStoreAddr(String storeAddr) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupStore>> result = popupStoreRepository.findByStoreAddr(storeAddr);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupStoreRes> getPopupStoreResList = new ArrayList<>();
+            for (PopupStore popupStore : result.get()) {
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeName(popupStore.getStoreName())
+                        .storeAddr(popupStore.getStoreAddr())
+                        .storeDate(popupStore.getStoreDate())
+                        .category(popupStore.getCategory())
+                        .build();
+                List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+                for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
+                    GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                            .productIdx(popupGoods.getProductIdx())
+                            .productName(popupGoods.getProductName())
+                            .productPrice(popupGoods.getProductPrice())
+                            .productContent(popupGoods.getProductContent())
+                            .productImg(popupGoods.getProductImg())
+                            .productAmount(popupGoods.getProductAmount())
+                            .storeName(popupGoods.getStoreName())
+                            .build();
+                    getPopupGoodsResList.add(getPopupGoodsRes);
+                }
+                getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
+                List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
+                for (PopupReview popupReview : popupStore.getReviews()) {
+                    GetPopupReviewRes popupReviewRes = GetPopupReviewRes.builder()
+                            .reviewTitle(popupReview.getReviewTitle())
+                            .reviewContent(popupReview.getReviewContent())
+                            .rating(popupReview.getRating())
+                            .reviewDate(popupReview.getReviewDate())
+                            .storeName(popupReview.getStoreName())
+                            .build();
+                    popupReviewResList.add(popupReviewRes);
+                }
+                getPopupStoreRes.setReviews(popupReviewResList);
 
-    public Optional<List<PopupStoreRes>> findByCategory(String category) {
-        List<PopupStore> popupStores = popupStoreRepository.findByCategory(category);
-        if (popupStores.isEmpty()) {
-            return Optional.empty();
-        }
-        List<PopupStoreRes> popupStoreResList = new ArrayList<>();
-        for (PopupStore popupStore : popupStores) {
-            PopupStoreRes popupStoreRes = new PopupStoreRes();
-            popupStoreRes = popupStoreRes.convertToPopupStoreRes(popupStore);
-            List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-            for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-                PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-                popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
-                popupGoodsResList.add(popupGoodsRes);
+                getPopupStoreResList.add(getPopupStoreRes);
             }
-            popupStoreRes.setPopupGoodsList(popupGoodsResList);
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
 
-            List<PopupReviewRes> reviewResList = new ArrayList<>();
-            for (PopupReview review : popupStore.getReviews()) {
-                PopupReviewRes reviewRes = new PopupReviewRes();
-                reviewRes = reviewRes.convertToReviewRes(review);
-                reviewResList.add(reviewRes);
-            }
-            popupStoreRes.setReviews(reviewResList);
-
-            popupStoreResList.add(popupStoreRes);
+            start = System.currentTimeMillis();
+            result = popupStoreRepository.findByStoreAddrWithGoods(storeAddr);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupStoreResList;
+        } else {
+            throw new RuntimeException("No popup stores found");
         }
-
-        return Optional.of(popupStoreResList);
     }
 
-//    public PopupStoreRes findByStoreName_with_review(String store_name) {
-//        PopupStore popupStore = popupStoreRepository.findByStoreName(store_name);
-//        PopupStoreRes popupStoreRes = convertToPopupStoreRes(popupStore);
-//        return popupStoreRes;
-//    }
+    public List<GetPopupStoreRes> findByCompanyIdx(Long companyIdx) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupStore>> result = popupStoreRepository.findByCompanyIdx(companyIdx);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupStoreRes> getPopupStoreResList = new ArrayList<>();
+            for (PopupStore popupStore : result.get()) {
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeName(popupStore.getStoreName())
+                        .storeAddr(popupStore.getStoreAddr())
+                        .storeDate(popupStore.getStoreDate())
+                        .category(popupStore.getCategory())
+                        .build();
+                List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+                for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
+                    GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                            .productIdx(popupGoods.getProductIdx())
+                            .productName(popupGoods.getProductName())
+                            .productPrice(popupGoods.getProductPrice())
+                            .productContent(popupGoods.getProductContent())
+                            .productImg(popupGoods.getProductImg())
+                            .productAmount(popupGoods.getProductAmount())
+                            .storeName(popupGoods.getStoreName())
+                            .build();
+                    getPopupGoodsResList.add(getPopupGoodsRes);
+                }
+                getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
+                List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
+                for (PopupReview popupReview : popupStore.getReviews()) {
+                    GetPopupReviewRes popupReviewRes = GetPopupReviewRes.builder()
+                            .reviewTitle(popupReview.getReviewTitle())
+                            .reviewContent(popupReview.getReviewContent())
+                            .rating(popupReview.getRating())
+                            .reviewDate(popupReview.getReviewDate())
+                            .storeName(popupReview.getStoreName())
+                            .build();
+                    popupReviewResList.add(popupReviewRes);
+                }
+                getPopupStoreRes.setReviews(popupReviewResList);
 
-    public PopupStoreRes findByStoreName(String store_name) {
-        PopupStore popupStore = popupStoreRepository.findByStoreName(store_name);
-        PopupStoreRes popupStoreRes = new PopupStoreRes();
-        popupStoreRes = popupStoreRes.convertToPopupStoreRes(popupStore);
-        List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-        for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-            PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-            popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
-            popupGoodsResList.add(popupGoodsRes);
+                getPopupStoreResList.add(getPopupStoreRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+
+            start = System.currentTimeMillis();
+            result = popupStoreRepository.findByCompanyIdxWithGoods(companyIdx);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupStoreResList;
+        } else {
+            throw new RuntimeException("No popup stores found");
         }
-        popupStoreRes.setPopupGoodsList(popupGoodsResList);
-
-        List<PopupReviewRes> reviewResList = new ArrayList<>();
-        for (PopupReview review : popupStore.getReviews()) {
-            PopupReviewRes reviewRes = new PopupReviewRes();
-            reviewRes = reviewRes.convertToReviewRes(review);
-            reviewResList.add(reviewRes);
-        }
-        popupStoreRes.setReviews(reviewResList);
-
-        return popupStoreRes;
     }
 
-//    public PopupStoreRes findByStoreName_with_goods(String store_name) {
-//        PopupStore popupStore = popupStoreRepository.findByStoreName(store_name);
-//        PopupStoreRes popupStoreRes = convertToPopupStoreRes(popupStore);
-//        return popupStoreRes;
-//    }
+    public List<GetPopupStoreRes> findByStoreDate(String storeDate) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupStore>> result = popupStoreRepository.findByCategory(storeDate);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupStoreRes> getPopupStoreResList = new ArrayList<>();
+            for (PopupStore popupStore : result.get()) {
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeName(popupStore.getStoreName())
+                        .storeAddr(popupStore.getStoreAddr())
+                        .storeDate(popupStore.getStoreDate())
+                        .category(popupStore.getCategory())
+                        .build();
+                List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+                for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
+                    GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                            .productIdx(popupGoods.getProductIdx())
+                            .productName(popupGoods.getProductName())
+                            .productPrice(popupGoods.getProductPrice())
+                            .productContent(popupGoods.getProductContent())
+                            .productImg(popupGoods.getProductImg())
+                            .productAmount(popupGoods.getProductAmount())
+                            .storeName(popupGoods.getStoreName())
+                            .build();
+                    getPopupGoodsResList.add(getPopupGoodsRes);
+                }
+                getPopupStoreRes.setPopupGoodsList(getPopupGoodsResList);
+                List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
+                for (PopupReview popupReview : popupStore.getReviews()) {
+                    GetPopupReviewRes popupReviewRes = GetPopupReviewRes.builder()
+                            .reviewTitle(popupReview.getReviewTitle())
+                            .reviewContent(popupReview.getReviewContent())
+                            .rating(popupReview.getRating())
+                            .reviewDate(popupReview.getReviewDate())
+                            .storeName(popupReview.getStoreName())
+                            .build();
+                    popupReviewResList.add(popupReviewRes);
+                }
+                getPopupStoreRes.setReviews(popupReviewResList);
 
-    public Optional<List<PopupStoreRes>> findByStoreAddr(String store_addr) {
-        List<PopupStore> popupStores = popupStoreRepository.findByStoreAddr(store_addr);
-        if (popupStores.isEmpty()) {
-            return Optional.empty();
-        }
-        List<PopupStoreRes> popupStoreResList = new ArrayList<>();
-        for (PopupStore popupStore : popupStores) {
-            PopupStoreRes popupStoreRes = new PopupStoreRes();
-            popupStoreRes = popupStoreRes.convertToPopupStoreRes(popupStore);
-            List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-            for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-                PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-                popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
-                popupGoodsResList.add(popupGoodsRes);
+                getPopupStoreResList.add(getPopupStoreRes);
             }
-            popupStoreRes.setPopupGoodsList(popupGoodsResList);
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
 
-            List<PopupReviewRes> reviewResList = new ArrayList<>();
-            for (PopupReview review : popupStore.getReviews()) {
-                PopupReviewRes reviewRes = new PopupReviewRes();
-                reviewRes = reviewRes.convertToReviewRes(review);
-                reviewResList.add(reviewRes);
-            }
-            popupStoreRes.setReviews(reviewResList);
-
-            popupStoreResList.add(popupStoreRes);
+            start = System.currentTimeMillis();
+            result = popupStoreRepository.findByCategoryWithGoods(storeDate);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupStoreResList;
+        } else {
+            throw new RuntimeException("No popup stores found");
         }
-
-        return Optional.of(popupStoreResList);
     }
-
-    public Optional<List<PopupStoreRes>> findByCompanyIdx(Long company_idx) {
-        List<PopupStore> popupStores = popupStoreRepository.findByCompanyIdx(company_idx);
-        if (popupStores.isEmpty()) {
-            return Optional.empty();
-        }
-        List<PopupStoreRes> popupStoreResList = new ArrayList<>();
-        for (PopupStore popupStore : popupStores) {
-            PopupStoreRes popupStoreRes = new PopupStoreRes();
-            popupStoreRes = popupStoreRes.convertToPopupStoreRes(popupStore);
-            List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-            for (PopupGoods popupGoods : popupStore.getPopupGoodsList()) {
-                PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-                popupGoodsRes = popupGoodsRes.convertToPopupGoodsRes(popupGoods);
-                popupGoodsResList.add(popupGoodsRes);
-            }
-            popupStoreRes.setPopupGoodsList(popupGoodsResList);
-
-            List<PopupReviewRes> reviewResList = new ArrayList<>();
-            for (PopupReview review : popupStore.getReviews()) {
-                PopupReviewRes reviewRes = new PopupReviewRes();
-                reviewRes = reviewRes.convertToReviewRes(review);
-                reviewResList.add(reviewRes);
-            }
-            popupStoreRes.setReviews(reviewResList);
-
-            popupStoreResList.add(popupStoreRes);
-        }
-
-        return Optional.of(popupStoreResList);
-    }
-
-//    public Optional<List<PopupStoreRes>> findByStoreDate(String store_date) {
-//        List<PopupStore> popupStores = popupStoreRepository.findByStoreDate(store_date);
-//        if (popupStores.isEmpty()) {
-//            return Optional.empty();
-//        }
-//        List<PopupStoreRes> popupStoreResList = new ArrayList<>();
-//        for (PopupStore popupStore : popupStores) {
-//            PopupStoreRes popupStoreRes = convertToPopupStoreRes(popupStore);
-//            for(PopupGoods pg : popupStore.getPopupGoodsList())
-//                popupStoreRes.getPopupGoodsList().add(convertToPopupGoodsRes(pg));
-//            popupStoreResList.add(popupStoreRes);
-//        }
-//
-//        return Optional.of(popupStoreResList);
-//    }
-
-//    private PopupStoreRes convertToPopupStoreRes(PopupStore popupStore) {
-//        PopupStoreRes popupStoreRes = PopupStoreRes.builder()
-//                .storeName(popupStore.getStoreName())
-//                .storeAddr(popupStore.getStoreAddr())
-//                .storeDate(popupStore.getStoreDate())
-//                .category(popupStore.getCategory())
-//                .build();
-//        return popupStoreRes;
-//    }
-//
-//    private PopupGoodsRes convertToPopupGoodsRes(PopupGoods popupGoods) {
-//        PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-//        popupGoodsRes.setProductIdx(popupGoods.getProductIdx());
-//        popupGoodsRes.setProductName(popupGoods.getProductName());
-//        popupGoodsRes.setProductPrice(popupGoods.getProductPrice());
-//        popupGoodsRes.setProductContent(popupGoods.getProductContent());
-//        popupGoodsRes.setProductImg(popupGoods.getProductImg());
-//        popupGoodsRes.setProductAmount(popupGoods.getProductAmount());
-//        return popupGoodsRes;
-//    }
-//
-//    private PopupReviewRes convertToReviewRes(PopupReview review) {
-//        PopupReviewRes popupReviewRes = new PopupReviewRes();
-//        popupReviewRes.setReviewTitle(review.getReviewTitle());
-//        popupReviewRes.setReviewContent(review.getReviewContent());
-//        popupReviewRes.setRating(review.getRating());
-//        popupReviewRes.setReviewDate(review.getReviewDate());
-//        popupReviewRes.setStoreName(review.getStoreName());
-//        return popupReviewRes;
-//
-//    }
 }

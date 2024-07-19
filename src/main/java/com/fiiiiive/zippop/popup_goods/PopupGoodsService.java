@@ -1,103 +1,181 @@
 package com.fiiiiive.zippop.popup_goods;
 
-import com.fiiiiive.zippop.common.exception.BaseException;
-import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
-import com.fiiiiive.zippop.popup_goods.model.request.PopupGoodsReq;
-import com.fiiiiive.zippop.popup_goods.model.response.PopupGoodsRes;
-import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import com.fiiiiive.zippop.popup_goods.model.request.CreatePopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
+import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
+@RequiredArgsConstructor
 public class PopupGoodsService {
     private final PopupGoodsRepository popupGoodsRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public PopupGoodsService(PopupGoodsRepository popupGoodsRepository, PopupStoreRepository popupStoreRepository) {
-        this.popupGoodsRepository = popupGoodsRepository;
-        this.popupStoreRepository = popupStoreRepository;
-
-    }
-
-    public void register(PopupGoodsReq popupGoodsReq) {
+    public void register(CreatePopupGoodsReq createPopupGoodsReq) {
         PopupGoods goods = PopupGoods.builder()
-                .productName(popupGoodsReq.getProductName())
-                .productAmount(popupGoodsReq.getProductAmount())
-                .productPrice(popupGoodsReq.getProductPrice())
-                .storeName(popupGoodsReq.getStoreName())
+                .productName(createPopupGoodsReq.getProductName())
+                .productAmount(createPopupGoodsReq.getProductAmount())
+                .productPrice(createPopupGoodsReq.getProductPrice())
+                .storeName(createPopupGoodsReq.getStoreName())
                 .build();
-        PopupStore optionalStore = popupStoreRepository.findByStoreName(popupGoodsReq.getStoreName());
-        if (optionalStore != null) {
+        Optional<PopupStore> optionalStore = popupStoreRepository.findByStoreName(createPopupGoodsReq.getStoreName());
+        if (optionalStore.isPresent()) {
             // PopupGoods 설정
-            goods.setPopupStore(optionalStore);
+            goods.setPopupStore(optionalStore.get());
             // PopupGoods 저장
             popupGoodsRepository.save(goods);
 
             // PopupStore의 PopupGoods 리스트에 추가
-            optionalStore.getPopupGoodsList().add(goods);
+            optionalStore.get().getPopupGoodsList().add(goods);
         } else {
             throw new RuntimeException("Store not found");
         }
     }
 
 
-    public Optional<List<PopupGoodsRes>> findAll() {
-        List<PopupGoods> popupGoodsList = popupGoodsRepository.findAll();
-        if (popupGoodsList.isEmpty()) {
-            return Optional.empty();
+    public List<GetPopupGoodsRes> findAll() {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupGoods>> result = Optional.of(popupGoodsRepository.findAll());
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+            for (PopupGoods popupGoods : result.get()) {
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productImg(popupGoods.getProductImg())
+                        .productAmount(popupGoods.getProductAmount())
+                        .storeIdx(popupGoods.getPopupStore().getStoreIdx())
+                        .storeName(popupGoods.getPopupStore().getStoreName())
+                        .build();
+                getPopupGoodsResList.add(getPopupGoodsRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+            start = System.currentTimeMillis();
+            result = Optional.of(popupGoodsRepository.findAllWithStore());
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupGoodsResList;
+        } else {
+            throw new RuntimeException("No popup goods found");
         }
-        List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-        for (PopupGoods popupGoods : popupGoodsList) {
-            PopupGoodsRes popupGoodsRes = convertToPopupGoodsRes(popupGoods);
-            popupGoodsResList.add(popupGoodsRes);
+
+    }
+
+    public List<GetPopupGoodsRes> findByProductName(String productName) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupGoods>> result = popupGoodsRepository.findByProductName(productName);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+            for (PopupGoods popupGoods : result.get()) {
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productImg(popupGoods.getProductImg())
+                        .productAmount(popupGoods.getProductAmount())
+                        .storeIdx(popupGoods.getPopupStore().getStoreIdx())
+                        .storeName(popupGoods.getPopupStore().getStoreName())
+                        .build();
+                getPopupGoodsResList.add(getPopupGoodsRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+            start = System.currentTimeMillis();
+            result = popupGoodsRepository.findByProductNameWithStore(productName);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupGoodsResList;
+        } else {
+            throw new RuntimeException("No popup goods found");
         }
 
-        return Optional.of(popupGoodsResList);
     }
 
-    public Optional<List<PopupGoodsRes>> findByProductName(String product_name) {
-        List<PopupGoods> popupGoodsList = popupGoodsRepository.findByProductName(product_name);
-        if (popupGoodsList.isEmpty()) {
-            return Optional.empty();
+    public List<GetPopupGoodsRes> findByStoreName(String storeName) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupGoods>> result = popupGoodsRepository.findByStoreName(storeName);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+            for (PopupGoods popupGoods : result.get()) {
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productImg(popupGoods.getProductImg())
+                        .productAmount(popupGoods.getProductAmount())
+                        .storeIdx(popupGoods.getPopupStore().getStoreIdx())
+                        .storeName(popupGoods.getPopupStore().getStoreName())
+                        .build();
+                getPopupGoodsResList.add(getPopupGoodsRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+            start = System.currentTimeMillis();
+            result = popupGoodsRepository.findByStoreNameWithStore(storeName);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupGoodsResList;
+        } else {
+            throw new RuntimeException("No popup goods found");
         }
-        List<PopupGoodsRes> popupGoodsResList = new ArrayList<>();
-        for (PopupGoods popupGoods : popupGoodsList) {
-            PopupGoodsRes popupGoodsRes = convertToPopupGoodsRes(popupGoods);
-            popupGoodsResList.add(popupGoodsRes);
+    }
+
+    public List<GetPopupGoodsRes> findByProductPrice(Integer productPrice) {
+        Long start = System.currentTimeMillis();
+        Optional<List<PopupGoods>> result = popupGoodsRepository.findByProductPrice(productPrice);
+        Long end = System.currentTimeMillis();
+        Long diff = end - start;
+        if (result.isPresent()) {
+            List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+            for (PopupGoods popupGoods : result.get()) {
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productImg(popupGoods.getProductImg())
+                        .productAmount(popupGoods.getProductAmount())
+                        .storeIdx(popupGoods.getPopupStore().getStoreIdx())
+                        .storeName(popupGoods.getPopupStore().getStoreName())
+                        .build();
+                getPopupGoodsResList.add(getPopupGoodsRes);
+            }
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+            start = System.currentTimeMillis();
+            result = popupGoodsRepository.findByProductPriceWithStore(productPrice);
+            end = System.currentTimeMillis();
+            diff = end - start;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+            return getPopupGoodsResList;
+        } else {
+            throw new RuntimeException("No popup goods found");
         }
-
-        return Optional.of(popupGoodsResList);
     }
 
-    public Optional<List<PopupGoods>> findByStoreName(String store_name) {
-        return popupGoodsRepository.findByStoreName(store_name);
-    }
-
-    public Optional<List<PopupGoods>> findByProductPrice(Integer product_price) {
-        List<PopupGoods> popupGoods = popupGoodsRepository.findByProductPrice(product_price);
-        return Optional.of(popupGoods);
-    }
-
-    private PopupGoodsRes convertToPopupGoodsRes(PopupGoods popupGoods) {
-        PopupGoodsRes popupGoodsRes = new PopupGoodsRes();
-        popupGoodsRes.setProductIdx(popupGoods.getProductIdx());
-        popupGoodsRes.setProductName(popupGoods.getProductName());
-        popupGoodsRes.setProductPrice(popupGoods.getProductPrice());
-        popupGoodsRes.setProductContent(popupGoods.getProductContent());
-        popupGoodsRes.setProductImg(popupGoods.getProductImg());
-        popupGoodsRes.setProductAmount(popupGoods.getProductAmount());
-        return popupGoodsRes;
-    }
-    public Integer getPopupGoodsPrice(Long id) throws BaseException {
-        PopupGoods popupGoods = popupGoodsRepository
-                .findById(id)
-                .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_GOODS_NULL));
-        return popupGoods.getProductPrice();
-    }
 }

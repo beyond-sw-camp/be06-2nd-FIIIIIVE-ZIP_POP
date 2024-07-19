@@ -9,12 +9,29 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PopupGoodsRepository extends JpaRepository<PopupGoods, Long> {
-    public List<PopupGoods> findByProductPrice(Integer price);
 
-    public List<PopupGoods> findByProductName(String product_name);
+    @Query("SELECT pg FROM PopupGoods pg")
+    List<PopupGoods> findAll();
 
-//    public Optional<List<PopupGoods>> findByStoreName(String store_name);
+    @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore")
+    List<PopupGoods> findAllWithStore();
 
-    @Query("SELECT pg FROM PopupGoods pg JOIN pg.popupStore ps WHERE ps.storeName = :storeName")
-    public Optional<List<PopupGoods>> findByStoreName(@Param("storeName") String storeName);
+    @Query("SELECT pg FROM PopupGoods pg WHERE pg.productPrice = :productPrice")
+    Optional<List<PopupGoods>> findByProductPrice(Integer productPrice);
+
+    @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore WHERE pg.productPrice = :productPrice")
+    Optional<List<PopupGoods>> findByProductPriceWithStore(Integer productPrice);
+
+    @Query("SELECT pg FROM PopupGoods pg WHERE pg.productName = :productName")
+    Optional<List<PopupGoods>> findByProductName(String productName);
+
+    @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore WHERE pg.productName = :productName")
+    Optional<List<PopupGoods>> findByProductNameWithStore(String productName);
+
+    @Query("SELECT pg FROM PopupGoods pg WHERE pg.storeName = :storeName")
+    public Optional<List<PopupGoods>> findByStoreName(String storeName);
+
+    @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore ps WHERE ps.storeName = :storeName")
+    Optional<List<PopupGoods>> findByStoreNameWithStore(String storeName);
+
 }
