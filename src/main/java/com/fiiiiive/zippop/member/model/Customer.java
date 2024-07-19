@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.post.model.Post;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
 import java.util.*;
 
 @Entity
@@ -28,6 +30,7 @@ public class Customer {
     @Column(nullable = false, length = 100, unique = true)
     private String role;
     private Boolean enabled;
+    @BatchSize(size=10)
     @OneToMany(mappedBy = "customer")
     @JsonManagedReference
     private List<Post> postsList = new ArrayList<>();
