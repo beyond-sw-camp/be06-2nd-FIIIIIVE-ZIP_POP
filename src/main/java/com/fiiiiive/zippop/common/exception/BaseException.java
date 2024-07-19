@@ -10,6 +10,7 @@ public class BaseException extends Exception{
     private String message;
     private Integer code;
     private String details;
+    private BaseResponseMessage status;
 
     public BaseException(BaseResponseMessage baseResponseMessage) {
         this.code = baseResponseMessage.getCode();
