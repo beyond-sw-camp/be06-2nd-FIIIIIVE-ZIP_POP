@@ -1,8 +1,8 @@
-package com.fiiiiive.zippop.popup_store.model.res;
+package com.fiiiiive.zippop.popup_store.model.response;
 
 
-import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
-import com.fiiiiive.zippop.popup_review.model.res.PopupReviewRes;
+import com.fiiiiive.zippop.popup_goods.model.response.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_review.model.response.PopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import lombok.*;
 

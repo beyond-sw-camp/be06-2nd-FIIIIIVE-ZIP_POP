@@ -17,7 +17,9 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Column(nullable = false, length = 100, unique = true)
     private String email;
+    @Column(nullable = false, length = 100, unique = true)
     private String password;
     private String name;
     // 사업자 등록 번호(Company Registration Number)

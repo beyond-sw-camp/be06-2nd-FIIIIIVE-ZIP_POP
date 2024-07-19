@@ -29,6 +29,7 @@ dependencies {
 	// lombok
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
 	annotationProcessor('org.projectlombok:lombok')
+
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
@@ -38,16 +39,15 @@ dependencies {
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-	// lombok
-	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.30'
-	annotationProcessor('org.projectlombok:lombok')
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// 카카오페이 결제
 	implementation 'com.github.iamport:iamport-rest-client-java:0.2.23'
 	implementation 'com.google.code.gson:gson'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "member-service-api", description = "Member")
+@Tag(name = "member-api", description = "Member")
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/member")
@@ -19,22 +19,18 @@ public class MemberController {
     private final MemberService memberService;
     private final EmailVerifyService emailVerifyService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/signup")
-    public ResponseEntity<BaseResponse<PostSignupRes>> signup(@RequestBody PostSignupReq request) throws Exception {
-        String uuid = memberService.sendEmail(request.getEmail(), request.getRole());
-        PostSignupRes response = memberService.signup(request);
-        emailVerifyService.save(request.getEmail(), uuid);
+    @PostMapping("/signup")
+    public ResponseEntity<BaseResponse<PostSignupRes>> signup(@RequestBody PostSignupReq dto) throws Exception {
+        String uuid = memberService.sendEmail(dto);
+        PostSignupRes response = memberService.signup(dto);
+        emailVerifyService.save(dto, uuid);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_REGISTER_SUCCESS, response));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/verify")
-    public ResponseEntity<BaseResponse> verify(String email, String role, String uuid) {
-        Boolean verifyResponse = emailVerifyService.isExist(email, uuid);
-        if (verifyResponse) {
-            Boolean activeResponse = memberService.activeMember(email, role);
-            return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SUCCESS));
-        } else {
-            return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL));
-        }
+    @GetMapping("/verify")
+    public ResponseEntity<BaseResponse> verify(String email, String role, String uuid) throws Exception {
+        emailVerifyService.isExist(email, uuid);
+        memberService.activeMember(email, role);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SUCCESS));
     }
 }

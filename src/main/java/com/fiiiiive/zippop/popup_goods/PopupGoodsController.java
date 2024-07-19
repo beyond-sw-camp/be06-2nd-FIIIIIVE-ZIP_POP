@@ -2,8 +2,8 @@ package com.fiiiiive.zippop.popup_goods;
 
 
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
-import com.fiiiiive.zippop.popup_goods.model.req.PopupGoodsReq;
-import com.fiiiiive.zippop.popup_goods.model.res.PopupGoodsRes;
+import com.fiiiiive.zippop.popup_goods.model.request.PopupGoodsReq;
+import com.fiiiiive.zippop.popup_goods.model.response.PopupGoodsRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

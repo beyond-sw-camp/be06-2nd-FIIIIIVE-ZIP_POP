@@ -6,8 +6,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PostLoginReq {
-    private String role;
     private String email;
     private String password;
-    private String crn; // 사업자 등록 번호(Company Registration Number
 }

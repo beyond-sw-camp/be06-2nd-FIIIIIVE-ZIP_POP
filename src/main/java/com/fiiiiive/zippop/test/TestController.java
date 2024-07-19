@@ -20,7 +20,6 @@ public class TestController {
     @Operation(summary = "exception")
     @RequestMapping(method = RequestMethod.GET, value = "/exception")
     public ResponseEntity<BaseResponse> exception(){
-//        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.REQUEST_SUCCESS, "ex01"));
         throw new RuntimeException("Test exception");
     }
 

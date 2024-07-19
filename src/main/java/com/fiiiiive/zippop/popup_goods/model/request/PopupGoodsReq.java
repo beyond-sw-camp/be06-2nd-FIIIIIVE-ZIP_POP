@@ -1,4 +1,4 @@
-package com.fiiiiive.zippop.popup_goods.model.req;
+package com.fiiiiive.zippop.popup_goods.model.request;
 
 import lombok.*;
 
