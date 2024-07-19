@@ -1,7 +1,9 @@
 package com.fiiiiive.zippop.popup_goods;
 
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -34,4 +36,8 @@ public interface PopupGoodsRepository extends JpaRepository<PopupGoods, Long> {
     @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore ps WHERE ps.storeName = :storeName")
     Optional<List<PopupGoods>> findByStoreNameWithStore(String storeName);
 
+    // 비관적락 잠금 설정
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT pg FROM PopupGoods pg WHERE pg.productIdx = :productIdx")
+    Optional<PopupGoods> findByIdx(@Param("productIdx") Long productIdx);
 }

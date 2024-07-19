@@ -24,7 +24,6 @@ public class Orders {
     @Column(nullable = false, length = 100, unique = true)
     private String impUid;
 
-
     @ManyToOne
     @JoinColumn(name = "Customer_id")
     private Customer customer;
@@ -47,6 +46,4 @@ public class Orders {
     void updatedAt() {
         this.updatedAt = Timestamp.from(Instant.now());
     }
-
-
 }

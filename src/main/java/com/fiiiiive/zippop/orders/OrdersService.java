@@ -3,6 +3,7 @@ package com.fiiiiive.zippop.orders;
 
 import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.orders.model.Orders;
 import com.fiiiiive.zippop.orders.model.OrdersDetail;
@@ -15,6 +16,7 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.GOODS_ORDER_FAIL_EXCEEDED;
+import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.ORDERS_VALIDATION_FAIL;
 
 
 @Service
@@ -33,7 +38,19 @@ public class OrdersService {
     private final PopupGoodsRepository popupGoodsRepository;
     private final PopupGoodsService popupGoodsService;
 
-    public GetOrdersRes paymentValidation(Customer customer, String impUid) throws BaseException, IamportResponseException, IOException {
+    @Transactional
+    public GetOrdersRes paymentValidation(CustomUserDetails customUserDetails, String impUid) throws BaseException, IamportResponseException, IOException {
+        Customer customer = null;
+        if (customUserDetails != null) {
+            customer = Customer.builder()
+                    .idx(customUserDetails.getIdx())
+                    .email(customUserDetails.getEmail())
+                    .password(customUserDetails.getPassword())
+                    .role(customUserDetails.getRole())
+                    .enabled(customUserDetails.getEnabled())
+                    .build();
+        }
+
         // iamport에서 결제 정보를 받아옴
         IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
         // 결제된 가격을 저장
@@ -50,10 +67,14 @@ public class OrdersService {
             // 굿즈 번호에 해당하는 굿즈를 구매한 갯수 저장
             Integer purchaseGoodsAmount = goodsMap.get(key).intValue();
             // DB에서 조회한 가격 * 구매한 갯수를 반복문 돌면서 다 더한다.
-            PopupGoods popupGoods = popupGoodsRepository.findById(Long.parseLong(key)).orElseThrow();
+            PopupGoods popupGoods = popupGoodsRepository.findByIdx(Long.parseLong(key)).orElseThrow();
+            // 굿즈 재고보다 더 많은 갯수를 구매하려고 하면 에러 리턴
+            if (purchaseGoodsAmount > popupGoods.getProductAmount()) {
+                throw new BaseException(GOODS_ORDER_FAIL_EXCEEDED);
+            }
             popupGoodsList.add(popupGoods);
             totalPurchaseGoodsAmount +=  purchaseGoodsAmount * popupGoods.getProductPrice(); // * 조회한 가격
-            System.out.println(purchaseGoodsAmount);
+
         }
 
         // 결제 금액이 맞으면
@@ -71,8 +92,11 @@ public class OrdersService {
                 Integer purchaseGoodsAmount = goodsMap.get(key).intValue();
                 PopupGoods popupGoods = popupGoodsRepository.findById(Long.parseLong(key)).orElseThrow();
                 popupGoods.setProductAmount(popupGoods.getProductAmount() - purchaseGoodsAmount);
+
                 popupGoodsRepository.save(popupGoods);
             }
+
+            List<PopupGoods> popupGoodsList11 = new ArrayList<>();
 
             for(PopupGoods popupGoods : popupGoodsList) {
                 OrdersDetail ordersDetail = OrdersDetail.builder()
@@ -83,18 +107,12 @@ public class OrdersService {
                 popupGoodsRepository.findById(popupGoods.getProductIdx());
             }
 
-            return GetOrdersRes.builder().impUid(impUid).build();
+            return GetOrdersRes.builder()
+                    .impUid(impUid)
+                    .productIdxMap(goodsMap)
+                    .build();
         } else {
-            throw new BaseException(BaseResponseMessage.ORDERS_VALIDATION_FAIL);
+            throw new BaseException(ORDERS_VALIDATION_FAIL);
         }
     }
-
-//    public Boolean checkOrdered(Customer customer, Long productIdx) {
-//        Optional<Orders> result = ordersRepository.findByCustomerAndPopupGoods(customer, PopupGoods.builder().productIdx(productIdx).build());
-//
-//        if (result.isPresent()) {
-//            return true;
-//        }
-//        return false;
-//    }
 }
