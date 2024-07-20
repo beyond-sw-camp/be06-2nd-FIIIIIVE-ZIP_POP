@@ -101,6 +101,11 @@ public enum BaseResponseMessage {
     CART_COUNT_FAIL_INVALID_OPERATION(false, 5201, "장바구니 아이템의 수량을 감소에 실패했습니다."),
     CART_COUNT_FAIL_IS_0(false, 5202, "장바구니 아이템의 수량이 0입니다."),
     CART_COUNT_FAIL_NOT_FOUND(false, 5203, "장바구니 아이템의 수량이 0입니다."),
+    // 장바구니 삭제 5300
+    CART_DELETE_ALL_SUCCESS(true, 5300, "장바구니 전체 삭제에 성공했습니다."),
+    // 장바구니 전체삭제 5400
+    CART_DELETE_SUCCESS(true, 5400, "장바구니 아이템 삭제에 성공했습니다."),
+
     // ========================================================================================================================
     // 게시글 6000
 

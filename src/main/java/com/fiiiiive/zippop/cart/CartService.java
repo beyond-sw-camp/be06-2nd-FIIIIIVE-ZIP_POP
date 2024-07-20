@@ -73,7 +73,6 @@ public class CartService {
             throw new BaseException(BaseResponseMessage.CART_COUNT_FAIL_INVALID_OPERATION);
         }
     }
-
     public List<GetCartRes> list(CustomUserDetails customUserDetails) throws BaseException {
         Optional<List<Cart>> carts = cartRepository.findAllByCustomerIdx(customUserDetails.getIdx());
         if (carts.isEmpty()) {
@@ -90,6 +89,14 @@ public class CartService {
             getCartResList.add(getCartRes);
         }
         return getCartResList;
+    }
+
+    public void deleteByCartIdx(Long cartIdx) throws BaseException {
+        cartRepository.deleteById(cartIdx);
+    }
+
+    public void deleteAll(CustomUserDetails customUserDetails) throws BaseException {
+        cartRepository.deleteAllByCustomerIdx(customUserDetails.getIdx());
     }
 }
 
