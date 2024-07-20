@@ -22,7 +22,6 @@ import java.util.Optional;
 
 
 @Service
-@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
@@ -55,8 +54,8 @@ public class CartService {
             }
     }
 
-    public CountCartRes adjustCount(Long cartIdx, Long operation) throws BaseException {
-        Cart cart = cartRepository.findById(cartIdx)
+    public CountCartRes adjustCount(CustomUserDetails customUserDetails, Long cartIdx, Long operation) throws BaseException {
+        Cart cart = cartRepository.findByIdAndCustomerIdx(cartIdx, customUserDetails.getIdx())
                 .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_COUNT_FAIL_NOT_FOUND)));
         if (operation == 0){
             cart.setCount(cart.getCount() + 1);
@@ -73,28 +72,36 @@ public class CartService {
             throw new BaseException(BaseResponseMessage.CART_COUNT_FAIL_INVALID_OPERATION);
         }
     }
+
     public List<GetCartRes> list(CustomUserDetails customUserDetails) throws BaseException {
-        Optional<List<Cart>> carts = cartRepository.findAllByCustomerIdx(customUserDetails.getIdx());
-        if (carts.isEmpty()) {
+        Optional<List<Cart>> result = cartRepository.findAllByCustomerIdx(customUserDetails.getIdx());
+        if (result.isPresent()) {
+            List<GetCartRes> getCartResList = new ArrayList<>();
+            for(Cart cart: result.get()){
+                GetCartRes getCartRes = GetCartRes.builder()
+                        .cartIdx(cart.getCartIdx())
+                        .popupGoods(cart.getPopupGoods())
+                        .count(cart.getCount())
+                        .price(cart.getPrice())
+                        .build();
+                getCartResList.add(getCartRes);
+            }
+            return getCartResList;
+        }
+        else {
             throw new BaseException(BaseResponseMessage.CART_SEARCH_FAIL);
         }
-        List<GetCartRes> getCartResList = new ArrayList<>();
-        for(Cart cart: carts.get()){
-            GetCartRes getCartRes = GetCartRes.builder()
-                    .cartIdx(cart.getCartIdx())
-                    .popupGoods(cart.getPopupGoods())
-                    .count(cart.getCount())
-                    .price(cart.getPrice())
-                    .build();
-            getCartResList.add(getCartRes);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByCartIdx(CustomUserDetails customUserDetails, Long cartIdx) throws BaseException {
+        int deletedCount = cartRepository.deleteByIdAndCustomerIdx(cartIdx, customUserDetails.getIdx());
+        if (deletedCount == 0) {
+            throw new BaseException(BaseResponseMessage.CART_DELETE_FAIL_ITEM_NOT_FOUND);
         }
-        return getCartResList;
     }
 
-    public void deleteByCartIdx(Long cartIdx) throws BaseException {
-        cartRepository.deleteById(cartIdx);
-    }
-
+    @Transactional(rollbackFor = Exception.class)
     public void deleteAll(CustomUserDetails customUserDetails) throws BaseException {
         cartRepository.deleteAllByCustomerIdx(customUserDetails.getIdx());
     }

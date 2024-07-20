@@ -36,10 +36,10 @@ public class CartController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_REGISTER_SUCCESS, response));
     }
 
-//    @ExeTimer
+    @ExeTimer
     @GetMapping("/adjust-count")
-    public ResponseEntity<BaseResponse> adjustCount(@RequestParam Long cartIdx, @RequestParam Long operation) throws BaseException {
-        CountCartRes response  = cartService.adjustCount(cartIdx, operation);
+    public ResponseEntity<BaseResponse> adjustCount(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx, @RequestParam Long operation) throws BaseException {
+        CountCartRes response  = cartService.adjustCount(customUserDetails, cartIdx, operation);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_COUNT_SUCCESS, response));
     }
 
@@ -57,8 +57,8 @@ public class CartController {
     }
 
     @DeleteMapping("/delete-cart")
-    public ResponseEntity<BaseResponse> deleteByCartIdx(@RequestParam Long cartIdx) throws BaseException {
-        cartService.deleteByCartIdx(cartIdx);
+    public ResponseEntity<BaseResponse> deleteByCartIdx(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx) throws BaseException {
+        cartService.deleteByCartIdx(customUserDetails, cartIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_SUCCESS));
     }
 

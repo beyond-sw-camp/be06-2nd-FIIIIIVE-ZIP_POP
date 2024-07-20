@@ -28,39 +28,42 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public PostSignupRes signup(PostSignupReq request) throws BaseException {
-        try {
-            if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
-                Company company = Company.builder()
-                        .email(request.getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .name(request.getName())
-                        .crn(request.getCrn())
-                        .role(request.getRole())
-                        .enabled(false)
-                        .build();
-                companyRepository.save(company);
-                return PostSignupRes.builder()
-                        .idx(company.getCompanyIdx())
-                        .role(request.getRole())
-                        .email(request.getEmail())
-                        .build();
-            } else {
-                Customer customer = Customer.builder()
-                        .email(request.getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .name(request.getName())
-                        .role(request.getRole())
-                        .enabled(false)
-                        .build();
-                customerRepository.save(customer);
-                return PostSignupRes.builder()
-                        .idx(customer.getCustomerIdx())
-                        .role(request.getRole())
-                        .email(request.getEmail())
-                        .build();
+        if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
+            if(customerRepository.findByEmail(request.getEmail()).isPresent()) {
+                throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_CUSTOMER);
             }
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL, e.getMessage());
+            Company company = Company.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .name(request.getName())
+                    .crn(request.getCrn())
+                    .role(request.getRole())
+                    .enabled(false)
+                    .build();
+            companyRepository.save(company);
+            return PostSignupRes.builder()
+                    .idx(company.getCompanyIdx())
+                    .role(request.getRole())
+                    .email(request.getEmail())
+                    .build();
+        } else {
+            if(companyRepository.findByEmail(request.getEmail()).isPresent()) {
+                throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_COMPANY);
+            }
+            Customer customer = Customer.builder()
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .name(request.getName())
+                    .role(request.getRole())
+                    .point(3000)
+                    .enabled(false)
+                    .build();
+            customerRepository.save(customer);
+            return PostSignupRes.builder()
+                    .idx(customer.getCustomerIdx())
+                    .role(request.getRole())
+                    .email(request.getEmail())
+                    .build();
         }
     }
 
@@ -86,6 +89,7 @@ public class MemberService {
         }
         return true;
     }
+
     public String sendEmail(PostSignupReq dto) throws MailException, Exception {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(dto.getEmail());

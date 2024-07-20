@@ -12,6 +12,8 @@ public enum BaseResponseMessage {
     // 회원가입 2000
     MEMBER_REGISTER_SUCCESS(true, 2000, "이메일 인증을 완료해주세요"),
     MEMBER_REGISTER_FAIL(false, 2001, "회원가입에 실패했습니다."),
+    MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_CUSTOMER(false, 2002, "이미 고객 회원으로 가입된 계정입니다. 고객 회원은 기업 회원으로 회원가입 할 수 없습니다."),
+    MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_COMPANY(false, 2003, "이미 기업 회원으로 가입된 계정입니다. 기업 회원은 고객 회원으로 회원가입할 수 없습니다."),
     MEMBER_REGISTER_FAIL_ID_EMPTY(false, 2002, "아이디를 입력해주세요"),
     MEMBER_REGISTER_FAIL_ID_FORMAT(false, 2003, "아이디 형식이 맞지 않습니다."),
     MEMBER_REGISTER_FAIL_ID_DUPLICATION(false, 2004, "아이디가 중복되었습니다."),
@@ -100,11 +102,25 @@ public enum BaseResponseMessage {
     CART_COUNT_SUCCESS(true, 5200, "장바구니 아이템의 수량을 조절에 성공했습니다."),
     CART_COUNT_FAIL_INVALID_OPERATION(false, 5201, "장바구니 아이템의 수량을 감소에 실패했습니다."),
     CART_COUNT_FAIL_IS_0(false, 5202, "장바구니 아이템의 수량이 0입니다."),
-    CART_COUNT_FAIL_NOT_FOUND(false, 5203, "장바구니 아이템의 수량이 0입니다."),
+    CART_COUNT_FAIL_NOT_FOUND(false, 5203, "장바구니 아이템을 찾을 수 없습니다."),
     // 장바구니 삭제 5300
-    CART_DELETE_ALL_SUCCESS(true, 5300, "장바구니 전체 삭제에 성공했습니다."),
+    CART_DELETE_SUCCESS(true, 5300, "장바구니 아이템 삭제에 성공했습니다."),
+    CART_DELETE_FAIL(false, 5301, "장바구니 아이템 삭제에 실패했습니다."),
+    CART_DELETE_FAIL_ITEM_NOT_FOUND(false, 5302, "장바구니 아이템을 찾을 수 없습니다."),
     // 장바구니 전체삭제 5400
-    CART_DELETE_SUCCESS(true, 5400, "장바구니 아이템 삭제에 성공했습니다."),
+    CART_DELETE_ALL_SUCCESS(true, 5400, "장바구니 전체 삭제에 성공했습니다."),
+    CART_DELETE_ALL_FAIL(false, 5401, "장바구니 전체 삭제에 실패했습니다."),
+
+    // ========================================================================================================================
+    // 찜 6000
+    // 찜 등록 6100
+    FAVORITE_ACTIVE_SUCCESS(true, 6100, "해당 팝업 스토어를 찜 목록에 추가했습니다."),
+    FAVORITE_ACTIVE_FAIL_STORE_NOT_FOUND(false, 6101, "해당 팝업 스토어를 찾을 수 없습니다."),
+    FAVORITE_ACTIVE_FAIL_MEMBER_NOT_FOUND(false, 6102, "유저를 찾을 수 없습니다."),
+    FAVORITE_INACTIVE_SUCCESS(true, 6200, "해당 팝업 스토어를 찜 목록에서 뺏습니다."),
+    // 찜 조회 6200
+    FAVORITE_SEARCH_ALL_SUCCESS(true, 6200, "팝업 스토어 찜 목록을 불러오는데 성공했습니다."),
+    FAVORITE_SEARCH_ALL_FAIL(false, 6201, "팝업 스토어 찜 목록을 불러오는데 실패했습니다."),
 
     // ========================================================================================================================
     // 게시글 6000
