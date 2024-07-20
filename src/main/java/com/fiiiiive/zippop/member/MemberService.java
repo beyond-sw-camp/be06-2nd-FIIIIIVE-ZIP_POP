@@ -8,6 +8,7 @@ import com.fiiiiive.zippop.member.model.request.PostSignupReq;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailParseException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,37 +28,39 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public PostSignupRes signup(PostSignupReq request) throws BaseException {
-        if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
-            Company company = Company.builder()
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .name(request.getName())
-                    .crn(request.getCrn())
-                    .role(request.getRole())
-                    .enabled(false)
-                    .build();
-            companyRepository.save(company);
-            return PostSignupRes.builder()
-                    .idx(company.getIdx())
-                    .role(request.getRole())
-                    .email(request.getEmail())
-                    .build();
-        } else if (Objects.equals(request.getRole(), "ROLE_CUSTOMER")){
-            Customer customer = Customer.builder()
-                    .email(request.getEmail())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .name(request.getName())
-                    .role(request.getRole())
-                    .enabled(false)
-                    .build();
-            customerRepository.save(customer);
-            return PostSignupRes.builder()
-                    .idx(customer.getIdx())
-                    .role(request.getRole())
-                    .email(request.getEmail())
-                    .build();
-        } else {
-            throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL);
+        try {
+            if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
+                Company company = Company.builder()
+                        .email(request.getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .name(request.getName())
+                        .crn(request.getCrn())
+                        .role(request.getRole())
+                        .enabled(false)
+                        .build();
+                companyRepository.save(company);
+                return PostSignupRes.builder()
+                        .idx(company.getCompanyIdx())
+                        .role(request.getRole())
+                        .email(request.getEmail())
+                        .build();
+            } else {
+                Customer customer = Customer.builder()
+                        .email(request.getEmail())
+                        .password(passwordEncoder.encode(request.getPassword()))
+                        .name(request.getName())
+                        .role(request.getRole())
+                        .enabled(false)
+                        .build();
+                customerRepository.save(customer);
+                return PostSignupRes.builder()
+                        .idx(customer.getCustomerIdx())
+                        .role(request.getRole())
+                        .email(request.getEmail())
+                        .build();
+            }
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL, e.getMessage());
         }
     }
 

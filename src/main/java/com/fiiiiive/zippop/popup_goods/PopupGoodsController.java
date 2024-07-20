@@ -1,9 +1,11 @@
 package com.fiiiiive.zippop.popup_goods;
 
 
+import com.fiiiiive.zippop.common.annotation.ExeTimer;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.model.request.CreatePopupGoodsReq;
 import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "popup-goods-api", description = "PopupGoods")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/popup-goods")
@@ -22,7 +25,6 @@ public class PopupGoodsController {
         popupGoodsService.register(createPopupGoodsReq);
         return ResponseEntity.ok("등록 성공");
     }
-
 
     @GetMapping("/search")
     public ResponseEntity<List<GetPopupGoodsRes>> search() {

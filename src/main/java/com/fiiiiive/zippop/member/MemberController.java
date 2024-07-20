@@ -1,4 +1,6 @@
 package com.fiiiiive.zippop.member;
+import com.fiiiiive.zippop.common.annotation.ExeTimer;
+import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
@@ -23,12 +25,12 @@ public class MemberController {
     public ResponseEntity<BaseResponse<PostSignupRes>> signup(@RequestBody PostSignupReq dto) throws Exception {
         String uuid = memberService.sendEmail(dto);
         PostSignupRes response = memberService.signup(dto);
-        emailVerifyService.save(dto, uuid);
+        emailVerifyService.save(dto.getEmail(), uuid);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_REGISTER_SUCCESS, response));
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<BaseResponse> verify(String email, String role, String uuid) throws Exception {
+    public ResponseEntity<BaseResponse> verify(String email, String role, String uuid) throws Exception, BaseException {
         emailVerifyService.isExist(email, uuid);
         memberService.activeMember(email, role);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SUCCESS));

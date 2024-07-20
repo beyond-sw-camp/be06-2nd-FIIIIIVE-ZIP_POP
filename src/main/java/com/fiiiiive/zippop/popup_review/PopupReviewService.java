@@ -18,7 +18,6 @@ public class PopupReviewService {
     private final PopupReviewRepository popupReviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-
     public void register(CreatePopupReviewReq createPopupReviewReq) {
         PopupReview popupReview = PopupReview.builder()
                 .reviewTitle(createPopupReviewReq.getReviewTitle())
@@ -79,16 +78,10 @@ public class PopupReviewService {
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
             start = System.currentTimeMillis();
             result = popupReviewRepository.findByStoreNameWithStore(storeName);
             end = System.currentTimeMillis();
             diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return getPopupReviewResList;
 
         } else {

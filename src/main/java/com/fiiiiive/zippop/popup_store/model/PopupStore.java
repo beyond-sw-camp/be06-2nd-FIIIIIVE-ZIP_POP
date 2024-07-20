@@ -41,7 +41,7 @@ public class PopupStore {
     private Integer totalPeople;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_idx")
+    @JoinColumn(name = "companyIdx")
     @JsonBackReference
     private Company company;
 }

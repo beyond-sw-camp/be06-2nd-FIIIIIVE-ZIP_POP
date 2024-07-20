@@ -3,6 +3,7 @@ package com.fiiiiive.zippop.popup_store;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_store.model.request.CreatePopupStoreReq;
 import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "popup-store-api", description = "PopupStore")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/popup-store")
