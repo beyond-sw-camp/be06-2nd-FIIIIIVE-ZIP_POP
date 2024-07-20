@@ -4,7 +4,6 @@ import com.fiiiiive.zippop.cart.model.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +23,16 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
             "JOIN FETCH c.customer " +
             "JOIN FETCH c.popupGoods " +
             "WHERE c.customer.customerIdx = :customerIdx and c.popupGoods.productIdx = :productIdx")
-    Optional<Cart> findByCustomerIdxAndProductIdx(@Param("customerIdx") Long customerIdx, @Param("productIdx") Long productIdx);
+    Optional<Cart> findByCustomerIdxAndProductIdx(Long customerIdx, Long productIdx);
+
+    @Query("SELECT c FROM Cart c " +
+            "WHERE c.customer.customerIdx = :customerIdx and c.cartIdx = :cartIdx")
+    Optional<Cart> findByIdAndCustomerIdx(Long cartIdx, Long customerIdx);
+
+    @Modifying
+    @Query("DELETE FROM Cart c " +
+            "WHERE c.cartIdx = :cartIdx and c.customer.customerIdx = :customerIdx")
+    int deleteByIdAndCustomerIdx(Long cartIdx, Long customerIdx);
 
     @Modifying
     @Query("DELETE FROM Cart c " +
