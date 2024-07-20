@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.io.IOException;
 public class ExceptionFilter extends OncePerRequestFilter {
     private void setErrorResponse(HttpServletResponse response, BaseResponseMessage baseResponseMessage, String errorMessage){
         ObjectMapper objectMapper = new ObjectMapper();
-        response.setStatus(baseResponseMessage.getCode());
+        response.setStatus(response.getStatus());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("utf-8");
         try{
@@ -30,17 +32,21 @@ public class ExceptionFilter extends OncePerRequestFilter {
             e.printStackTrace();
         }
     }
-
+    
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e){
             log.error("Bearer 토큰이 만료되었습니다.");
-            setErrorResponse(response, BaseResponseMessage.TOKEN_EXPIRED, e.getMessage());
+            setErrorResponse(response, BaseResponseMessage.MEMBER_ACCESS_TOKEN_EXPIRED, e.getMessage());
         } catch (JwtException | IllegalArgumentException e){
             log.error("Bearer 토큰이 유효하지 않습니다.");
-            setErrorResponse(response, BaseResponseMessage.TOKEN_INVALID, e.getMessage());
+            setErrorResponse(response, BaseResponseMessage.MEMBER_ACCESS_TOKEN_INVALID, e.getMessage());
+        } catch (BadCredentialsException e){
+            if(e instanceof BadCredentialsException){
+                System.out.println("dd");
+            }
         }
     }
 }

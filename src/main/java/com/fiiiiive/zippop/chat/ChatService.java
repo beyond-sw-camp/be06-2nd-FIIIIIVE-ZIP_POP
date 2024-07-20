@@ -58,7 +58,6 @@ public class ChatService {
             List<ChatMessage> messages = chatRoom.getMessages();
 
             long endTime = System.currentTimeMillis();
-            System.out.println("성능 개선 전 실행 시간: " + (endTime - startTime) + "ms");
 
             return new BaseResponse<>(BaseResponseMessage.CHAT_HISTORY_SEARCH_SUCCESS, messages);
         } catch (BaseException e) {

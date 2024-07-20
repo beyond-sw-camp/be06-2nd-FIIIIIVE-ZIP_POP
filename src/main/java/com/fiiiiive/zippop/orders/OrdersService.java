@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.GOODS_ORDER_FAIL_EXCEEDED;
-import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.ORDERS_VALIDATION_FAIL;
+import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.*;
 
 
 @Service
@@ -43,7 +42,7 @@ public class OrdersService {
         Customer customer = null;
         if (customUserDetails != null) {
             customer = Customer.builder()
-                    .idx(customUserDetails.getIdx())
+                    .customerIdx(customUserDetails.getIdx())
                     .email(customUserDetails.getEmail())
                     .password(customUserDetails.getPassword())
                     .role(customUserDetails.getRole())
@@ -70,7 +69,7 @@ public class OrdersService {
             PopupGoods popupGoods = popupGoodsRepository.findByIdx(Long.parseLong(key)).orElseThrow();
             // 굿즈 재고보다 더 많은 갯수를 구매하려고 하면 에러 리턴
             if (purchaseGoodsAmount > popupGoods.getProductAmount()) {
-                throw new BaseException(GOODS_ORDER_FAIL_EXCEEDED);
+                throw new BaseException(POPUP_GOODS_ORDERS_FAIL_EXCEEDED);
             }
             popupGoodsList.add(popupGoods);
             totalPurchaseGoodsAmount +=  purchaseGoodsAmount * popupGoods.getProductPrice(); // * 조회한 가격
@@ -112,7 +111,7 @@ public class OrdersService {
                     .productIdxMap(goodsMap)
                     .build();
         } else {
-            throw new BaseException(ORDERS_VALIDATION_FAIL);
+            throw new BaseException(POPUP_GOODS_ORDERS_VALIDATION_FAIL);
         }
     }
 }

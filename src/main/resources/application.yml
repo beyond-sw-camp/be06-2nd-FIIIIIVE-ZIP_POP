@@ -5,7 +5,7 @@ spring:
   jwt:
     secret: 12345678901234567890123456789012
   datasource:
-    url: ${DB_URL}
+    url: ${DATABASE_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.mariadb.jdbc.Driver

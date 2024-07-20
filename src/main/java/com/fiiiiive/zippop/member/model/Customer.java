@@ -17,7 +17,7 @@ import java.util.*;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    private Long customerIdx;
     @Column(nullable = false, length = 100, unique = true)
     private String email;
     @Column(nullable = false, length = 100, unique = true)

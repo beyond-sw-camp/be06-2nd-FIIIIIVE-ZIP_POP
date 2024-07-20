@@ -60,14 +60,10 @@ public class PopupGoodsService {
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
             start = System.currentTimeMillis();
             result = Optional.of(popupGoodsRepository.findAllWithStore());
             end = System.currentTimeMillis();
             diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
             return getPopupGoodsResList;
         } else {
             throw new RuntimeException("No popup goods found");
