@@ -10,12 +10,12 @@ import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.post.PostRepository;
 import com.fiiiiive.zippop.post.model.Post;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,20 +51,33 @@ public class CommentService {
         }
     }
 
-
-    public List<GetCommentRes> getCommentsByPost(Long postId) throws BaseException {
-        List<Comment> comments = commentRepository.findByPost_Idx(postId);
+    public Page<GetCommentRes> getCommentsByPost(Long postId, Pageable pageable) throws BaseException {
+        Page<Comment> comments = commentRepository.findByPost_Idx(postId, pageable);
         if (comments.isEmpty()) {
             throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
         }
 
-        return comments.stream()
-                .map(comment -> GetCommentRes.builder()
-                        .commentId(comment.getCommentId())
-                        .content(comment.getContent())
-                        .email(comment.getCustomer().getEmail())
-                        .createdDate(comment.getCreatedDate().toString())
-                        .build())
-                .collect(Collectors.toList());
+        return comments.map(comment -> GetCommentRes.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .email(comment.getCustomer().getEmail())
+                .createdDate(comment.getCreatedDate().toString())
+                .build());
     }
+
+    public Page<GetCommentRes> getCommentsByCustomerEmail(String email, Pageable pageable) throws BaseException {
+        Page<Comment> comments = commentRepository.findByCustomerEmail(email, pageable);
+        if (comments.isEmpty()) {
+            throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
+        }
+
+        return comments.map(comment -> GetCommentRes.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .email(comment.getCustomer().getEmail())
+                .createdDate(comment.getCreatedDate().toString())
+                .build());
+    }
+
+
 }
