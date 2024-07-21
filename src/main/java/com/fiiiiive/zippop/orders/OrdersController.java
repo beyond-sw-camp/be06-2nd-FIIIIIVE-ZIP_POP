@@ -21,10 +21,22 @@ import java.io.IOException;
 @RequestMapping(value = "/api/v1/orders")
 public class OrdersController {
     private final OrdersService ordersService;
-    @GetMapping("/validation")
-    public BaseResponse<GetOrdersRes> validation(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam String impUid) throws BaseException, IamportResponseException, IOException{
-        GetOrdersRes response = ordersService.paymentValidation(customUserDetails, impUid);
+
+    @GetMapping("/validation/stockGoods")
+    public BaseResponse<GetOrdersRes> stockGoodsValidation(@AuthenticationPrincipal CustomUserDetails customUserDetails,  @RequestParam String impUid) throws BaseException, IamportResponseException, IOException{
+        GetOrdersRes response = ordersService.stockGoodsPaymentValidation(customUserDetails, impUid);
         return new BaseResponse(BaseResponseMessage.POPUP_GOODS_ORDERS_VALIDATION_SUCCESS,response);
     }
-}
 
+    @GetMapping("/validation/reservationGoods")
+    public BaseResponse<GetOrdersRes> reservationGoodsValidation(@AuthenticationPrincipal CustomUserDetails customUserDetails,  @RequestParam String impUid) throws BaseException, IamportResponseException, IOException{
+        GetOrdersRes response = ordersService.reservationGoodsPaymentValidation(customUserDetails, impUid);
+        return new BaseResponse(BaseResponseMessage.POPUP_GOODS_ORDERS_VALIDATION_SUCCESS,response);
+    }
+
+    @GetMapping("/validation/registrationFee")
+    public BaseResponse<GetOrdersRes> registrationFeeValidation(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam String impUid) throws BaseException, IamportResponseException, IOException{
+        GetOrdersRes response = ordersService.popupStoreRegistrationValidation(customUserDetails, impUid);
+        return new BaseResponse(BaseResponseMessage.POPUP_STORE_REGISTER_SUCCESS,response);
+    }
+}
