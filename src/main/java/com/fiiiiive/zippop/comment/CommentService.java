@@ -67,4 +67,14 @@ public class CommentService {
                         .build())
                 .collect(Collectors.toList());
     }
+    public List<GetCommentRes> getCommentsByCustomerEmail(String email) throws BaseException {
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.MEMBER_LOGIN_FAIL_NOT_FOUND));
+
+        return customer.getCommentList().stream()
+                .map(comment -> new GetCommentRes(comment.getCommentId(), comment.getContent(), comment.getCustomer().getEmail(), comment.getCreatedDate().toString()))
+                .collect(Collectors.toList());
+    }
+
+
 }

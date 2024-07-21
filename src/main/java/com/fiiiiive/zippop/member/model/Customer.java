@@ -2,6 +2,7 @@ package com.fiiiiive.zippop.member.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.cart.model.Cart;
+import com.fiiiiive.zippop.comment.model.Comment;
 import com.fiiiiive.zippop.favorite.model.Favorite;
 import com.fiiiiive.zippop.post.model.Post;
 import jakarta.persistence.*;
@@ -41,4 +42,9 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Favorite> favoriteList;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Comment> commentList;
+
+
 }

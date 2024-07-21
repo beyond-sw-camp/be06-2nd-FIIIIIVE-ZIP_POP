@@ -1,5 +1,7 @@
 package com.fiiiiive.zippop.post;
 
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.CustomerRepository;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.post.model.Post;
@@ -22,55 +24,46 @@ public class PostService {
     private final PostRepository postRepository;
     private final CustomerRepository customerRepository;
 
-    public void register(CreatePostReq createPostReq) {
+    public void register(CreatePostReq createPostReq) throws BaseException {
         Post post = Post.builder()
                 .postTitle(createPostReq.getPostTitle())
                 .postContent(createPostReq.getPostContent())
                 .postDate(createPostReq.getPostDate())
+                .email(createPostReq.getEmail())
                 .build();
-        Optional<Customer> customer = customerRepository.findByEmail(createPostReq.getEmail());
-        if (customer.isPresent()) {
-            post.setCustomer(customer.get());
-            post.setEmail(customer.get().getEmail());
+        try {
             postRepository.save(post);
-            customer.get().getPostsList().add(post);
-        } else {
-            throw new RuntimeException("Customer not found");
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseMessage.POST_REGISTER_FAIL);
         }
     }
 
-    public List<GetPostRes> findByCustomerEmail(String email) {
-        Long start = System.currentTimeMillis();
+    public List<GetPostRes> findByCustomerEmail(String email) throws BaseException {
         Optional<List<Post>> result = postRepository.findByEmail(email);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-        if (result.isPresent()) {
-            List<GetPostRes> getPostResList = new ArrayList<>();
-            for (Post post : result.get()) {
-                GetPostRes getPostRes = GetPostRes.builder()
-                        .postTitle(post.getPostTitle())
-                        .postContent(post.getPostContent())
-                        .email(post.getCustomer().getEmail())
-                        .postDate(post.getPostDate())
-                        .build();
-                getPostResList.add(getPostRes);
-            }
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-            start = System.currentTimeMillis();
-            result = postRepository.findByEmailFetchJoin(email);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-            return getPostResList;
-        } else{
-            throw new RuntimeException("Customer not found");
+        if (result.isEmpty()) {
+            throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
         }
+
+        List<GetPostRes> getPostResList = new ArrayList<>();
+        for (Post post : result.get()) {
+            GetPostRes getPostRes = GetPostRes.builder()
+                    .postTitle(post.getPostTitle())
+                    .postContent(post.getPostContent())
+                    .email(post.getEmail())
+                    .postDate(post.getPostDate())
+                    .build();
+            getPostResList.add(getPostRes);
+        }
+
+        return getPostResList;
     }
 
-    public Page<Post> getAllPostsPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findPageBy(pageable);
+    public Page<Post> getAllPostsPaged(int page, int size) throws BaseException {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return postRepository.findPageBy(pageable);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
+        }
     }
 }

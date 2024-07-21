@@ -1,9 +1,12 @@
 package com.fiiiiive.zippop.post.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fiiiiive.zippop.comment.model.Comment;
 import com.fiiiiive.zippop.member.model.Customer;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +27,7 @@ public class Post {
     private String email;
     private String postContent;
     private String postDate;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 }
