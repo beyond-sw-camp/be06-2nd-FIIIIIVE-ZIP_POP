@@ -32,6 +32,7 @@ public class Customer {
     private Integer point;
     private String role;
     private Boolean enabled;
+
     @BatchSize(size=10)
     @OneToMany(mappedBy = "customer")
     @JsonManagedReference
@@ -43,6 +44,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Favorite> favoriteList;
 
+    @BatchSize(size=10)
     @OneToMany(mappedBy = "customer")
     private List<Comment> commentList;
 
