@@ -21,6 +21,7 @@ public enum BaseResponseMessage {
     MEMBER_REGISTER_FAIL_PASSWORD_FORMAT(false, 2006, "패스워드 형식이 맞지 않습니다."),
     MEMBER_REGISTER_FAIL_PASSWORD_COMPLEXITY(false, 2007, "복잡한 패스워드를 사용해주세요"),
     MEMBER_REGISTER_FAIL_NAME_EMPTY(false, 2008, "이름을 입력해주세요"),
+    MEMBER_REGISTER_FAIL_ALREADY_EXIST(false, 2009, "이미 회원가입한 계정입니다."),
     // 이메일 인증 2010
     MEMBER_EMAIL_VERIFY_SUCCESS(true, 2010, "이메일 인증을 완료했습니다."),
     MEMBER_EMAIL_VERIFY_FAIL(false, 2011, "이메일 인증에 실패했습니다."),
@@ -34,6 +35,9 @@ public enum BaseResponseMessage {
     MEMBER_LOGIN_SUCCESS(true, 2030, "로그인에 성공했습니다."),
     MEMBER_LOGIN_FAIL(false, 2031, "아이디 또는 비밀번호를 확인해주세요"),
     MEMBER_LOGIN_FAIL_NOT_FOUND(false, 2032, "사용자를 찾을 수 없습니다"),
+    // 계정 비활성화 2040
+    MEMBER_INACTIVE_SUCCESS(true, 2040, "계정 비활성화에 성공했습니다."),
+    MEMBER_INACTIVE_FAIL(false, 2041, "계정 비활성화에 실패했습니다."),
 
     // ========================================================================================================================
     // 팝업 스토어 3000

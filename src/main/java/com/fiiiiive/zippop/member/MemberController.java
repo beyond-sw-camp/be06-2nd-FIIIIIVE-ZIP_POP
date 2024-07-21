@@ -27,16 +27,25 @@ public class MemberController {
     public ResponseEntity<BaseResponse<PostSignupRes>> signup(@RequestBody PostSignupReq dto) throws Exception {
 
         PostSignupRes response = memberService.signup(dto);
-        String uuid = memberService.sendEmail(dto);
+        String uuid = memberService.sendEmail(response);
         emailVerifyService.save(dto.getEmail(), uuid);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_REGISTER_SUCCESS, response));
     }
 
     @GetMapping("/verify")
     public ResponseEntity<BaseResponse> verify(String email, String role, String uuid) throws Exception, BaseException {
-        emailVerifyService.isExist(email, uuid);
-        memberService.activeMember(email, role);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SUCCESS));
+        if(emailVerifyService.isExist(email, uuid)){
+            memberService.activeMember(email, role);
+            return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SUCCESS));
+        } else {
+            return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL));
+        }
+    }
+
+    @GetMapping("/inactive")
+    public ResponseEntity<BaseResponse> inactive(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws Exception, BaseException {
+        memberService.inActiveMenber(customUserDetails);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_INACTIVE_SUCCESS));
     }
 
 }
