@@ -26,8 +26,7 @@ public class Customer {
     private String password;
     private String name;
     private String phoneNumber;
-    private String address1;
-    private String address2;
+    private String address;
     private Integer point;
     private String role;
     private Boolean enabled;
