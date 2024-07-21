@@ -29,6 +29,7 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.company.idx = :companyIdx")
     Page<PopupStore> findByCompanyIdxFetchJoin(Long companyIdx,Pageable pageable);
 
+
     Page<PopupStore> findByStoreDate (String storeDate,Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeDate = :storeDate")

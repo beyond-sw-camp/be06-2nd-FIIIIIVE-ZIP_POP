@@ -5,6 +5,7 @@ import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_store.model.request.CreatePopupStoreReq;
 import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +14,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
+@Tag(name = "popup-store-api", description = "PopupStore")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/popup-store")
 public class PopupStoreController {
     private final PopupStoreService popupStoreService;
 
+    @ExeTimer
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreatePopupStoreReq createPopupStoreReq) throws Exception {
         popupStoreService.register(customUserDetails, createPopupStoreReq);

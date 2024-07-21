@@ -45,7 +45,6 @@ public class PopupGoodsService {
         Page<PopupGoods> result = popupGoodsRepository.findAll(pageable); //
         Long end = System.currentTimeMillis();
         Long diff = end - start;
-
         if (result.hasContent()) {
             Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods -> GetPopupGoodsRes.builder()
                     .productIdx(popupGoods.getProductIdx())
@@ -68,7 +67,6 @@ public class PopupGoodsService {
             System.out.println("성능 개선 후 끝");
 
             return getPopupGoodsResPage;
-
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
         }

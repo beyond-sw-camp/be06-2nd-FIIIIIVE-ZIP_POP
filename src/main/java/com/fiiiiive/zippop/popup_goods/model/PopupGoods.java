@@ -1,9 +1,12 @@
 package com.fiiiiive.zippop.popup_goods.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fiiiiive.zippop.cart.model.Cart;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,4 +29,7 @@ public class PopupGoods {
     @JsonBackReference
     private PopupStore popupStore;
     private String storeName; // 추가된 필드
+
+    @OneToMany(mappedBy = "popupGoods")
+    private List<Cart> carts;
 }

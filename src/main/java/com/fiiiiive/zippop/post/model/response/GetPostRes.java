@@ -1,6 +1,5 @@
 package com.fiiiiive.zippop.post.model.response;
 
-import com.fiiiiive.zippop.post.model.Post;
 import lombok.*;
 
 @Getter

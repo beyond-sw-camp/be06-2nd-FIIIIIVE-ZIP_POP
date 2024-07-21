@@ -21,24 +21,32 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws  ServletException, IOException, InternalAuthenticationServiceException {
-        String authorization = request.getHeader("Authorization");
-        if(authorization == null || !authorization.startsWith("Bearer")){
-            log.info("Bearer 토큰 없음");
+        try{
+            String authorization = request.getHeader("Authorization");
+            if(authorization == null || !authorization.startsWith("Bearer")){
+                log.info("Bearer 토큰 없음");
+                try {
+                    filterChain.doFilter(request, response);
+                    return;
+                } catch (NullPointerException e){
+                    throw new NullPointerException("ddd");
+                }
+            }
+            String token = authorization.split(" ")[1];
+            if(jwtUtil.isExpired(token)){
+                filterChain.doFilter(request, response);
+                return;
+            }
+            Long idx = jwtUtil.getIdx(token);
+            String email = jwtUtil.getUsername(token);
+            String role = jwtUtil.getRole(token);
+            log.info(idx + " " + email + " " + role);
+            CustomUserDetails customUserDetails = new CustomUserDetails(idx, email, role);
+            Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
             filterChain.doFilter(request, response);
-            return;
+        }catch (ServletException e){
+            throw new ServletException(e);
         }
-        String token = authorization.split(" ")[1];
-        if(jwtUtil.isExpired(token)){
-            filterChain.doFilter(request, response);
-            return;
-        }
-        Long idx = jwtUtil.getIdx(token);
-        String email = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
-        log.info(idx + " " + email + " " + role);
-        CustomUserDetails customUserDetails = new CustomUserDetails(idx, email, role);
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-        filterChain.doFilter(request, response);
     }
 }

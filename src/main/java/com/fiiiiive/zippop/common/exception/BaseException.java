@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BaseException extends Exception{
+public class BaseException extends Exception {
     private String message;
     private Integer code;
     private String details;

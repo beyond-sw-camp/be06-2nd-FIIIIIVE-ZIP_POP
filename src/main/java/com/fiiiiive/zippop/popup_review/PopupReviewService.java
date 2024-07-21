@@ -22,7 +22,6 @@ public class PopupReviewService {
     private final PopupReviewRepository popupReviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-
     public void register(CreatePopupReviewReq createPopupReviewReq) throws BaseException {
         PopupReview popupReview = PopupReview.builder()
                 .reviewTitle(createPopupReviewReq.getReviewTitle())
