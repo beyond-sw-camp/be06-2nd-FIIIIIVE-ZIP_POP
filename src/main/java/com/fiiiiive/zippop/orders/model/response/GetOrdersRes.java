@@ -14,4 +14,6 @@ import java.util.Map;
 public class GetOrdersRes {
     private String impUid;
     private Map<String, Double> productIdxMap;
+    private Long storeIdx;
+    private Integer totalPeople;
 }

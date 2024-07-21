@@ -44,6 +44,9 @@ public enum BaseResponseMessage {
     // 팝업 스토어 등록 3000
     POPUP_STORE_REGISTER_SUCCESS(true, 3000, "팝업 스토어 등록에 성공했습니다."),
     POPUP_STORE_REGISTER_FAIL_DUPLICATION(false, 3001, "이미 등록된 팝업 스토어 입니다."),
+    POPUP_STORE_REGISTER_FAIL_UNAUTHORIZED(false, 3002, "팝업 스토어 등록은 기업회원만 가능합니다."),
+    POPUP_STORE_REGISTER_FAIL_VALIDATION_FAIL(true, 3003, "팝업 스토어 등록에 실패했습니다. 결제 정보가 일치하지 않습니다."),
+
     // 팝업 스토어 조회 3100
     POPUP_STORE_SEARCH_SUCCESS(true, 3100, "팝업 스토어 목록 조회에 성공했습니다."),
     POPUP_STORE_SEARCH_FAIL_NOT_EXIST(false, 3101, "해당 팝업 스토어가 존재하지 않습니다."),
@@ -86,6 +89,8 @@ public enum BaseResponseMessage {
     POPUP_GOODS_ORDERS_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
     POPUP_GOODS_ORDERS_FAIL_EXCEEDED(false,4405,"해당 상품의 재고가 부족합니다."),
     POPUP_GOODS_ORDERS_GOODS_NULL(false, 4406, "굿즈가 존재하지 않습니다."),
+    POPUP_GOODS_ORDER_LIMIT_EXCEEDED(false, 4407, "사전 예매 굿즈는 품목 당 하나만 구매 가능합니다."),
+
     // 팝업 굿즈 결제 4500
     POPUP_GOODS_PAY_SUCCESS(true, 4500, "결제에 성공했습니다."),
     POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4501, "결제 수단을 입력해주세요"),
