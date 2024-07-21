@@ -1,5 +1,6 @@
 package com.fiiiiive.zippop.popup_store;
 
+import com.fiiiiive.zippop.common.annotation.ExeTimer;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.popup_store.model.request.CreatePopupStoreReq;
 import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class PopupStoreController {
     private final PopupStoreService popupStoreService;
 
+    @ExeTimer
     @PostMapping("/register")
     public ResponseEntity<String> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreatePopupStoreReq createPopupStoreReq) {
         popupStoreService.register(customUserDetails, createPopupStoreReq);
