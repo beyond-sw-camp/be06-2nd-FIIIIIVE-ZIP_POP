@@ -1,12 +1,16 @@
 package com.fiiiiive.zippop.popup_review;
 
 
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
 import com.fiiiiive.zippop.popup_review.model.request.CreatePopupReviewReq;
 import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,7 +22,7 @@ public class PopupReviewService {
     private final PopupReviewRepository popupReviewRepository;
     private final PopupStoreRepository popupStoreRepository;
 
-    public void register(CreatePopupReviewReq createPopupReviewReq) {
+    public void register(CreatePopupReviewReq createPopupReviewReq) throws BaseException {
         PopupReview popupReview = PopupReview.builder()
                 .reviewTitle(createPopupReviewReq.getReviewTitle())
                 .reviewContent(createPopupReviewReq.getReviewContent())
@@ -35,11 +39,11 @@ public class PopupReviewService {
 
             popupStore.get().getReviews().add(popupReview);
         } else {
-            throw new RuntimeException("store not found");
+            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
         }
     }
 
-    public List<GetPopupReviewRes> findAll() {
+    public List<GetPopupReviewRes> findAll() throws BaseException {
         Optional<List<PopupReview>> result = Optional.of(popupReviewRepository.findAll());
         if (result.isPresent()) {
             List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
@@ -56,36 +60,41 @@ public class PopupReviewService {
 
             return popupReviewResList;
         } else {
-            throw new RuntimeException("popup reviews not found");
+            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_CONTENTS_EMPTY);
         }
     }
 
-    public List<GetPopupReviewRes> findByStoreName(String storeName) {
+    public Page<GetPopupReviewRes> findByStoreName(String storeName, Pageable pageable) throws BaseException {
         Long start = System.currentTimeMillis();
-        Optional<List<PopupReview>> result = popupReviewRepository.findByStoreName(storeName);
+        Page<PopupReview> result = popupReviewRepository.findByStoreName(storeName, pageable);
         Long end = System.currentTimeMillis();
         Long diff = end - start;
-        if (result.isPresent()) {
-            List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
-            for (PopupReview popupReview : result.get()) {
-                GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
-                        .reviewTitle(popupReview.getReviewTitle())
-                        .reviewContent(popupReview.getReviewContent())
-                        .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getPopupStore().getStoreName())
-//                        .storeName(popupReview.getStoreName())
-                        .build();
-                getPopupReviewResList.add(getPopupReviewRes);
-            }
+        System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+        System.out.println("성능 개선 전 끝");
+
+        if (result.hasContent()) {
+            Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> GetPopupReviewRes.builder()
+                    .reviewTitle(popupReview.getReviewTitle())
+                    .reviewContent(popupReview.getReviewContent())
+                    .rating(popupReview.getRating())
+                    .reviewDate(popupReview.getReviewDate())
+                    .storeName(popupReview.getPopupStore().getStoreName())
+                    .build());
+
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 전 끝");
+
             start = System.currentTimeMillis();
-            result = popupReviewRepository.findByStoreNameWithStore(storeName);
+            result = popupReviewRepository.findByStoreNameFetchJoin(storeName, pageable);
             end = System.currentTimeMillis();
             diff = end - start;
-            return getPopupReviewResList;
+            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
+            System.out.println("성능 개선 후 끝");
+
+            return getPopupReviewResPage;
 
         } else {
-            throw new RuntimeException("store not found");
+            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
         }
     }
 

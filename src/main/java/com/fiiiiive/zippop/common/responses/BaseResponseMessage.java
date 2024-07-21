@@ -89,6 +89,7 @@ public enum BaseResponseMessage {
     POPUP_GOODS_ORDERS_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
     POPUP_GOODS_ORDERS_FAIL_EXCEEDED(false,4405,"해당 상품의 재고가 부족합니다."),
     POPUP_GOODS_ORDERS_GOODS_NULL(false, 4406, "굿즈가 존재하지 않습니다."),
+
     POPUP_GOODS_ORDER_LIMIT_EXCEEDED(false, 4407, "사전 예매 굿즈는 품목 당 하나만 구매 가능합니다."),
 
     // 팝업 굿즈 결제 4500

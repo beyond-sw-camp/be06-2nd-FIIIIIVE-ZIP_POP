@@ -1,40 +1,34 @@
 package com.fiiiiive.zippop.popup_goods;
 
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface PopupGoodsRepository extends JpaRepository<PopupGoods, Long> {
 
-    @Query("SELECT pg FROM PopupGoods pg")
-    List<PopupGoods> findAll();
+    Page<PopupGoods> findAll(Pageable pageable);
 
     @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore")
-    List<PopupGoods> findAllWithStore();
+    Page<PopupGoods> findAllFetchJoin(Pageable pageable);
 
-    @Query("SELECT pg FROM PopupGoods pg WHERE pg.productPrice = :productPrice")
-    Optional<List<PopupGoods>> findByProductPrice(Integer productPrice);
+    Page<PopupGoods> findByProductPrice(Integer productPrice, Pageable pageable);
 
     @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore WHERE pg.productPrice = :productPrice")
-    Optional<List<PopupGoods>> findByProductPriceWithStore(Integer productPrice);
+    Page<PopupGoods> findByProductPriceFetchJoin(Integer productPrice, Pageable pageable);
 
-    @Query("SELECT pg FROM PopupGoods pg WHERE pg.productName = :productName")
-    Optional<List<PopupGoods>> findByProductName(String productName);
+    Page<PopupGoods> findByProductName(String productName, Pageable pageable);
 
     @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore WHERE pg.productName = :productName")
-    Optional<List<PopupGoods>> findByProductNameWithStore(String productName);
+    Page<PopupGoods> findByProductNameFetchJoin(String productName, Pageable pageable);
 
-    @Query("SELECT pg FROM PopupGoods pg WHERE pg.storeName = :storeName")
-    public Optional<List<PopupGoods>> findByStoreName(String storeName);
+    public Page<PopupGoods> findByStoreName(String storeName, Pageable pageable);
 
     @Query("SELECT pg FROM PopupGoods pg JOIN FETCH pg.popupStore ps WHERE ps.storeName = :storeName")
-    Optional<List<PopupGoods>> findByStoreNameWithStore(String storeName);
+    Page<PopupGoods> findByStoreNameFetchJoin(String storeName, Pageable pageable);
 
     // 비관적락 잠금 설정
     @Lock(LockModeType.PESSIMISTIC_WRITE)

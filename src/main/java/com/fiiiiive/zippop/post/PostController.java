@@ -1,5 +1,7 @@
 package com.fiiiiive.zippop.post;
 
+import com.fiiiiive.zippop.common.responses.BaseResponse;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.common.annotation.ExeTimer;
 import com.fiiiiive.zippop.post.model.Post;
 import com.fiiiiive.zippop.post.model.request.CreatePostReq;
@@ -7,6 +9,8 @@ import com.fiiiiive.zippop.post.model.response.GetPostRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,20 +24,23 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<String> register(@RequestBody CreatePostReq createPostReq) {
+    public ResponseEntity<BaseResponse> register(@RequestBody CreatePostReq createPostReq) throws Exception {
         postService.register(createPostReq);
-        return ResponseEntity.ok("등록 성공");
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_REGISTER_SUCCESS));
     }
     @ExeTimer
     @GetMapping(value = "/search-customer-email")
-    public ResponseEntity<List<GetPostRes>> searchCustomerEmail(@RequestParam String email) {
-        List<GetPostRes> postRes = postService.findByCustomerEmail(email);
-        return ResponseEntity.ok(postRes);
+    public ResponseEntity<BaseResponse<Page<GetPostRes>>> searchCustomerEmail(@RequestParam String email,
+                                                                              @RequestParam int page,
+                                                                              @RequestParam int size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<GetPostRes> postRes = postService.findByCustomerEmail(email, pageable);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_SUCCESS, postRes));
     }
 
     @GetMapping(value = "/paged")
-    public ResponseEntity<Page<Post>> getAllPostsPaged(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<BaseResponse<Page<Post>>> getAllPostsPaged(@RequestParam int page, @RequestParam int size) {
         Page<Post> postPage = postService.getAllPostsPaged(page, size);
-        return ResponseEntity.ok(postPage);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_SUCCESS,postPage));
     }
 }
