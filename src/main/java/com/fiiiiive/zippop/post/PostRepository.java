@@ -14,6 +14,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p JOIN FETCH p.customer WHERE p.email = :email")
     Page<Post> findByEmailFetchJoin(String email, Pageable pageable);
-
-    @Query("SELECT p FROM Post p")
-    Page<Post> findPageBy(Pageable pageable);}
+}

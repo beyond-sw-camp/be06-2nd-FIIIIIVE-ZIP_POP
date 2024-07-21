@@ -71,9 +71,4 @@ public class PostService {
             throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
         }
     }
-
-    public Page<Post> getAllPostsPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return postRepository.findPageBy(pageable);
-    }
 }
