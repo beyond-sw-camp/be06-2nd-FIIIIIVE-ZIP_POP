@@ -24,9 +24,10 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeAddr = :storeAddr")
     Optional<List<PopupStore>> findByStoreAddrWithGoods(String storeAddr);
 
+    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.company WHERE ps.company.companyIdx = :companyIdx")
     Optional<List<PopupStore>> findByCompanyIdx(Long companyIdx);
 
-    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.company.idx = :companyIdx")
+    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.company.companyIdx = :companyIdx")
     Optional<List<PopupStore>> findByCompanyIdxWithGoods(Long companyIdx);
 
     Optional<List<PopupStore>> findByStoreDate (String storeDate);

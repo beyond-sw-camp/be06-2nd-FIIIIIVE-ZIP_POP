@@ -16,7 +16,7 @@ import java.util.*;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idx;
+    private Long companyIdx;
     @Column(nullable = false, length = 100, unique = true)
     private String email;
     @Column(nullable = false, length = 100, unique = true)

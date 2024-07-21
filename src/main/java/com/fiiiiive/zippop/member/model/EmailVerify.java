@@ -1,4 +1,4 @@
-package com.fiiiiive.zippop.member;
+package com.fiiiiive.zippop.member.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

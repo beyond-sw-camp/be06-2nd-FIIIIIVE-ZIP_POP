@@ -3,6 +3,7 @@ package com.fiiiiive.zippop.popup_store.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fiiiiive.zippop.favorite.model.Favorite;
 import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
@@ -41,7 +42,10 @@ public class PopupStore {
     private Integer totalPeople;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_idx")
+    @JoinColumn(name = "companyIdx")
     @JsonBackReference
     private Company company;
+
+    @OneToMany(mappedBy = "popupStore")
+    private List<Favorite> favoriteList;
 }
