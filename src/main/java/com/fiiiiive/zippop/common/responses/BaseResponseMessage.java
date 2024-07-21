@@ -79,6 +79,7 @@ public enum BaseResponseMessage {
     // 팝업 굿즈 구매
 
 
+<<<<<<< Updated upstream
     // 5000 : 주문 및 결제 에러
     // 주문 실패 500
     ORDERS_VALIDATION_SUCCESS(true, 5000, "결제 검증에 성공했습니다."),
@@ -112,6 +113,40 @@ public enum BaseResponseMessage {
     CHAT_USER_COUNT_SEARCH_SUCCESS(true, 8400, "채팅방 사용자 수 조회에 성공했습니다."),
     CHAT_USER_COUNT_SEARCH_FAIL(false, 8401, "채팅방 사용자 수 조회에 실패했습니다."),
     //채팅방 기록 조회
+=======
+    // ========================================================================================================================
+    // 게시글 6000
+    //등록
+    POST_REGISTER_SUCCESS(true, 6000, "게시글이 성공적으로 등록되었습니다."),
+    POST_REGISTER_FAIL(false, 6001, "게시글 등록에 실패했습니다."),
+    //검색
+    POST_SEARCH_SUCCESS(true, 6100, "게시글 검색에 성공했습니다."),
+    POST_SEARCH_FAIL(false, 6101, "해당 게시글을 찾을 수 없습니다."),
+
+    // ========================================================================================================================
+    // 댓글 7000
+    COMMENT_CREATE_SUCCESS(true, 7000, "댓글이 성공적으로 등록되었습니다."),
+    COMMENT_CREATE_FAIL(false, 7001, "댓글 등록에 실패했습니다."),
+
+    COMMENT_FOUND(true,7100,"해당 게시물의 댓글을 불러오는데 성공했습니다."),
+    COMMENT_NOT_FOUND(false, 7002, "해당 게시물의 댓글을 불러오는데 실패했습니다."),
+
+    // ========================================================================================================================
+    // 채팅 8000
+    // 채팅방 생성 8000
+    CHAT_ROOM_CREATE_SUCCESS(true, 8000, "채팅방 생성에 성공했습니다."),
+    CHAT_ROOM_CREATE_FAIL(false, 8001, "채팅방 생성에 실패했습니다."),
+    // 채팅방 참여 8100
+    CHAT_ROOM_JOIN_SUCCESS(true, 8100, "채팅방에 성공적으로 참여했습니다."),
+    CHAT_ROOM_JOIN_FAIL(false, 8101, "채팅방 참여에 실패했습니다."),
+    // 채팅방 나가기 8200
+    CHAT_ROOM_LEAVE_SUCCESS(true, 8200, "채팅방에서 성공적으로 나갔습니다."),
+    CHAT_ROOM_LEAVE_FAIL(false, 8201, "채팅방 나가기에 실패했습니다."),
+    // 채팅방 사용자 조회 8300
+    CHAT_USER_COUNT_SEARCH_SUCCESS(true, 8300, "채팅방 사용자 수 조회에 성공했습니다."),
+    CHAT_USER_COUNT_SEARCH_FAIL(false, 8301, "채팅방 사용자 수 조회에 실패했습니다."),
+    // 채팅방 기록 조회 8400
+>>>>>>> Stashed changes
     CHAT_HISTORY_SEARCH_SUCCESS(true, 8500, "채팅 기록 조회에 성공했습니다."),
     CHAT_HISTORY_SEARCH_FAIL(false, 8501, "채팅 기록 조회에 실패했습니다."),
     //채팅방 조회
