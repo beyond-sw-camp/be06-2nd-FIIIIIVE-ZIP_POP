@@ -37,10 +37,10 @@ public class ExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e){
             log.error("Bearer 토큰이 만료되었습니다.");
-            setErrorResponse(response, BaseResponseMessage.TOKEN_EXPIRED, e.getMessage());
+            setErrorResponse(response, BaseResponseMessage.MEMBER_ACCESS_TOKEN_EXPIRED, e.getMessage());
         } catch (JwtException | IllegalArgumentException e){
             log.error("Bearer 토큰이 유효하지 않습니다.");
-            setErrorResponse(response, BaseResponseMessage.TOKEN_INVALID, e.getMessage());
+            setErrorResponse(response, BaseResponseMessage.MEMBER_ACCESS_TOKEN_INVALID, e.getMessage());
         }
     }
 }

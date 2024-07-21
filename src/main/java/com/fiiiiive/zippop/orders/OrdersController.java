@@ -35,6 +35,6 @@ public class OrdersController {
                     .build();
         }
         GetOrdersRes response = ordersService.paymentValidation(customer, impUid);
-        return new BaseResponse(BaseResponseMessage.ORDERS_VALIDATION_SUCCESS, response);
+        return new BaseResponse(BaseResponseMessage.POPUP_GOODS_ORDERS_VALIDATION_SUCCESS, response);
     }
 }

@@ -1,36 +1,36 @@
 package com.fiiiiive.zippop.popup_store;
 
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
 
-    Optional<List<PopupStore>> findByCategory(String category);
+    Page<PopupStore> findByCategory(String category, Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.category = :category")
-    Optional<List<PopupStore>> findByCategoryWithGoods(String category);
+    Page<PopupStore> findByCategoryFetchJoin(String category, Pageable pageable);
 
     Optional<PopupStore> findByStoreName(String storeName);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeName = :storeName")
-    Optional<PopupStore> findByStoreNameWithGoods(String storeName);
+    Optional<PopupStore> findByStoreNameFetchJoin(String storeName);
 
-    Optional<List<PopupStore>> findByStoreAddr(String storeAddr);
+    Page<PopupStore> findByStoreAddr(String storeAddr,Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeAddr = :storeAddr")
-    Optional<List<PopupStore>> findByStoreAddrWithGoods(String storeAddr);
+    Page<PopupStore> findByStoreAddrFetchJoin(String storeAddr,Pageable pageable);
 
-    Optional<List<PopupStore>> findByCompanyIdx(Long companyIdx);
+    Page<PopupStore> findByCompanyIdx(Long companyIdx,Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.company.idx = :companyIdx")
-    Optional<List<PopupStore>> findByCompanyIdxWithGoods(Long companyIdx);
+    Page<PopupStore> findByCompanyIdxFetchJoin(Long companyIdx,Pageable pageable);
 
-    Optional<List<PopupStore>> findByStoreDate (String storeDate);
+    Page<PopupStore> findByStoreDate (String storeDate,Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeDate = :storeDate")
-    Optional<List<PopupStore>> findByStoreDateWithGoods (String storeDate);
+    Page<PopupStore> findByStoreDateFetchJoin(String storeDate,Pageable pageable);
 }

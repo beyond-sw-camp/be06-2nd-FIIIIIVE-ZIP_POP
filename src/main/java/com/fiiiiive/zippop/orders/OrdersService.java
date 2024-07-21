@@ -85,7 +85,7 @@ public class OrdersService {
 
             return GetOrdersRes.builder().impUid(impUid).build();
         } else {
-            throw new BaseException(BaseResponseMessage.ORDERS_VALIDATION_FAIL);
+            throw new BaseException(BaseResponseMessage.POPUP_GOODS_ORDERS_VALIDATION_FAIL);
         }
     }
 

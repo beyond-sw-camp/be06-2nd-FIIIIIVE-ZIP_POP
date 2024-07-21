@@ -1,5 +1,7 @@
 package com.fiiiiive.zippop.post;
 
+import com.fiiiiive.zippop.common.exception.BaseException;
+import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.CustomerRepository;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.post.model.Post;
@@ -22,7 +24,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final CustomerRepository customerRepository;
 
-    public void register(CreatePostReq createPostReq) {
+    public void register(CreatePostReq createPostReq) throws BaseException {
         Post post = Post.builder()
                 .postTitle(createPostReq.getPostTitle())
                 .postContent(createPostReq.getPostContent())
@@ -35,37 +37,38 @@ public class PostService {
             postRepository.save(post);
             customer.get().getPostsList().add(post);
         } else {
-            throw new RuntimeException("Customer not found");
+            throw new BaseException(BaseResponseMessage.POST_REGISTER_FAIL);
         }
     }
 
-    public List<GetPostRes> findByCustomerEmail(String email) {
+    public Page<GetPostRes> findByCustomerEmail(String email, Pageable pageable) throws BaseException {
         Long start = System.currentTimeMillis();
-        Optional<List<Post>> result = postRepository.findByEmail(email);
+        Page<Post> result = postRepository.findByEmail(email, pageable);
         Long end = System.currentTimeMillis();
         Long diff = end - start;
-        if (result.isPresent()) {
-            List<GetPostRes> getPostResList = new ArrayList<>();
-            for (Post post : result.get()) {
-                GetPostRes getPostRes = GetPostRes.builder()
-                        .postTitle(post.getPostTitle())
-                        .postContent(post.getPostContent())
-                        .email(post.getCustomer().getEmail())
-                        .postDate(post.getPostDate())
-                        .build();
-                getPostResList.add(getPostRes);
-            }
+
+        if (result.hasContent()) {
+            Page<GetPostRes> getPostResPage = result.map(post -> GetPostRes.builder()
+                    .postTitle(post.getPostTitle())
+                    .postContent(post.getPostContent())
+                    .email(post.getCustomer().getEmail())
+                    .postDate(post.getPostDate())
+                    .build());
+
             System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
             System.out.println("성능 개선 전 끝");
+
             start = System.currentTimeMillis();
-            result = postRepository.findByEmailFetchJoin(email);
+            Page<Post> fetchJoinResult = postRepository.findByEmailFetchJoin(email, pageable);
             end = System.currentTimeMillis();
             diff = end - start;
+
             System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
             System.out.println("성능 개선 후 끝");
-            return getPostResList;
-        } else{
-            throw new RuntimeException("Customer not found");
+
+            return getPostResPage;
+        } else {
+            throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
         }
     }
 

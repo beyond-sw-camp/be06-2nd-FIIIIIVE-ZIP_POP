@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Optional<List<Post>> findByEmail(String email);
+    Page<Post> findByEmail(String email, Pageable pageable);
 
     @Query("SELECT p FROM Post p JOIN FETCH p.customer WHERE p.email = :email")
-    Optional<List<Post>> findByEmailFetchJoin(String email);
+    Page<Post> findByEmailFetchJoin(String email, Pageable pageable);
 
     @Query("SELECT p FROM Post p")
     Page<Post> findPageBy(Pageable pageable);}

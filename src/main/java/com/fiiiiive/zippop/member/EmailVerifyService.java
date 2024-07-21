@@ -28,6 +28,6 @@ public class EmailVerifyService {
                 .uuid(uuid)
                 .build();
         EmailVerify result = emailVerifyRepository.save(emailVerify);
-        if(result==null){ throw new BaseException(BaseResponseMessage.EMAIL_VERIFY_SAVE_FAIL);}
+        if(result==null){ throw new BaseException(BaseResponseMessage.MEMBER_EMAIL_VERIFY_SAVE_FAIL);}
     }
 }
