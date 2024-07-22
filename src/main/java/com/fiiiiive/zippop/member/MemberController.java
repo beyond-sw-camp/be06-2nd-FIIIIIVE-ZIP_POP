@@ -4,6 +4,8 @@ import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
+import com.fiiiiive.zippop.member.model.request.EditInfoReq;
+import com.fiiiiive.zippop.member.model.request.EditPasswordReq;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,7 +27,6 @@ public class MemberController {
 
     @PostMapping("/signup")
     public ResponseEntity<BaseResponse<PostSignupRes>> signup(@RequestBody PostSignupReq dto) throws Exception {
-
         PostSignupRes response = memberService.signup(dto);
         String uuid = memberService.sendEmail(response);
         emailVerifyService.save(dto.getEmail(), uuid);
@@ -48,4 +49,15 @@ public class MemberController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_INACTIVE_SUCCESS));
     }
 
+    @PatchMapping("/edit-info")
+    public ResponseEntity<BaseResponse> editInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody EditInfoReq dto) throws BaseException {
+        memberService.editInfo(customUserDetails, dto);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EDIT_INFO_SUCCESS));
+    }
+
+    @PatchMapping("/edit-password")
+    public ResponseEntity<BaseResponse> editPassword(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody EditPasswordReq dto) throws BaseException {
+        memberService.editPassword(customUserDetails, dto);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EDIT_PASSWORD_SUCCESS));
+    }
 }
