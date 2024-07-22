@@ -3,10 +3,12 @@ package com.fiiiiive.zippop.test;
 import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,5 +35,11 @@ public class TestController {
     @RequestMapping(method = RequestMethod.GET, value = "/base-exception")
     public ResponseEntity<BaseResponse> baseException() throws BaseException {
         throw new BaseException(BaseResponseMessage.REQUEST_FAIL);
+    }
+
+    @Operation(summary = "userInfo")
+    @RequestMapping(method = RequestMethod.GET, value = "/userInfo")
+    public ResponseEntity<BaseResponse> userInfo(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.REQUEST_SUCCESS, customUserDetails));
     }
 }

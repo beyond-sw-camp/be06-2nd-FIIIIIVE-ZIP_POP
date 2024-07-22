@@ -3,6 +3,8 @@ package com.fiiiiive.zippop.config;
 import com.fiiiiive.zippop.config.filter.ExceptionFilter;
 import com.fiiiiive.zippop.config.filter.JwtFilter;
 import com.fiiiiive.zippop.config.filter.LoginFilter;
+import com.fiiiiive.zippop.config.filter.OAuth2AuthenticationSuccessHandler;
+import com.fiiiiive.zippop.member.CustomOAuth2Service;
 import com.fiiiiive.zippop.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +26,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final CustomOAuth2Service customOAuth2Service;
 
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOriginPattern("*");
-        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("*");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setAllowCredentials(true);
@@ -42,18 +46,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf((auth) -> auth.disable());
         http.httpBasic((auth) -> auth.disable());
-        http.formLogin((auth) -> {
-                    auth.disable();
-                    auth.loginProcessingUrl("/member/login");
-        });
         http.sessionManagement((auth) -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests((auth) ->
                         auth
 //                            .requestMatchers("/api/v1/test/**").authenticated()
 //                            .requestMatchers("/api/v1/member/**").permitAll()
-                            .anyRequest().permitAll()
+                                .anyRequest().permitAll()
         );
-
+        http.oauth2Login((config) -> {
+            config.successHandler(oAuth2AuthenticationSuccessHandler);
+            config.userInfoEndpoint((endpoint) -> endpoint.userService(customOAuth2Service));
+        });
         http.addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
         http.addFilterBefore(new ExceptionFilter(), LoginFilter.class);
         LoginFilter loginFilter = new LoginFilter(jwtUtil, authenticationManager(authenticationConfiguration));

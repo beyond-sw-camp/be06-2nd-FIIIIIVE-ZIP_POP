@@ -24,9 +24,12 @@ public class Company {
     private String name;
     // 사업자 등록 번호(Company Registration Number)
     private String crn;
+    private String phoneNumber;
+    private String address;
     private Boolean enabled;
     private String role;
     @OneToMany(mappedBy = "company")
     @JsonManagedReference
     private List<PopupStore> popupStoreList = new ArrayList<>();
 }
+

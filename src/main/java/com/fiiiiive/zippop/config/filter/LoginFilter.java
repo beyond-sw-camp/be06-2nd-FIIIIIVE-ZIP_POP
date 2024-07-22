@@ -50,12 +50,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     // 그림에서 10번
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        CustomUserDetails user = (CustomUserDetails)authResult.getPrincipal();
-        Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-        GrantedAuthority auth = authorities.iterator().next();
-        Long idx = user.getIdx();
-        String username = user.getUsername();
-        String role = auth.getAuthority();
+        CustomUserDetails member = (CustomUserDetails)authResult.getPrincipal();
+        Long idx = member.getIdx();
+        String username = member.getUsername();
+        String role = member.getRole();
         String token = jwtUtil.createToken(idx, username, role);
         log.info(idx + " " + role + " " + username);
         response.addHeader("Authorization", "Bearer " + token);

@@ -38,6 +38,14 @@ public enum BaseResponseMessage {
     // 계정 비활성화 2040
     MEMBER_INACTIVE_SUCCESS(true, 2040, "계정 비활성화에 성공했습니다."),
     MEMBER_INACTIVE_FAIL(false, 2041, "계정 비활성화에 실패했습니다."),
+    // 계정 정보 수정 2050
+    MEMBER_EDIT_INFO_SUCCESS(true, 2050, "계정 프로필 정보 변경에 성공했습니다."),
+    MEMBER_EDIT_INFO_FAIL(false, 2051, "계정 프로필 정보 변경에 실패했습니다."),
+
+    // 계정 패스워드 수정 2060
+    MEMBER_EDIT_PASSWORD_SUCCESS(true, 2050, "계정 비밀번호 변경에 성공했습니다."),
+    MEMBER_EDIT_PASSWORD_FAIL(false, 2051, "계정 비밀번호 변경에 실패했습니다."),
+    MEMBER_EDIT_PASSWORD_FAIL_PASSWORD_NOT_MATCH(false, 2052, "계정 비밃번호가 틀립니다."),
 
     // ========================================================================================================================
     // 팝업 스토어 3000

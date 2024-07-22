@@ -1,4 +1,5 @@
 package com.fiiiiive.zippop.member.model.request;
+
 import lombok.*;
 
 @Getter
@@ -6,10 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostSignupReq {
-    private String role;
-    private String email;
-    private String password;
+public class EditInfoReq {
     private String name;
     private String crn; // 사업자 등록 번호(Company Registration Number
     private String phoneNumber;
