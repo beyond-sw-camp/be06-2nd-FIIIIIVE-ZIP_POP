@@ -12,4 +12,6 @@ public class PostSignupReq {
     private String password;
     private String name;
     private String crn; // 사업자 등록 번호(Company Registration Number
+    private String phoneNumber;
+    private String address;
 }
