@@ -260,7 +260,7 @@ public class PopupStoreService {
 
     public Page<GetPopupStoreRes> findByCompanyIdx(Long companyIdx, Pageable pageable) throws BaseException{
         Long start = System.currentTimeMillis();
-        Page<PopupStore> result = popupStoreRepository.findByCompanyIdx(companyIdx, pageable);
+        Page<PopupStore> result = popupStoreRepository.findByCompanyCompanyIdx(companyIdx, pageable);
         Long end = System.currentTimeMillis();
         Long diff = end - start;
 

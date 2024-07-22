@@ -37,10 +37,4 @@ public class PostController {
         Page<GetPostRes> postRes = postService.findByCustomerEmail(email, pageable);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_SUCCESS, postRes));
     }
-
-    @GetMapping(value = "/paged")
-    public ResponseEntity<BaseResponse<Page<Post>>> getAllPostsPaged(@RequestParam int page, @RequestParam int size) {
-        Page<Post> postPage = postService.getAllPostsPaged(page, size);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_SUCCESS,postPage));
-    }
 }
