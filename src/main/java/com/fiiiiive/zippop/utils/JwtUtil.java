@@ -32,6 +32,14 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
+    public String getReserveIdx(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("reserveIdx", String.class);
+    }
+
+    public String getEmail(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+    }
+
     public Boolean isExpired(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
@@ -41,6 +49,16 @@ public class JwtUtil {
                 .claim("idx", id)
                 .claim("username", username)
                 .claim("role", role)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 100000))
+                .signWith(secretKey)
+                .compact();
+    }
+
+    public String createToken(Long reserveIdx, String email) {
+        return Jwts.builder()
+                .claim("reserveIdx", reserveIdx)
+                .claim("email", email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 100000))
                 .signWith(secretKey)

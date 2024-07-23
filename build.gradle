@@ -53,6 +53,9 @@ dependencies {
 	implementation 'com.google.code.gson:gson'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

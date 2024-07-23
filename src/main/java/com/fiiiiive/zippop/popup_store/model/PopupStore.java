@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.favorite.model.Favorite;
 import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_reserve.model.PopupReserve;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
 import jakarta.persistence.*;
 import lombok.*;
@@ -48,4 +49,7 @@ public class PopupStore {
 
     @OneToMany(mappedBy = "popupStore")
     private List<Favorite> favoriteList;
+
+    @OneToMany(mappedBy = "popupStore")
+    private List<PopupReserve> popupReserveList = new ArrayList<>();
 }

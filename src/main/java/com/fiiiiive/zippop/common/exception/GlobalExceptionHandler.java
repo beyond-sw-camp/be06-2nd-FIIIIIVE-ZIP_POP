@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
-        BaseResponse<String> baseResponse = new BaseResponse<>(BaseResponseMessage.INTERNAL_SERVER_ERROR, e.getMessage());
-        return new ResponseEntity<>(baseResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
+//        BaseResponse<String> baseResponse = new BaseResponse<>(BaseResponseMessage.INTERNAL_SERVER_ERROR, e.getMessage());
+//        return new ResponseEntity<>(baseResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(MailException.class)
     public ResponseEntity<BaseResponse> handleMailException(MailException e){

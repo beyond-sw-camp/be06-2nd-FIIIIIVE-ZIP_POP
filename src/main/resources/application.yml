@@ -16,6 +16,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  data:
+    redis:
+      host: 123.123.123.128
+      port: 6379
   mail:
     host: smtp.gmail.com
     port: 587
