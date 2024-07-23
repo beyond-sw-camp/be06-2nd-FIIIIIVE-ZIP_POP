@@ -8,6 +8,7 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import com.fiiiiive.zippop.popup_reserve.model.request.CreatePopupReserveReq;
 import com.fiiiiive.zippop.popup_reserve.model.response.CreatePopupReserveRes;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+@Tag(name = "popup-reserve-api", description = "PopupReserve")
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/popup-reserve")
