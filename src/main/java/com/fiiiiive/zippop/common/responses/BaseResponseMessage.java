@@ -67,9 +67,20 @@ public enum BaseResponseMessage {
     POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST(false, 4002, "팝업 스토어 리뷰 내용을 작성해주세요"),
 
     // ========================================================================================================================
-    // 팝업 예약 6000
-    POPUP_STORE_RESERVATION_SUCCESS(true, 3200, "예약에 성공했습니다."),
-    POPUP_STORE_RESERVATION_FAIL_TIME_CLOSED(false, 3201, "해당 시간대는 예약이 마감되었습니다."),
+    // 팝업 예약 9000
+    // 팝업 예약 생성 9000
+    POPUP_RESERVE_CREATE_SUCCESS(true, 9000, "예약 등록에 성공했습니다."),
+    POPUP_RESERVE_CREATE_FAIL_TIME_CLOSED(false, 9001, "해당 시간대는 예약이 마감되었습니다."),
+    POPUP_RESERVE_CREATE_FAIL_INVALID_MEMBER(false, 9002, "기업 회원이 아닌 회원은 예약을 생성할 수 없습니다."),
+    POPUP_RESERVE_CREATE_FAIL_NOT_FOUND(false, 9003, "예약을 생성하려는 팝업스토어를 찾을 수 없습니다."),
+    // 팝업 예약 취소 9100
+    POPUP_RESERVE_CANCEL_SUCCESS(true, 9100, "예약 취소에 성공했습니다."),
+    POPUP_RESERVE_CANCEL_FAIL(false,  9101, "예약 취소에 실패했습니다."),
+    // 팝업 예약 접속 9200
+    POPUP_RESERVE_ENROLL_SUCCESS(true, 9200, "예약에 성공했습니다."),
+    POPUP_RESERVE_ENROLL_FAIL(false, 9201, "예약에 실패했습니다."),
+    // 팝업 예약 조회 9300
+    POPUP_RESERVE_SEARCH_STATUS_SUCCESS(true, 9300, "예약 대기자 및 Redis 상태를 불러왔습니다."),
 
     // ========================================================================================================================
     // 팝업 굿즈 4000
