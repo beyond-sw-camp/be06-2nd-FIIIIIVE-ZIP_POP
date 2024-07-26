@@ -117,14 +117,9 @@ public class PopupReserveService {
     }
 
     public String reserveStatus(String reserveUUID, String reserveWaitingUUID){
-        Set<ZSetOperations.TypedTuple<Object>> values = redisUtil.getAllValues(reserveUUID);
-        values.forEach(value -> System.out.println("Value: " + value.getValue() + ", Score: " + value.getScore()));
-        Long inReserve = redisUtil.zCard(reserveUUID);
-        System.out.println("==========================================");
-        Set<ZSetOperations.TypedTuple<Object>> rvalues = redisUtil.getAllValues(reserveWaitingUUID);
-        rvalues.forEach(value -> System.out.println("Value: " + value.getValue() + ", Score: " + value.getScore()));
-        Long waitingReserve = redisUtil.zCard(reserveWaitingUUID);
-        return "예약접속자" + inReserve + "예약대기자" + waitingReserve;
+        String reserveTotal = redisUtil.getAllValues(reserveUUID);
+        String reserveWaitingTotal = redisUtil.getAllValues(reserveWaitingUUID);
+        return " 예약접속자 " + reserveTotal + " 예약대기자 " + reserveWaitingTotal;
     }
 }
 

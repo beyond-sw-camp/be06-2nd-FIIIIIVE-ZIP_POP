@@ -11,6 +11,4 @@ import lombok.*;
 public class CreatePostReq {
     private String postTitle;
     private String postContent;
-    private String postDate;
-    private String email;
 }
