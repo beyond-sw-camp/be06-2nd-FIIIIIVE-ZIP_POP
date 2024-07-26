@@ -10,6 +10,7 @@ import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,24 +33,31 @@ public class PopupGoodsController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search(@RequestParam Pageable pageable) throws Exception{
+    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search(@RequestParam int page,
+                                                                       @RequestParam int size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
         Page<GetPopupGoodsRes> popupGoodsPage = popupGoodsService.findAll(pageable);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
     }
+
     @GetMapping("/search-product-name")
-    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_product_name(@RequestParam String productName, @RequestParam Pageable pageable) throws Exception{
+    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_product_name(@RequestParam String productName, @RequestParam int page,
+                                                                                    @RequestParam int size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
         Page<GetPopupGoodsRes> popupGoodsPage = popupGoodsService.findByProductName(productName, pageable);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
     }
 
     @GetMapping("/search-store-name")
-    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_store_name(@RequestParam String storeName, @RequestParam Pageable pageable) throws Exception {
+    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_store_name(@RequestParam String storeName, @RequestParam int page, @RequestParam int size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
         Page<GetPopupGoodsRes> popupGoods = popupGoodsService.findByStoreName(storeName, pageable);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoods));
     }
 
     @GetMapping("/search-product-price")
-    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_product_price(@RequestParam Integer productPrice, @RequestParam Pageable pageable) throws Exception{
+    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search_product_price(@RequestParam Integer productPrice, @RequestParam int page, @RequestParam int size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
         Page<GetPopupGoodsRes> popupGoodsPage = popupGoodsService.findByProductPrice(productPrice, pageable);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
     }
