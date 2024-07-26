@@ -3,7 +3,7 @@ imp:
   imp_secret: ${IMP_SECRET}
 spring:
   jwt:
-    secret: 12345678901234567890123456789012
+    secret: ${JWT_SECRET}
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -48,7 +48,6 @@ spring:
             client-name: Kakao
             scope:
               - profile_nickname
-        #              - account_email
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
