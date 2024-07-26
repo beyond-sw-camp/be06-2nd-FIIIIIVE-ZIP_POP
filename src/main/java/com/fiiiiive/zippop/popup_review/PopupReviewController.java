@@ -22,7 +22,7 @@ public class PopupReviewController {
     private final PopupReviewService popupReviewService;
 
     @PostMapping(value = "/register")
-    public ResponseEntity<BaseResponse> registerReview(@RequestBody CreatePopupReviewReq createPopupReviewReq) throws Exception{
+    public ResponseEntity<BaseResponse> registerReview(@RequestBody CreatePopupReviewReq createPopupReviewReq) throws Exception {
         popupReviewService.register(createPopupReviewReq);
 
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_REGISTER_SUCCESS));
