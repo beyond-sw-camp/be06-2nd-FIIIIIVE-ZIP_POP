@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetPostRes {
+public class CreatePostRes {
     private Long postIdx;
     private String customerEmail;
     private String postTitle;
     private String postContent;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

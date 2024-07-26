@@ -17,30 +17,36 @@ import java.util.concurrent.TimeUnit;
 @Service
 @AllArgsConstructor
 public class RedisUtil {
-
     private final RedisTemplate<String, Object> redisTemplate;
 
-    // SortedSet 초기화 및 만료 시간 설정
-    public void init(String key, long expirationTimeInSeconds) {
+    // Redis SortedSet 초기화 및 만료 시간 설정
+    public void init(String key, long expirationTimeMinutes) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         zSetOperations.add(key, "start", System.currentTimeMillis());
         zSetOperations.remove(key, "start");
-        redisTemplate.expire(key, expirationTimeInSeconds, TimeUnit.MINUTES);
+        redisTemplate.expire(key, expirationTimeMinutes, TimeUnit.MINUTES);
     }
 
-    // SortedSet 값 저장
+    // SortedSet 값 저장(key, value, score), 타임스탬프를 기준으로 value를 정렬
     public void save(String key, String value, long timestamp) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         zSetOperations.add(key, value, timestamp);
     }
 
     // SortedSet 전체 값 조회
-    public Set<ZSetOperations.TypedTuple<Object>> getAllValues(String key) {
+    public String getAllValues(String key) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
-        return zSetOperations.rangeWithScores(key, 0, -1);
+        Set<ZSetOperations.TypedTuple<Object>> values = zSetOperations.rangeWithScores(key, 0, -1);
+        values.forEach(
+                value -> log.info("Value: " + value.getValue() + ", Score: " + value.getScore())
+        );
+        String total = String.valueOf(this.zCard(key));
+        log.info(total);
+        log.info("==========================================");
+        return total;
     }
 
-    // SortedSet 사이즈 조회
+    // SortedSet 전체 사이즈 조회
     public Long zCard(String key) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         return zSetOperations.zCard(key);
@@ -51,7 +57,7 @@ public class RedisUtil {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         return zSetOperations.rank(key, value);
     }
-    // SortedSet 내 값의 순위 조회
+    // SortedSet 값 삭제
     public void remove(String key, String value) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         zSetOperations.remove(key, value);
@@ -67,7 +73,8 @@ public class RedisUtil {
             zSetOperations.remove(key2, userEmail);
             zSetOperations.add(key1, userEmail, score);
             return userEmail;
+        } else {
+            return null;
         }
-        return null;
     }
 }

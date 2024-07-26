@@ -28,22 +28,18 @@ public class CommentService {
     public void createComment(Long postId, CreateCommentReq createCommentReq) throws BaseException {
         Optional<Post> post = postRepository.findById(postId);
         Optional<Customer> customer = customerRepository.findByEmail(createCommentReq.getEmail());
-
         if (post.isEmpty()) {
             throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
         }
-
         if (customer.isEmpty()) {
             throw new BaseException(BaseResponseMessage.MEMBER_LOGIN_FAIL_NOT_FOUND);
         }
-
         Comment comment = Comment.builder()
                 .post(post.get())
                 .customer(customer.get())
                 .content(createCommentReq.getContent())
                 .createdDate(LocalDateTime.now())
                 .build();
-
         try {
             commentRepository.save(comment);
         } catch (Exception e) {
@@ -56,7 +52,6 @@ public class CommentService {
         if (comments.isEmpty()) {
             throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
         }
-
         return comments.map(comment -> GetCommentRes.builder()
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())
@@ -70,7 +65,6 @@ public class CommentService {
         if (comments.isEmpty()) {
             throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
         }
-
         return comments.map(comment -> GetCommentRes.builder()
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())

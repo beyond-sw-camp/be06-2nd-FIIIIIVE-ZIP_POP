@@ -155,10 +155,18 @@ public enum BaseResponseMessage {
 
     // ========================================================================================================================
     // 게시글 6000
-    //등록
+    // 게시글 등록 6000
     POST_REGISTER_SUCCESS(true, 6000, "게시글이 성공적으로 등록되었습니다."),
     POST_REGISTER_FAIL(false, 6001, "게시글 등록에 실패했습니다."),
-    //검색
+    POST_REGISTER_FAIL_NOT_FOUND_MEMBER(false, 6002, "사용자를 찾을 수 없어 게시글 등록에 실패했습니다."),
+    // 게시글 사용자 조회
+    POST_SEARCH_BY_EMAIL_SUCCESS(false, 6003, "사용자가 작성한 게시글을 불러왔습니다."),
+    POST_SEARCH_BY_EMAIL_FAIL(false, 6004, "사용자가 작성한 게시글을 불러오는데 실패했습니다."),
+    // 게시글 전체 조회
+    POST_SEARCH_ALL_SUCCESS(true, 6004, "전체 게시글을 불러왔습니다." ),
+    POST_SEARCH_ALL_FAIL(false, 6005, "전체 게시글을 불러오는데 실패했습니다."),
+
+    // 게시글 검색
     POST_SEARCH_SUCCESS(true, 6100, "게시글 검색에 성공했습니다."),
     POST_SEARCH_FAIL(false, 6101, "해당 게시글을 찾을 수 없습니다."),
 
