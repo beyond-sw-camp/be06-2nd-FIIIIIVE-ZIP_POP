@@ -6,7 +6,7 @@ public enum BaseResponseMessage {
     REQUEST_SUCCESS(true, 200, "요청이 정상적으로 처리되었습니다"),
     REQUEST_FAIL(false, 404, "요청을 실패했습니다."),
     INTERNAL_SERVER_ERROR(false, 500, "내부 서버 오류"),
-
+    FILE_UPLOAD_FAIL(false, 501, "파입 업로드에 실패했습니다."),
     // ========================================================================================================================
     // 회원 기능(2000)
     // 회원가입 2000
@@ -153,30 +153,52 @@ public enum BaseResponseMessage {
 
     // ========================================================================================================================
 
-    // ========================================================================================================================
-    // 게시글 6000
+
+    // 게시글 6000 ========================================================================================================================
     // 게시글 등록 6000
     POST_REGISTER_SUCCESS(true, 6000, "게시글이 성공적으로 등록되었습니다."),
     POST_REGISTER_FAIL(false, 6001, "게시글 등록에 실패했습니다."),
-    POST_REGISTER_FAIL_NOT_FOUND_MEMBER(false, 6002, "사용자를 찾을 수 없어 게시글 등록에 실패했습니다."),
-    // 게시글 사용자 조회
-    POST_SEARCH_BY_EMAIL_SUCCESS(false, 6003, "사용자가 작성한 게시글을 불러왔습니다."),
-    POST_SEARCH_BY_EMAIL_FAIL(false, 6004, "사용자가 작성한 게시글을 불러오는데 실패했습니다."),
-    // 게시글 전체 조회
-    POST_SEARCH_ALL_SUCCESS(true, 6004, "전체 게시글을 불러왔습니다." ),
-    POST_SEARCH_ALL_FAIL(false, 6005, "전체 게시글을 불러오는데 실패했습니다."),
+    POST_REGISTER_FAIL_INVALID_MEMBER(false, 6002, "인증된 사용자만이 게시글을 등록할 수 있습니다."),
 
-    // 게시글 검색
-    POST_SEARCH_SUCCESS(true, 6100, "게시글 검색에 성공했습니다."),
-    POST_SEARCH_FAIL(false, 6101, "해당 게시글을 찾을 수 없습니다."),
+    // 게시글 전체 조회 6100
+    POST_SEARCH_ALL_SUCCESS(true, 6100, "전체 게시글을 불러오는데 성공했습니다." ),
+    POST_SEARCH_ALL_FAIL(false, 6101, "전체 게시글을 불러오는데 실패했습니다."),
 
+    // 게시글 단일 조회 6200
+    POST_SEARCH_BY_IDX_SUCCESS(true, 6200, "단일 게시글을 불러오는데 성공했습니다."),
+    POST_SEARCH_BY_IDX_FAIL(false, 6201, "단일 게시글을 불러오는데 실패했습니다."),
+
+    // 게시글 검색어 추천 조회 6300
+    POST_SEARCH_BY_KEYWORD_SUCCESS(true, 6300, "게시글 검색어 추천 조회에 성공했습니다."),
+    POST_SEARCH_FAIL(false, 6301, "게시글 검색어 추천 조회에 실패했습니다."),
+
+    // 게시글 고객 회원 조회 6400
+    POST_SEARCH_BY_CUSTOMER_SUCCESS(false, 6400, "사용자가 작성한 게시글을 불러왔습니다."),
+    POST_SEARCH_BY_CUSTOMER_FAIL(false, 6401, "사용자가 작성한 게시글을 불러오는데 실패했습니다."),
+
+    // 게시글 고객 회원 수정 6500
+    POST_UPDATE_SUCCESS(true, 6500, "게시글 수정에 성공했습니다."),
+    POST_UPDATE_FAIL(false, 6501, "게시글 수정에 실패했습니다."),
+    POST_UPDATE_FAIL_INVALID_MEMBER(false, 6502, "해당 게시글의 작성자가 아닙니다." ),
+
+    // 게시글 고객 회원 삭제 6600
+    POST_DELETE_SUCCESS(true, 6600, "게시글 삭제에 성공했습니다."),
+    POST_DELETE_FAIL_INVALID_MEMBER(false, 6601, "해당 게시글의 작성자가 아닙니다."),
+    POST_DELETE_FAIL_NOT_FOUND(false, 6602, "해당 게시글을 찾을 수 없습니다."),
+    POST_DELETE_FAIL(false, 6602, "게시글 삭제에 실패했습니다."),
+
+    // 게시글 추천 6700
+    POST_LIKE_SUCCESS(true, 6700, "게시글 추천에 성공했습니다."),
+    POST_LIKE_FAIL_NOT_FOUND(false, 6701, "해당 게시글을 찾을 수 없습니다."),
+    POST_LIKE_FAIL_INVALID_MEMBER(false, 6702, "인증된 사용자 만이 게시글을 추천할 수 있습니다."),
     // ========================================================================================================================
     // 댓글 7000
     COMMENT_CREATE_SUCCESS(true, 7000, "댓글이 성공적으로 등록되었습니다."),
     COMMENT_CREATE_FAIL(false, 7001, "댓글 등록에 실패했습니다."),
-
+    COMMENT_CREATE_FAIL_MEMBER_NOT_FOUND(false, 7003, "로그인한 사용자만이 댓글을 등록할수있습니다."),
     COMMENT_FOUND(true,7100,"해당 게시물의 댓글을 불러오는데 성공했습니다."),
     COMMENT_NOT_FOUND(false, 7002, "해당 게시물의 댓글을 불러오는데 실패했습니다."),
+    COMMENT_CREATE_FAIL_POST_NOT_FOUND(false,7003,"해당 게시글을 찾을 수 없습니다."),
 
     // ========================================================================================================================
     // 채팅 8000

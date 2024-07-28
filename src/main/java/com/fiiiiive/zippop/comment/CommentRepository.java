@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT c FROM Comment c JOIN FETCH c.customer WHERE c.post.postIdx = :postIdx")
-    Page<Comment> findByPost_Idx(Long postId, Pageable pageable); // Pageable 추가
+    Page<Comment> findByPostIdx(Long postIdx, Pageable pageable); // Pageable 추가
 
     @Query("SELECT c FROM Comment c WHERE c.customer.email = :email")
     Page<Comment> findByCustomerEmail(String email, Pageable pageable); // Pageable 추가

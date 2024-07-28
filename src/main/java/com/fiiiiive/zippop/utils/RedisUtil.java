@@ -57,6 +57,7 @@ public class RedisUtil {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
         return zSetOperations.rank(key, value);
     }
+
     // SortedSet 값 삭제
     public void remove(String key, String value) {
         ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();

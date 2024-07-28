@@ -26,16 +26,21 @@ public class Post {
     private String customerEmail;
     private String postTitle;
     private String postContent;
+    private Integer postLikeCount;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLike> postLikes;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostImage> postImages;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_idx")
+    @JoinColumn(name = "customerIdx")
     @JsonBackReference
     private Customer customer;
 }

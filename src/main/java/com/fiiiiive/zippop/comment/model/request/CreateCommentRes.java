@@ -7,6 +7,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateCommentReq {
+public class CreateCommentRes {
+    private Long commentIdx;
     private String commentContent;
+    private String customerEmail;
+    private String createdAt;
+    private String updatedAt;
 }
