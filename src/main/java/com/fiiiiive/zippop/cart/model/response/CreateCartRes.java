@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 public class CreateCartRes {
     private Long cartIdx;
+    private Integer cartItemCount;
+    private Integer cartItemPrice;
     private Long customerIdx;
     private Long productIdx;
-    private Integer count;
-    private Integer price;
 }

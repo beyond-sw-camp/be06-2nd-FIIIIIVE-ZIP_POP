@@ -18,8 +18,8 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartIdx;
-    private Integer count;
-    private Integer price;
+    private Integer cartItemCount;
+    private Integer cartItemPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerIdx")
