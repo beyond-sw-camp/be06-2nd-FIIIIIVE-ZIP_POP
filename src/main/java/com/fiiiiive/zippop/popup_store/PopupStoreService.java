@@ -90,11 +90,7 @@ public class PopupStoreService {
     }
 
     public Page<GetPopupStoreRes> findByCategory(String category, Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupStore> result = popupStoreRepository.findByCategory(category, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             List<GetPopupStoreRes> getPopupStoreResList = result.getContent().stream().map(popupStore -> {
                 GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
@@ -130,17 +126,7 @@ public class PopupStoreService {
 
                 return getPopupStoreRes;
             }).collect(Collectors.toList());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupStoreRepository.findByCategoryFetchJoin(category, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return new PageImpl<>(getPopupStoreResList, pageable, result.getTotalElements());
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
@@ -186,14 +172,7 @@ public class PopupStoreService {
                 reviewResList.add(reviewRes);
             }
             getPopupStoreRes.setReviews(reviewResList);
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-            start = System.currentTimeMillis();
             result = popupStoreRepository.findByStoreNameFetchJoin(storeName);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
             return getPopupStoreRes;
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
@@ -201,11 +180,7 @@ public class PopupStoreService {
     }
 
     public Page<GetPopupStoreRes> findByStoreAddr(String storeAddr, Pageable pageable) throws BaseException{
-        Long start = System.currentTimeMillis();
         Page<PopupStore> result = popupStoreRepository.findByCategory(storeAddr, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             List<GetPopupStoreRes> getPopupStoreResList = result.getContent().stream().map(popupStore -> {
                 GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
@@ -241,17 +216,7 @@ public class PopupStoreService {
 
                 return getPopupStoreRes;
             }).collect(Collectors.toList());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupStoreRepository.findByStoreAddrFetchJoin(storeAddr, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return new PageImpl<>(getPopupStoreResList, pageable, result.getTotalElements());
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
@@ -259,11 +224,7 @@ public class PopupStoreService {
     }
 
     public Page<GetPopupStoreRes> findByCompanyIdx(Long companyIdx, Pageable pageable) throws BaseException{
-        Long start = System.currentTimeMillis();
         Page<PopupStore> result = popupStoreRepository.findByCompanyCompanyIdx(companyIdx, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             List<GetPopupStoreRes> getPopupStoreResList = result.getContent().stream().map(popupStore -> {
                 GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
@@ -299,17 +260,7 @@ public class PopupStoreService {
 
                 return getPopupStoreRes;
             }).collect(Collectors.toList());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupStoreRepository.findByCompanyIdxFetchJoin(companyIdx, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return new PageImpl<>(getPopupStoreResList, pageable, result.getTotalElements());
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
@@ -317,11 +268,7 @@ public class PopupStoreService {
     }
 
     public Page<GetPopupStoreRes> findByStoreDate(String storeDate, Pageable pageable) throws BaseException{
-        Long start = System.currentTimeMillis();
         Page<PopupStore> result = popupStoreRepository.findByCategory(storeDate, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             List<GetPopupStoreRes> getPopupStoreResList = result.getContent().stream().map(popupStore -> {
                 GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
@@ -358,16 +305,7 @@ public class PopupStoreService {
                 return getPopupStoreRes;
             }).collect(Collectors.toList());
 
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupStoreRepository.findByStoreDateFetchJoin(storeDate, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return new PageImpl<>(getPopupStoreResList, pageable, result.getTotalElements());
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);

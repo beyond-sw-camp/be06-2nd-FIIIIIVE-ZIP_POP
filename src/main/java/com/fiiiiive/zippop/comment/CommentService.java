@@ -2,19 +2,27 @@ package com.fiiiiive.zippop.comment;
 
 import com.fiiiiive.zippop.comment.model.Comment;
 import com.fiiiiive.zippop.comment.model.request.CreateCommentReq;
+import com.fiiiiive.zippop.comment.model.request.CreateCommentRes;
 import com.fiiiiive.zippop.comment.model.response.GetCommentRes;
 import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.CustomerRepository;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.post.PostRepository;
 import com.fiiiiive.zippop.post.model.Post;
+import com.fiiiiive.zippop.post.model.PostImage;
+import com.fiiiiive.zippop.post.model.response.GetPostImageRes;
+import com.fiiiiive.zippop.post.model.response.GetPostRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,53 +33,62 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CustomerRepository customerRepository;
 
-    public void createComment(Long postId, CreateCommentReq createCommentReq) throws BaseException {
-        Optional<Post> post = postRepository.findById(postId);
-        Optional<Customer> customer = customerRepository.findByEmail(createCommentReq.getEmail());
-        if (post.isEmpty()) {
-            throw new BaseException(BaseResponseMessage.POST_SEARCH_FAIL);
-        }
-        if (customer.isEmpty()) {
-            throw new BaseException(BaseResponseMessage.MEMBER_LOGIN_FAIL_NOT_FOUND);
-        }
+    public CreateCommentRes register(CustomUserDetails customUserDetails, Long postIdx, CreateCommentReq dto) throws BaseException {
+        Post post = postRepository.findById(postIdx)
+                .orElseThrow(() ->  new BaseException(BaseResponseMessage.COMMENT_CREATE_FAIL_MEMBER_NOT_FOUND));
+        Customer customer = customerRepository.findById(customUserDetails.getIdx())
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_CREATE_FAIL_POST_NOT_FOUND));
         Comment comment = Comment.builder()
-                .post(post.get())
-                .customer(customer.get())
-                .content(createCommentReq.getContent())
-                .createdDate(LocalDateTime.now())
+                .post(post)
+                .customer(customer)
+                .commentContent(dto.getCommentContent())
                 .build();
-        try {
-            commentRepository.save(comment);
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseMessage.COMMENT_CREATE_FAIL);
-        }
+        commentRepository.save(comment);
+        return CreateCommentRes.builder()
+                .commentIdx(comment.getCommentIdx())
+                .customerEmail(customUserDetails.getEmail())
+                .commentContent(comment.getCommentContent())
+                .build();
+
     }
 
-    public Page<GetCommentRes> getCommentsByPost(Long postId, Pageable pageable) throws BaseException {
-        Page<Comment> comments = commentRepository.findByPost_Idx(postId, pageable);
-        if (comments.isEmpty()) {
+    public Page<GetCommentRes> searchByCustomer(int page, int size, CustomUserDetails customUserDetails) throws BaseException {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> result = commentRepository.findByCustomerEmail(customUserDetails.getEmail(), pageable);
+        if (result.hasContent()) {
+            Page<GetCommentRes> getCommentResPage = result.map(comment-> {
+                return GetCommentRes.builder()
+                        .commentIdx(comment.getCommentIdx())
+                        .customerEmail(comment.getCustomer().getEmail())
+                        .commentContent(comment.getCommentContent())
+                        .createdAt(comment.getCreatedAt())
+                        .createdAt(comment.getCreatedAt())
+                        .updatedAt(comment.getUpdatedAt())
+                        .build();
+            });
+            return getCommentResPage;
+        } else {
             throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
         }
-        return comments.map(comment -> GetCommentRes.builder()
-                .commentId(comment.getCommentId())
-                .content(comment.getContent())
-                .email(comment.getCustomer().getEmail())
-                .createdDate(comment.getCreatedDate().toString())
-                .build());
     }
 
-    public Page<GetCommentRes> getCommentsByCustomerEmail(String email, Pageable pageable) throws BaseException {
-        Page<Comment> comments = commentRepository.findByCustomerEmail(email, pageable);
-        if (comments.isEmpty()) {
+    public Page<GetCommentRes> searchByPost(int page, int size, Long postIdx) throws BaseException {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> result = commentRepository.findByPostIdx(postIdx, pageable);
+        if(result.hasContent()){
+            Page<GetCommentRes> getCommentResPage = result.map(comment-> {
+                return GetCommentRes.builder()
+                        .commentIdx(comment.getCommentIdx())
+                        .customerEmail(comment.getCustomer().getEmail())
+                        .commentContent(comment.getCommentContent())
+                        .createdAt(comment.getCreatedAt())
+                        .createdAt(comment.getCreatedAt())
+                        .updatedAt(comment.getUpdatedAt())
+                        .build();
+            });
+            return getCommentResPage;
+        }else {
             throw new BaseException(BaseResponseMessage.COMMENT_NOT_FOUND);
         }
-        return comments.map(comment -> GetCommentRes.builder()
-                .commentId(comment.getCommentId())
-                .content(comment.getContent())
-                .email(comment.getCustomer().getEmail())
-                .createdDate(comment.getCreatedDate().toString())
-                .build());
     }
-
-
 }

@@ -29,35 +29,39 @@ public class CartController {
     private final CartService cartService;
     private final CustomerRepository customerRepository;
 
-//    @ExeTimer
     @PostMapping("/register")
-    public ResponseEntity<BaseResponse> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreateCartReq dto) throws Exception {
+    public ResponseEntity<BaseResponse> register(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreateCartReq dto) throws BaseException {
         CreateCartRes response = cartService.register(customUserDetails, dto);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_REGISTER_SUCCESS, response));
     }
 
-    @ExeTimer
+//    @ExeTimer
     @GetMapping("/adjust-count")
-    public ResponseEntity<BaseResponse> adjustCount(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx, @RequestParam Long operation) throws BaseException {
+    public ResponseEntity<BaseResponse> adjustCount(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx, @RequestParam Long operation) throws BaseException {
         CountCartRes response  = cartService.adjustCount(customUserDetails, cartIdx, operation);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_COUNT_SUCCESS, response));
     }
 
 //    @ExeTimer
     @GetMapping("/list")
-    public ResponseEntity<BaseResponse> list(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
+    public ResponseEntity<BaseResponse> list(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
         List<GetCartRes> response = cartService.list(customUserDetails);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_SEARCH_LIST_SUCESS, response));
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<BaseResponse> deleteAll(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
+    public ResponseEntity<BaseResponse> deleteAll(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
         cartService.deleteAll(customUserDetails);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_ALL_SUCCESS));
     }
 
     @DeleteMapping("/delete-cart")
-    public ResponseEntity<BaseResponse> deleteByCartIdx(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx) throws BaseException {
+    public ResponseEntity<BaseResponse> deleteByCartIdx(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx) throws BaseException {
         cartService.deleteByCartIdx(customUserDetails, cartIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_SUCCESS));
     }

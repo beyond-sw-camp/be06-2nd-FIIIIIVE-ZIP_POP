@@ -1,7 +1,5 @@
-package com.fiiiiive.zippop.comment.model;
+package com.fiiiiive.zippop.post.model;
 
-import com.fiiiiive.zippop.member.model.Customer;
-import com.fiiiiive.zippop.post.model.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,29 +8,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Comment {
+public class PostImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentIdx;
-    @Column(nullable = false)
-    private String commentContent;
+    private Long postImageIdx;
+    @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
+    private String postImageUrl;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postIdx")
+    @JoinColumn(name="postIdx")
     private Post post;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerIdx")
-    private Customer customer;
 }
