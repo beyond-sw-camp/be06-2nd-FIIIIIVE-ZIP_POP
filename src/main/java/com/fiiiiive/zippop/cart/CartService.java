@@ -51,6 +51,8 @@ public class CartService {
                         .productIdx(popupGoods.getProductIdx())
                         .cartItemCount(cart.getCartItemCount())
                         .cartItemPrice(cart.getCartItemPrice())
+                        .createdAt(cart.getCreatedAt())
+                        .updatedAt(cart.getUpdatedAt())
                         .build();
             }
     }
@@ -93,6 +95,8 @@ public class CartService {
                         .getPopupGoodsRes(getPopupGoodsRes)
                         .cartItemCount(cart.getCartItemCount())
                         .cartItemPrice(cart.getCartItemPrice())
+                        .createdAt(cart.getCreatedAt())
+                        .updatedAt(cart.getUpdatedAt())
                         .build();
                 getCartResList.add(getCartRes);
             }

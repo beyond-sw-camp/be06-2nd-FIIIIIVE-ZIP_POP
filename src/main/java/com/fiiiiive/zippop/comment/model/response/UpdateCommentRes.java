@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetCommentRes {
+public class UpdateCommentRes {
     private Long commentIdx;
     private String commentContent;
     private String customerEmail;
-    private Integer commentLikeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

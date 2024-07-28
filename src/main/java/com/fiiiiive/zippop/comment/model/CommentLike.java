@@ -1,9 +1,7 @@
-package com.fiiiiive.zippop.cart.model;
+package com.fiiiiive.zippop.comment.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fiiiiive.zippop.member.model.Customer;
-import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.post.model.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,30 +10,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "cart")
 @EntityListeners(AuditingEntityListener.class)
-public class Cart {
+public class CommentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cartIdx;
-    private Integer cartItemCount;
-    private Integer cartItemPrice;
+    private Long commentLikeIdx;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerIdx")
-    @JsonIgnore
+    @JoinColumn(name="commentIdx")
+    private Comment comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customerIdx")
     private Customer customer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productIdx")
-    @JsonIgnore
-    private PopupGoods popupGoods;
 
     @CreatedDate
     private LocalDateTime createdAt;

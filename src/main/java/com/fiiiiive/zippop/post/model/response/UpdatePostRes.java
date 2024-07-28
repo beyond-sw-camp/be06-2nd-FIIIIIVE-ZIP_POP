@@ -17,7 +17,7 @@ public class UpdatePostRes {
     private String postTitle;
     private String postContent;
     private List<GetPostImageRes> getPostImageRes;
-    private List<GetCommentRes> getCommentRes;
+//    private List<GetCommentRes> getCommentRes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -2,6 +2,8 @@ package com.fiiiiive.zippop.cart.model.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,4 +15,7 @@ public class CreateCartRes {
     private Integer cartItemPrice;
     private Long customerIdx;
     private Long productIdx;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 }

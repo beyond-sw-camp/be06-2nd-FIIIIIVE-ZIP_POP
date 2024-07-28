@@ -21,7 +21,7 @@ public class GetPostRes {
     private String postContent;
     private Integer postLikeCount;
     private List<GetPostImageRes> getPostImageRes;
-    private List<GetCommentRes> getCommentRes;
+//    private List<GetCommentRes> getCommentRes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

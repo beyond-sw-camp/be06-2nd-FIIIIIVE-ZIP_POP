@@ -27,18 +27,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
-    private final CustomerRepository customerRepository;
 
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreateCartReq dto) throws BaseException {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestBody CreateCartReq dto) throws BaseException {
         CreateCartRes response = cartService.register(customUserDetails, dto);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_REGISTER_SUCCESS, response));
     }
 
     @GetMapping("/count")
     public ResponseEntity<BaseResponse> count(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx, @RequestParam Long operation) throws BaseException {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long cartIdx,
+        @RequestParam Long operation) throws BaseException {
         CountCartRes response  = cartService.count(customUserDetails, cartIdx, operation);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_COUNT_SUCCESS, response));
     }
@@ -52,7 +54,8 @@ public class CartController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponse> delete(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx) throws BaseException {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long cartIdx) throws BaseException {
         cartService.delete(customUserDetails, cartIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_SUCCESS));
     }
@@ -64,8 +67,5 @@ public class CartController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_ALL_SUCCESS));
     }
 
-
-
     // 장바구니에서 결제버튼클릭시 리다이렉션과 함께 결제에게 전송
-
 }
