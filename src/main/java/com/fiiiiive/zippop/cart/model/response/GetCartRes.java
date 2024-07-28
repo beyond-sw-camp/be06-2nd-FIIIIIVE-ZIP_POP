@@ -4,6 +4,7 @@ import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -16,4 +17,6 @@ public class GetCartRes {
     private Integer cartItemCount;
     private Integer cartItemPrice;
     private GetPopupGoodsRes getPopupGoodsRes;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -184,21 +184,44 @@ public enum BaseResponseMessage {
     // 게시글 고객 회원 삭제 6600
     POST_DELETE_SUCCESS(true, 6600, "게시글 삭제에 성공했습니다."),
     POST_DELETE_FAIL_INVALID_MEMBER(false, 6601, "해당 게시글의 작성자가 아닙니다."),
-    POST_DELETE_FAIL_NOT_FOUND(false, 6602, "해당 게시글을 찾을 수 없습니다."),
+    POST_DELETE_FAIL_POST_NOT_FOUND(false, 6602, "해당 게시글을 찾을 수 없습니다."),
     POST_DELETE_FAIL(false, 6602, "게시글 삭제에 실패했습니다."),
 
     // 게시글 추천 6700
     POST_LIKE_SUCCESS(true, 6700, "게시글 추천에 성공했습니다."),
-    POST_LIKE_FAIL_NOT_FOUND(false, 6701, "해당 게시글을 찾을 수 없습니다."),
+    POST_LIKE_FAIL_POST_NOT_FOUND(false, 6701, "해당 게시글을 찾을 수 없습니다."),
     POST_LIKE_FAIL_INVALID_MEMBER(false, 6702, "인증된 사용자 만이 게시글을 추천할 수 있습니다."),
-    // ========================================================================================================================
-    // 댓글 7000
-    COMMENT_CREATE_SUCCESS(true, 7000, "댓글이 성공적으로 등록되었습니다."),
-    COMMENT_CREATE_FAIL(false, 7001, "댓글 등록에 실패했습니다."),
-    COMMENT_CREATE_FAIL_MEMBER_NOT_FOUND(false, 7003, "로그인한 사용자만이 댓글을 등록할수있습니다."),
-    COMMENT_FOUND(true,7100,"해당 게시물의 댓글을 불러오는데 성공했습니다."),
-    COMMENT_NOT_FOUND(false, 7002, "해당 게시물의 댓글을 불러오는데 실패했습니다."),
-    COMMENT_CREATE_FAIL_POST_NOT_FOUND(false,7003,"해당 게시글을 찾을 수 없습니다."),
+
+    // 댓글 7000 ========================================================================================================================
+    // 댓글 생성 7000
+    COMMENT_REGISTER_SUCCESS(true, 7000, "댓글이 성공적으로 등록되었습니다."),
+    COMMENT_REGISTER_FAIL(false, 7001, "댓글 등록에 실패했습니다."),
+    COMMENT_REGISTER_FAIL_INVALID_MEMBER(false, 7003, "로그인한 사용자만이 댓글을 등록할수있습니다."),
+    COMMENT_REGISTER_FAIL_POST_NOT_FOUND(false,7003,"해당 게시글을 찾을 수 없습니다."),
+
+    // 댓글 전체 조회 7100
+    COMMENT_SEARCH_ALL_SUCCESS(true, 7100, "전체 댓글을 불러왔습니다." ),
+    COMMENT_SEARCH_ALL_FAIL(false, 7101, "전체 댓글을 불러오는데 실패했습니다."),
+
+    // 댓글 고객 회원 조회 7200
+    COMMENT_SEARCH_BY_CUSTOMER_SUCCESS(true, 7200, "사용자의 전체 댓글을 불러왔습니다. " ),
+    COMMENT_SEARCH_BY_CUSTOMER_FAIL(false, 7201, "사용자의 전체 댓글을 불러오는데 실패했습니다."),
+
+    // 댓글 수정 7300
+    COMMENT_UPDATE_SUCCESS(true, 7300, "댓글을 수정하는데 성공했습니다."),
+    COMMENT_UPDATE_FAIL_INVALID_MEMBER(false, 7301, "해당 댓글을 단 사용자가 아닙니다."),
+    COMMENT_UPDATE_FAIL_COMMENT_NOT_FOUND(false, 7302, "해당 댓글을 찾을 수 없습니다."),
+
+    // 댓글 삭제 7400
+    COMMENT_DELETE_SUCCESS(true, 7400, "댓글을 삭제하는데 성공했습니다."),
+    COMMENT_DELETE_FAIL_INVALID_MEMBER(false, 7401, "해당 댓글을 단 사용자가 아닙니다."),
+    COMMENT_DELETE_FAIL_COMMENT_NOT_FOUND(false, 7402, "해당 댓글을 찾을 수 없습니다."),
+
+    // 댓글 추천 7500
+    COMMENT_LIKE_SUCCESS(true, 7500, "댓글 추천에 성공했습니다."),
+    COMMENT_LIKE_FAIL_INVALID_MEMBER(false, 7501,"인증된 사용자만이 댓글을 추천할 수 있습니다."),
+    COMMENT_LIKE_FAIL_COMMENT_NOT_FOUND(false, 7502,"해당 댓글을 찾을 수 없습니다."),
+
 
     // ========================================================================================================================
     // 채팅 8000

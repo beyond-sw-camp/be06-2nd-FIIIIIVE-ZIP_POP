@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetCommentRes {
+public class CreateCommentRes {
     private Long commentIdx;
     private String commentContent;
     private String customerEmail;

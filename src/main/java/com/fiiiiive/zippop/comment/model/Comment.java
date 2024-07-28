@@ -2,6 +2,7 @@ package com.fiiiiive.zippop.comment.model;
 
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.post.model.Post;
+import com.fiiiiive.zippop.post.model.PostLike;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,11 +24,17 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentIdx;
     @Column(nullable = false)
+    private String customerEmail;
     private String commentContent;
+    private Integer commentLikeCount;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentLike> commentLikes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postIdx")

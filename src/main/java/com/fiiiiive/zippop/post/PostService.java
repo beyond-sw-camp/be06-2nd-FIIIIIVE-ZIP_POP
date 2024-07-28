@@ -93,25 +93,25 @@ public class PostService {
                             .build();
                     getPostImageResList.add(getPostImageRes);
                 }
-                List<Comment> commentList = post.getComments();
-                List<GetCommentRes> getCommentResList = new ArrayList<>();
-                for(Comment comment: commentList){
-                    GetCommentRes getCommentRes = GetCommentRes.builder()
-                            .commentIdx(comment.getCommentIdx())
-                            .commentContent(comment.getCommentContent())
-                            .customerEmail(comment.getCustomer().getEmail())
-                            .createdAt(comment.getCreatedAt())
-                            .updatedAt(comment.getUpdatedAt())
-                            .build();
-                    getCommentResList.add(getCommentRes);
-                }
+//                List<Comment> commentList = post.getComments();
+//                List<GetCommentRes> getCommentResList = new ArrayList<>();
+//                for(Comment comment: commentList){
+//                    GetCommentRes getCommentRes = GetCommentRes.builder()
+//                            .commentIdx(comment.getCommentIdx())
+//                            .commentContent(comment.getCommentContent())
+//                            .customerEmail(comment.getCustomer().getEmail())
+//                            .createdAt(comment.getCreatedAt())
+//                            .updatedAt(comment.getUpdatedAt())
+//                            .build();
+//                    getCommentResList.add(getCommentRes);
+//                }
                 return GetPostRes.builder()
                         .postIdx(post.getPostIdx())
                         .postTitle(post.getPostTitle())
                         .postContent(post.getPostContent())
                         .postLikeCount(post.getPostLikeCount())
                         .getPostImageRes(getPostImageResList)
-                        .getCommentRes(getCommentResList)
+//                        .getCommentRes(getCommentResList)
                         .customerEmail(post.getCustomer().getEmail())
                         .createdAt(post.getCreatedAt())
                         .updatedAt(post.getUpdatedAt())
@@ -141,23 +141,23 @@ public class PostService {
                 }
                 List<Comment> commentList = post.getComments();
                 List<GetCommentRes> getCommentResList = new ArrayList<>();
-                for(Comment comment: commentList){
-                    GetCommentRes getCommentRes = GetCommentRes.builder()
-                            .commentIdx(comment.getCommentIdx())
-                            .commentContent(comment.getCommentContent())
-                            .customerEmail(comment.getCustomer().getEmail())
-                            .createdAt(comment.getCreatedAt())
-                            .updatedAt(comment.getUpdatedAt())
-                            .build();
-                    getCommentResList.add(getCommentRes);
-                }
+//                for(Comment comment: commentList){
+//                    GetCommentRes getCommentRes = GetCommentRes.builder()
+//                            .commentIdx(comment.getCommentIdx())
+//                            .commentContent(comment.getCommentContent())
+//                            .customerEmail(comment.getCustomer().getEmail())
+//                            .createdAt(comment.getCreatedAt())
+//                            .updatedAt(comment.getUpdatedAt())
+//                            .build();
+//                    getCommentResList.add(getCommentRes);
+//                }
                 return GetPostRes.builder()
                         .postIdx(post.getPostIdx())
                         .postTitle(post.getPostTitle())
                         .postContent(post.getPostContent())
                         .postLikeCount(post.getPostLikeCount())
                         .getPostImageRes(getPostImageResList)
-                        .getCommentRes(getCommentResList)
+//                        .getCommentRes(getCommentResList)
                         .customerEmail(post.getCustomer().getEmail())
                         .createdAt(post.getCreatedAt())
                         .updatedAt(post.getUpdatedAt())
@@ -185,24 +185,24 @@ public class PostService {
                             .build();
                     getPostImageResList.add(getPostImageRes);
                 }
-                List<Comment> commentList = post.getComments();
-                List<GetCommentRes> getCommentResList = new ArrayList<>();
-                for(Comment comment: commentList){
-                    GetCommentRes getCommentRes = GetCommentRes.builder()
-                            .commentIdx(comment.getCommentIdx())
-                            .commentContent(comment.getCommentContent())
-                            .customerEmail(comment.getCustomer().getEmail())
-                            .createdAt(comment.getCreatedAt())
-                            .updatedAt(comment.getUpdatedAt())
-                            .build();
-                    getCommentResList.add(getCommentRes);
-                }
+//                List<Comment> commentList = post.getComments();
+//                List<GetCommentRes> getCommentResList = new ArrayList<>();
+//                for(Comment comment: commentList){
+//                    GetCommentRes getCommentRes = GetCommentRes.builder()
+//                            .commentIdx(comment.getCommentIdx())
+//                            .commentContent(comment.getCommentContent())
+//                            .customerEmail(comment.getCustomer().getEmail())
+//                            .createdAt(comment.getCreatedAt())
+//                            .updatedAt(comment.getUpdatedAt())
+//                            .build();
+//                    getCommentResList.add(getCommentRes);
+//                }
                 return GetPostRes.builder()
                         .postIdx(post.getPostIdx())
                         .postTitle(post.getPostTitle())
                         .postContent(post.getPostContent())
                         .getPostImageRes(getPostImageResList)
-                        .getCommentRes(getCommentResList)
+//                        .getCommentRes(getCommentResList)
                         .customerEmail(post.getCustomer().getEmail())
                         .createdAt(post.getCreatedAt())
                         .updatedAt(post.getUpdatedAt())
@@ -229,18 +229,18 @@ public class PostService {
                         .build();
                 getPostImageResList.add(getPostImageRes);
             }
-            List<Comment> commentList = post.getComments();
-            List<GetCommentRes> getCommentResList = new ArrayList<>();
-            for(Comment comment: commentList){
-                GetCommentRes getCommentRes = GetCommentRes.builder()
-                        .commentIdx(comment.getCommentIdx())
-                        .commentContent(comment.getCommentContent())
-                        .customerEmail(comment.getCustomer().getEmail())
-                        .createdAt(comment.getCreatedAt())
-                        .updatedAt(comment.getUpdatedAt())
-                        .build();
-                getCommentResList.add(getCommentRes);
-            }
+//            List<Comment> commentList = post.getComments();
+//            List<GetCommentRes> getCommentResList = new ArrayList<>();
+//            for(Comment comment: commentList){
+//                GetCommentRes getCommentRes = GetCommentRes.builder()
+//                        .commentIdx(comment.getCommentIdx())
+//                        .commentContent(comment.getCommentContent())
+//                        .customerEmail(comment.getCustomer().getEmail())
+//                        .createdAt(comment.getCreatedAt())
+//                        .updatedAt(comment.getUpdatedAt())
+//                        .build();
+//                getCommentResList.add(getCommentRes);
+//            }
             return GetPostRes.builder()
                     .postIdx(post.getPostIdx())
                     .customerEmail(post.getCustomerEmail())
@@ -248,7 +248,7 @@ public class PostService {
                     .postContent(post.getPostContent())
                     .postLikeCount(post.getPostLikeCount())
                     .getPostImageRes(getPostImageResList)
-                    .getCommentRes(getCommentResList)
+//                    .getCommentRes(getCommentResList)
                     .createdAt(post.getCreatedAt())
                     .updatedAt(post.getUpdatedAt())
                     .build();
@@ -308,12 +308,12 @@ public class PostService {
                 throw new BaseException(BaseResponseMessage.POST_DELETE_FAIL_INVALID_MEMBER);
             }
         } else {
-            throw new BaseException(BaseResponseMessage.POST_DELETE_FAIL_NOT_FOUND);
+            throw new BaseException(BaseResponseMessage.POST_DELETE_FAIL_POST_NOT_FOUND);
         }
     }
 
     @Transactional
-    public void adjustLike(CustomUserDetails customUserDetails, Long postIdx) throws BaseException{
+    public void like(CustomUserDetails customUserDetails, Long postIdx) throws BaseException{
         Optional<Post> resultPost = postRepository.findById(postIdx);
         if(resultPost.isPresent()){
             Optional<Customer> resultCustomer = customerRepository.findById(customUserDetails.getIdx());
@@ -339,7 +339,7 @@ public class PostService {
                 throw new BaseException(BaseResponseMessage.POST_LIKE_FAIL_INVALID_MEMBER);
             }
         } else {
-            throw new BaseException(BaseResponseMessage.POST_LIKE_FAIL_NOT_FOUND);
+            throw new BaseException(BaseResponseMessage.POST_LIKE_FAIL_POST_NOT_FOUND);
         }
     }
 }
