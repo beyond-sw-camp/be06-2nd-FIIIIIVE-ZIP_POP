@@ -65,9 +65,7 @@ public class CartController {
         cartService.deleteByCartIdx(customUserDetails, cartIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_SUCCESS));
     }
-
-
-
+    
     // 장바구니에서 결제버튼클릭시 리다이렉션과 함께 결제에게 전송
 
 }
