@@ -1,6 +1,7 @@
 package com.fiiiiive.zippop.cart.model.response;
 
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import lombok.*;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @Builder
 public class GetCartRes {
     private Long cartIdx;
-    private Integer count;
-    private Integer price;
-    private PopupGoods popupGoods;
+    private Integer cartItemCount;
+    private Integer cartItemPrice;
+    private GetPopupGoodsRes getPopupGoodsRes;
 }

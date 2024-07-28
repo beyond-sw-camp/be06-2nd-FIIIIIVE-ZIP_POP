@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 public class CreateCartReq {
     private Long productIdx;
-    private Integer count;
+    private Integer cartItemCount;
 }

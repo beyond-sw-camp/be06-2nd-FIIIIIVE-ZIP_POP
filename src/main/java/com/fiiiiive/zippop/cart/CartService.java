@@ -12,6 +12,7 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsRepository;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,32 +41,32 @@ public class CartService {
                 Cart cart = Cart.builder()
                         .customer(customer)
                         .popupGoods(popupGoods)
-                        .count(dto.getCount())
-                        .price(popupGoods.getProductPrice())
+                        .cartItemCount(dto.getCartItemCount())
+                        .cartItemPrice(popupGoods.getProductPrice())
                         .build();
                 cartRepository.save(cart);
                 return CreateCartRes.builder()
                         .cartIdx(cart.getCartIdx())
                         .customerIdx(customer.getCustomerIdx())
                         .productIdx(popupGoods.getProductIdx())
-                        .count(cart.getCount())
-                        .price(cart.getPrice())
+                        .cartItemCount(cart.getCartItemCount())
+                        .cartItemPrice(cart.getCartItemPrice())
                         .build();
             }
     }
 
-    public CountCartRes adjustCount(CustomUserDetails customUserDetails, Long cartIdx, Long operation) throws BaseException {
+    public CountCartRes count(CustomUserDetails customUserDetails, Long cartIdx, Long operation) throws BaseException {
         Cart cart = cartRepository.findByIdAndCustomerIdx(cartIdx, customUserDetails.getIdx())
                 .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_COUNT_FAIL_NOT_FOUND)));
         if (operation == 0){
-            cart.setCount(cart.getCount() + 1);
+            cart.setCartItemCount(cart.getCartItemCount() + 1);
             cartRepository.save(cart);
             return CountCartRes.builder().cart(cart).build();
         } else if (operation == 1) {
-            if(cart.getCount() == 0){
+            if(cart.getCartItemCount() == 0){
                 throw new BaseException(BaseResponseMessage.CART_COUNT_FAIL_IS_0);
             }
-            cart.setCount(cart.getCount() - 1);
+            cart.setCartItemCount(cart.getCartItemCount() - 1);
             cartRepository.save(cart);
             return CountCartRes.builder().cart(cart).build();
         } else{
@@ -73,16 +74,25 @@ public class CartService {
         }
     }
 
-    public List<GetCartRes> list(CustomUserDetails customUserDetails) throws BaseException {
+    public List<GetCartRes> searchAll(CustomUserDetails customUserDetails) throws BaseException {
         Optional<List<Cart>> result = cartRepository.findAllByCustomerIdx(customUserDetails.getIdx());
         if (result.isPresent()) {
             List<GetCartRes> getCartResList = new ArrayList<>();
             for(Cart cart: result.get()){
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(cart.getPopupGoods().getProductIdx())
+                        .productName(cart.getPopupGoods().getProductName())
+                        .productPrice(cart.getPopupGoods().getProductPrice())
+                        .productContent(cart.getPopupGoods().getProductContent())
+                        .productImg(cart.getPopupGoods().getProductImg())
+                        .productAmount(cart.getPopupGoods().getProductAmount())
+                        .storeName(cart.getPopupGoods().getStoreName())
+                        .build();
                 GetCartRes getCartRes = GetCartRes.builder()
                         .cartIdx(cart.getCartIdx())
-                        .popupGoods(cart.getPopupGoods())
-                        .count(cart.getCount())
-                        .price(cart.getPrice())
+                        .getPopupGoodsRes(getPopupGoodsRes)
+                        .cartItemCount(cart.getCartItemCount())
+                        .cartItemPrice(cart.getCartItemPrice())
                         .build();
                 getCartResList.add(getCartRes);
             }
@@ -94,7 +104,7 @@ public class CartService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByCartIdx(CustomUserDetails customUserDetails, Long cartIdx) throws BaseException {
+    public void delete(CustomUserDetails customUserDetails, Long cartIdx) throws BaseException {
         int deletedCount = cartRepository.deleteByIdAndCustomerIdx(cartIdx, customUserDetails.getIdx());
         if (deletedCount == 0) {
             throw new BaseException(BaseResponseMessage.CART_DELETE_FAIL_ITEM_NOT_FOUND);
