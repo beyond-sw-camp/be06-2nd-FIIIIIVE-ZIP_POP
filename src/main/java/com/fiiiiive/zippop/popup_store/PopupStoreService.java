@@ -37,6 +37,7 @@ public class PopupStoreService {
                     .storeAddr(createPopupStoreReq.getStoreAddr())
                     .storeDate(createPopupStoreReq.getStoreDate())
                     .category(createPopupStoreReq.getCategory())
+                    .totalPeople(createPopupStoreReq.getTotalPeople())
                     .company(company.get())
                     .build();
             System.out.println(popupStore);

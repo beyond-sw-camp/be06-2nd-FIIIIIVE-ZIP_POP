@@ -5,10 +5,12 @@ import com.fiiiiive.zippop.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,10 +56,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Long idx = member.getIdx();
         String username = member.getUsername();
         String role = member.getRole();
-        String token = jwtUtil.createToken(idx, username, role);
         log.info(idx + " " + role + " " + username);
-        response.addHeader("Authorization", "Bearer " + token);
-        PrintWriter out = response.getWriter();
-        out.println("{\"role\":\"" + role + "\", \"isSuccess\": true, \"accessToken\": \"" + token + "\"}");
+//        response.addHeader("Authorization", "Bearer " + token);
+//        PrintWriter out = response.getWriter();
+//        out.println("{\"role\":\"" + role + "\", \"isSuccess\": true, \"accessToken\": \"" + token + "\"}");
+        String token = jwtUtil.createToken(idx, username, role);
+//        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+        Cookie aToken = new Cookie("ATOKEN", token);
+        aToken.setHttpOnly(true);
+        aToken.setSecure(true);
+        aToken.setPath("/");
+        aToken.setMaxAge(60 * 60 * 1);
+        response.addCookie(aToken);
     }
 }

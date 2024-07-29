@@ -3,6 +3,7 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +23,22 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws  ServletException, IOException, InternalAuthenticationServiceException {
         try{
-            String authorization = request.getHeader("Authorization");
-            if(authorization == null || !authorization.startsWith("Bearer")){
-                log.info("Bearer 토큰 없음");
-                try {
-                    filterChain.doFilter(request, response);
-                    return;
-                } catch (NullPointerException e){
-                    throw new NullPointerException("ddd");
+            String authorization = null;
+            if(request.getCookies() != null) {
+                for (Cookie cookie : request.getCookies()) {
+                    if (cookie.getName().equals("ATOKEN")) {
+                        authorization = cookie.getValue();
+                    }
                 }
             }
-            String token = authorization.split(" ")[1];
+            System.out.println(authorization);
+            if(authorization == null){
+                log.info("인증 쿠키 없음");
+                filterChain.doFilter(request, response);
+                return;
+            }
+//            String token = authorization.split(" ")[1];
+            String token = authorization;
             if(jwtUtil.isExpired(token)){
                 filterChain.doFilter(request, response);
                 return;

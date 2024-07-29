@@ -13,5 +13,6 @@ public class CreatePopupStoreReq {
     private String storeAddr;
     private String storeDate;
     private String category;
+    private Integer totalPeople;
 //    private Long companyIdx;
 }
