@@ -101,20 +101,33 @@ public enum BaseResponseMessage {
     POPUP_GOODS_DELETE_SUCCESS(true, 4300, "팝업 굿즈 삭제에 성공했습니다."),
     POPUP_GOODS_DELETE_FAIL(false, 4301, "팝업 굿즈 삭제에 실패했습니다."),
     // 팝업 굿즈 주문 검증 4400
-    POPUP_GOODS_ORDERS_VALIDATION_SUCCESS(true, 4400, "결제 검증에 성공했습니다."),
-    POPUP_GOODS_ORDERS_VALIDATION_FAIL(false, 4401, "결제 정보가 잘못되었습니다."),
-    POPUP_GOODS_ORDERS_IAMPORT_ERROR(false, 4402, "결제 금액이 잘못되었습니다."),
-    POPUP_GOODS_ORDERS_NOT_ORDERED(false, 4403, "결제 정보가 없습니다. 구해 후 이용해주세요."),
-    POPUP_GOODS_ORDERS_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
-    POPUP_GOODS_ORDERS_FAIL_EXCEEDED(false,4405,"해당 상품의 재고가 부족합니다."),
-    POPUP_GOODS_ORDERS_GOODS_NULL(false, 4406, "굿즈가 존재하지 않습니다."),
 
-    POPUP_GOODS_ORDER_LIMIT_EXCEEDED(false, 4407, "사전 예매 굿즈는 품목 당 하나만 구매 가능합니다."),
 
     // 팝업 굿즈 결제 4500
-    POPUP_GOODS_PAY_SUCCESS(true, 4500, "결제에 성공했습니다."),
-    POPUP_GOODS_PAY_FAIL_PAYMENT_EMPTY(false, 4501, "결제 수단을 입력해주세요"),
-    POPUP_GOODS_PAY_FAIL_SOLD_OUT(false, 4502,"해당 상품은 품절되었습니다."),
+
+
+    // 결제
+    // 기업 수수료 결제 4500
+    POPUP_PAY_SUCCESS(true, 4500,"결제에 성공했습니다."),
+    POPUP_PAY_FAIL_NOT_INVALID(false, 4501, "결제에 실패했습니다."),
+    // 기업 수수료 결제 4600
+    POPUP_STORE_PAY_FAIL(false, 4601, "기업 팝업 수수료 결제에 실패했습니다."),
+    POPUP_STORE_PAY_FAIL_NOT_FOUND_PAYINFO(false, 4602, "기업 팝업 수수료 결제 정보를 가져올수 없습니다."),
+    POPUP_STORE_PAY_FAIL_NOT_FOUND_COMPANY(false, 4607, "해당 기업 회원은 존재하지 않습니다."),
+    POPUP_STORE_PAY_FAIL_INCORRECT_REQUEST(false, 4608, "결제 형식이 다릅니다. 기업 수수료 결제를 진행해주세요"),
+    POPUP_STORE_PAY_FAIL_NOT_FOUND_STORE(false, 4409, "해당 팝업 스토어가 존재하지 않습니다"),
+    POPUP_STORE_PAY_FAIL_VALIDATION_ERROR(false, 4410, "결제 금액이 잘못 되었습니다."),
+    POPUP_STORE_PAY_FAIL_NOT_FOUND_AMOUNT(false, 4408, "결제 금액을 찾을 수 없습니다."),
+    POPUP_GOODS_PAY_FAIL_POINT_EXCEEDED(false, 4411, "3000포인트 이상부터 사용할 수 있습니다."),
+    // 굿즈 구매 4700
+    POPUP_GOODS_PAY_GOODS_NULL(false, 4406, "굿즈가 존재하지 않습니다."),
+
+    POPUP_GOODS_PAY_FAIL_EXCEEDED(false,4405,"해당 상품의 재고가 부족합니다."),
+    POPUP_GOODS_PAY_FAIL_LIMIT_EXCEEDED(false, 4407, "사전 예매 굿즈는 품목 당 하나만 구매 가능합니다."),
+    POPUP_GOODS_PAY_FAIL_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
+    POPUP_GOODS_PAY_FAIL_NOT_FOUND_MEMBER(false, 4408, "결제 정보에 해당하는 유저가 없습니다."),
+
+
 
     // ========================================================================================================================
     // 장바구니 5000

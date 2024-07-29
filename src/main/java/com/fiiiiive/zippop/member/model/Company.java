@@ -1,6 +1,7 @@
 package com.fiiiiive.zippop.member.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fiiiiive.zippop.orders.model.CompanyOrders;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,5 +32,8 @@ public class Company {
     @OneToMany(mappedBy = "company")
     @JsonManagedReference
     private List<PopupStore> popupStoreList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "company")
+    private List<CompanyOrders> companyOrders = new ArrayList<>();
 }
 
