@@ -14,10 +14,10 @@ import java.util.List;
 public class CreatePostRes {
     private Long postIdx;
     private String customerEmail;
-    private String postTitle;
-    private String postContent;
-    private Integer postLikeCount;
-    private List<GetPostImageRes> postImages;
+    private String title;
+    private String content;
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<GetPostImageRes> getPostImageResList;
 }

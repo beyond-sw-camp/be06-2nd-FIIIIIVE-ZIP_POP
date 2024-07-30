@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UpdatePostReq {
-    private String postTitle;
-    private String postContent;
+    private String title;
+    private String content;
 }

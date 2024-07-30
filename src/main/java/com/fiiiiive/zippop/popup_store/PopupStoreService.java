@@ -28,19 +28,17 @@ public class PopupStoreService {
     private final PopupStoreRepository popupStoreRepository;
     private final CompanyRepository companyRepository;
 
-    public void register(CustomUserDetails customUserDetails, CreatePopupStoreReq createPopupStoreReq) throws BaseException {
+    public void register(CustomUserDetails customUserDetails, CreatePopupStoreReq dto, List<String> fileNames) throws BaseException {
         Optional<Company> company = companyRepository.findById(customUserDetails.getIdx());
-
         if (company.isPresent()) {
             PopupStore popupStore = PopupStore.builder()
-                    .storeName(createPopupStoreReq.getStoreName())
-                    .storeAddr(createPopupStoreReq.getStoreAddr())
-                    .storeDate(createPopupStoreReq.getStoreDate())
-                    .category(createPopupStoreReq.getCategory())
-                    .totalPeople(createPopupStoreReq.getTotalPeople())
+                    .storeName(dto.getStoreName())
+                    .storeAddr(dto.getStoreAddr())
+                    .storeDate(dto.getStoreDate())
+                    .category(dto.getCategory())
+                    .totalPeople(dto.getTotalPeople())
                     .company(company.get())
                     .build();
-            System.out.println(popupStore);
             popupStoreRepository.save(popupStore);
         } else{
             throw new BaseException(BaseResponseMessage.POPUP_STORE_REGISTER_FAIL_DUPLICATION);
@@ -56,7 +54,6 @@ public class PopupStoreService {
                         .storeDate(popupStore.getStoreDate())
                         .category(popupStore.getCategory())
                         .build();
-
                 List<GetPopupGoodsRes> getPopupGoodsResList = popupStore.getPopupGoodsList().stream().map(popupGoods -> {
                     return GetPopupGoodsRes.builder()
                             .productIdx(popupGoods.getProductIdx())
@@ -135,10 +132,7 @@ public class PopupStoreService {
     }
 
     public GetPopupStoreRes findByStoreName(String storeName) throws BaseException{
-        Long start = System.currentTimeMillis();
         Optional<PopupStore> result = popupStoreRepository.findByStoreName(storeName);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
         if (result.isPresent()) {
             GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
                     .storeName(result.get().getStoreName())

@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CreateCommentReq {
-    private String commentContent;
+    private String content;
 }

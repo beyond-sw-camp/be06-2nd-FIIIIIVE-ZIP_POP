@@ -43,10 +43,6 @@ public class ExceptionFilter extends OncePerRequestFilter {
         } catch (JwtException | IllegalArgumentException e){
             log.error("Bearer 토큰이 유효하지 않습니다.");
             setErrorResponse(response, BaseResponseMessage.MEMBER_ACCESS_TOKEN_INVALID, e.getMessage());
-        } catch (BadCredentialsException e){
-            if(e instanceof BadCredentialsException){
-                System.out.println("dd");
-            }
         }
     }
 }

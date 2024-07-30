@@ -22,16 +22,15 @@ public class CommentLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentLikeIdx;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="commentIdx")
-    private Comment comment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="customerIdx")
-    private Customer customer;
-
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="commentIdx")
+    private Comment comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customerIdx")
+    private Customer customer;
 }

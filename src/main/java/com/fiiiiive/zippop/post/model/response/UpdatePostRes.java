@@ -14,10 +14,9 @@ import java.util.List;
 public class UpdatePostRes {
     private Long postIdx;
     private String customerEmail;
-    private String postTitle;
-    private String postContent;
-    private List<GetPostImageRes> getPostImageRes;
-//    private List<GetCommentRes> getCommentRes;
+    private String title;
+    private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<GetPostImageRes> getPostImageResList;
 }

@@ -24,20 +24,20 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postIdx;
     private String customerEmail;
-    private String postTitle;
-    private String postContent;
-    private Integer postLikeCount;
-
+    private String title;
+    private String content;
+    private Integer likeCount;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostLike> postLikes;
+    private List<PostLike> postLikeList;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comment> commentList;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PostImage> postImages;
+    private List<PostImage> postImageList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerIdx")

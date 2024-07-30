@@ -32,131 +32,103 @@ public class CommentService {
     private final PostRepository postRepository;
     private final CustomerRepository customerRepository;
     private final CommentLikeRepository commentLikeRepository;
+
     public CreateCommentRes register(CustomUserDetails customUserDetails, Long postIdx, CreateCommentReq dto) throws BaseException {
         Post post = postRepository.findById(postIdx)
-                .orElseThrow(() ->  new BaseException(BaseResponseMessage.COMMENT_REGISTER_FAIL_INVALID_MEMBER));
+        .orElseThrow(() ->  new BaseException(BaseResponseMessage.COMMENT_REGISTER_FAIL_INVALID_MEMBER));
         Customer customer = customerRepository.findById(customUserDetails.getIdx())
-                .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_REGISTER_FAIL_POST_NOT_FOUND));
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_REGISTER_FAIL_POST_NOT_FOUND));
         Comment comment = Comment.builder()
                 .post(post)
                 .customerEmail(customUserDetails.getEmail())
-                .commentContent(dto.getCommentContent())
-                .commentLikeCount(0)
+                .content(dto.getContent())
+                .likeCount(0)
                 .customer(customer)
                 .build();
         commentRepository.save(comment);
         return CreateCommentRes.builder()
                 .commentIdx(comment.getCommentIdx())
                 .customerEmail(customUserDetails.getEmail())
-                .commentLikeCount(comment.getCommentLikeCount())
+                .content(comment.getContent())
+                .likeCount(comment.getLikeCount())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
-                .commentContent(comment.getCommentContent())
                 .build();
     }
 
     public Page<GetCommentRes> searchCustomer(int page, int size, CustomUserDetails customUserDetails) throws BaseException {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Comment> result = commentRepository.findByCustomerIdx(customUserDetails.getIdx(), pageable);
-        if (result.hasContent()) {
-            Page<GetCommentRes> getCommentResPage = result.map(comment->
-                    GetCommentRes.builder()
-                        .commentIdx(comment.getCommentIdx())
-                        .customerEmail(comment.getCustomer().getEmail())
-                        .commentContent(comment.getCommentContent())
-                        .createdAt(comment.getCreatedAt())
-                        .createdAt(comment.getCreatedAt())
-                        .updatedAt(comment.getUpdatedAt())
-                        .build()
-            );
-            return getCommentResPage;
-        } else {
-            throw new BaseException(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_FAIL);
-        }
+        Page<Comment> result = commentRepository.findByCustomerIdx(customUserDetails.getIdx(), PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_FAIL));
+        Page<GetCommentRes> getCommentResPage = result.map(comment-> GetCommentRes.builder()
+                .commentIdx(comment.getCommentIdx())
+                .customerEmail(comment.getCustomer().getEmail())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build()
+        );
+        return getCommentResPage;
     }
 
     public Page<GetCommentRes> searchAll(int page, int size, Long postIdx) throws BaseException {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Comment> result = commentRepository.findByPostIdx(postIdx, pageable);
-        if(result.hasContent()){
-            Page<GetCommentRes> getCommentResPage = result.map(comment->
-                GetCommentRes.builder()
-                        .commentIdx(comment.getCommentIdx())
-                        .customerEmail(comment.getCustomer().getEmail())
-                        .commentContent(comment.getCommentContent())
-                        .createdAt(comment.getCreatedAt())
-                        .updatedAt(comment.getUpdatedAt())
-                        .build()
-            );
-            return getCommentResPage;
-        } else {
-            throw new BaseException(BaseResponseMessage.COMMENT_SEARCH_ALL_FAIL);
-        }
+        Page<Comment> result = commentRepository.findByPostIdx(postIdx, PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_ALL_FAIL));
+        Page<GetCommentRes> getCommentResPage = result.map(comment-> GetCommentRes.builder()
+                .commentIdx(comment.getCommentIdx())
+                .customerEmail(comment.getCustomer().getEmail())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build()
+        );
+        return getCommentResPage;
     }
 
     public UpdateCommentRes update(CustomUserDetails customUserDetails, Long commentIdx, UpdateCommentReq dto) throws BaseException {
-        Optional<Comment> result = commentRepository.findById(commentIdx);
-        if(result.isPresent()){
-            Comment comment = result.get();
-            if(Objects.equals(comment.getCustomerEmail(), customUserDetails.getEmail())){
-                comment.setCommentContent(dto.getCommentContent());
-                commentRepository.save(comment);
-                return UpdateCommentRes.builder()
-                        .commentIdx(comment.getCommentIdx())
-                        .customerEmail(customUserDetails.getEmail())
-                        .commentContent(comment.getCommentContent())
-                        .createdAt(comment.getCreatedAt())
-                        .updatedAt(comment.getUpdatedAt())
-                        .build();
-            } else {
-                throw new BaseException(BaseResponseMessage.COMMENT_UPDATE_FAIL_INVALID_MEMBER);
-            }
-        } else {
-            throw new BaseException(BaseResponseMessage.COMMENT_UPDATE_FAIL_COMMENT_NOT_FOUND);
+        Comment comment = commentRepository.findByCommentIdx(commentIdx)
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_UPDATE_FAIL_COMMENT_NOT_FOUND));
+        if(!Objects.equals(comment.getCustomerEmail(), customUserDetails.getEmail())){
+            throw new BaseException(BaseResponseMessage.COMMENT_UPDATE_FAIL_INVALID_MEMBER);
         }
+        comment.setContent(dto.getContent());
+        commentRepository.save(comment);
+        return UpdateCommentRes.builder()
+                .commentIdx(comment.getCommentIdx())
+                .customerEmail(customUserDetails.getEmail())
+                .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build();
     }
 
     public void delete(CustomUserDetails customUserDetails, Long commentIdx) throws BaseException{
-        Optional<Comment> result = commentRepository.findById(commentIdx);
-        if(result.isPresent()){
-            Comment comment = result.get();
-            if(Objects.equals(comment.getCustomerEmail(), customUserDetails.getEmail())){
-                commentRepository.deleteById(commentIdx);
-            } else {
-                throw new BaseException(BaseResponseMessage.COMMENT_DELETE_FAIL_INVALID_MEMBER);
-            }
-        } else {
-            throw new BaseException(BaseResponseMessage.COMMENT_DELETE_FAIL_COMMENT_NOT_FOUND);
+        Comment comment = commentRepository.findByCommentIdx(commentIdx)
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_DELETE_FAIL_COMMENT_NOT_FOUND));
+        if(!Objects.equals(comment.getCustomerEmail(), customUserDetails.getEmail())){
+            throw new BaseException(BaseResponseMessage.COMMENT_DELETE_FAIL_INVALID_MEMBER);
         }
+        commentRepository.deleteById(commentIdx);
     }
 
     @Transactional
     public void like(CustomUserDetails customUserDetails, Long commentIdx) throws BaseException{
-        Optional<Comment> resultComment = commentRepository.findById(commentIdx);
-        if(resultComment.isPresent()){
-            Optional<Customer> resultCustomer = customerRepository.findById(customUserDetails.getIdx());
-            if(resultCustomer.isPresent()){
-                Comment comment = resultComment.get();
-                Customer customer = resultCustomer.get();
-                Optional<CommentLike> resultCommentLike = commentLikeRepository.findByCustomerIdxAndCommentIdx(customUserDetails.getIdx(), commentIdx);
-                if(resultCommentLike.isEmpty()){
-                    comment.setCommentLikeCount(comment.getCommentLikeCount() + 1);
-                    commentRepository.save(comment);
-                    CommentLike commentLike = CommentLike.builder()
-                            .comment(comment)
-                            .customer(customer)
-                            .build();
-                    commentLikeRepository.save(commentLike);
-                } else {
-                    comment.setCommentLikeCount(comment.getCommentLikeCount() - 1);
-                    commentRepository.save(comment);
-                    commentLikeRepository.deleteByCustomerIdxAndCommentIdx(customer.getCustomerIdx(), commentIdx);
-                }
-            }else {
-                throw new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_INVALID_MEMBER);
-            }
+        Customer customer = customerRepository.findByCustomerIdx(customUserDetails.getIdx())
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_INVALID_MEMBER));
+        Comment comment = commentRepository.findByCommentIdx(commentIdx)
+        .orElseThrow(()-> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_COMMENT_NOT_FOUND));
+        Optional<CommentLike> result = commentLikeRepository.findByCustomerIdxAndCommentIdx(customUserDetails.getIdx(), commentIdx);
+        if(result.isEmpty()){
+            comment.setLikeCount(comment.getLikeCount() + 1);
+            commentRepository.save(comment);
+            CommentLike commentLike = CommentLike.builder()
+                    .comment(comment)
+                    .customer(customer)
+                    .build();
+            commentLikeRepository.save(commentLike);
         } else {
-            throw new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_COMMENT_NOT_FOUND);
+            comment.setLikeCount(comment.getLikeCount() - 1);
+            commentRepository.save(comment);
+            commentLikeRepository.deleteByCustomerIdxAndCommentIdx(customer.getCustomerIdx(), commentIdx);
         }
     }
 }

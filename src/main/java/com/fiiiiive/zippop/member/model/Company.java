@@ -23,17 +23,16 @@ public class Company {
     @Column(nullable = false, length = 100, unique = true)
     private String password;
     private String name;
-    // 사업자 등록 번호(Company Registration Number)
-    private String crn;
+    private String crn; // 사업자 등록 번호
     private String phoneNumber;
     private String address;
     private Boolean enabled;
+    private Boolean inactive;
     private String role;
     @OneToMany(mappedBy = "company")
     @JsonManagedReference
     private List<PopupStore> popupStoreList = new ArrayList<>();
-
     @OneToMany(mappedBy = "company")
-    private List<CompanyOrders> companyOrders = new ArrayList<>();
+    private List<CompanyOrders> companyOrdersList = new ArrayList<>();
 }
 

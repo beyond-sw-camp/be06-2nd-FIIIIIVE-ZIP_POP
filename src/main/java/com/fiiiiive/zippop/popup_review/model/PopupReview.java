@@ -22,7 +22,7 @@ public class PopupReview {
     private String reviewDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_idx")
+    @JoinColumn(name = "storeIdx")
     @JsonBackReference
     private PopupStore popupStore;
     private String storeName;

@@ -14,8 +14,8 @@ import java.util.List;
 @Builder
 public class GetCartRes {
     private Long cartIdx;
-    private Integer cartItemCount;
-    private Integer cartItemPrice;
+    private Integer itemCount;
+    private Integer itemPrice;
     private GetPopupGoodsRes getPopupGoodsRes;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
