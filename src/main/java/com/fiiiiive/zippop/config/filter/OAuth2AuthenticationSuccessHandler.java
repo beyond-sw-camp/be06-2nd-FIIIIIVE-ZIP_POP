@@ -3,6 +3,7 @@ package com.fiiiiive.zippop.config.filter;
 import com.fiiiiive.zippop.member.model.CustomOauth2UserDetails;
 import com.fiiiiive.zippop.utils.JwtUtil;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,18 +29,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String role = oAuth2Member.getCustomer().getRole();
         String token = jwtUtil.createToken(idx, username, role);
         log.info(idx + " " + role + " " + username);
-        response.addHeader("Authorization", "Bearer " + token);
-        PrintWriter out = response.getWriter();
-        out.println("{\"username\":\"" + username + "\", \"isSuccess\": true, \"accessToken\": \"" + token + "\"}");
-//        String token = jwtUtil.createToken(10L, email, "ROLE_CUSTOMER");
-//        log.info(10L + " " + role + " " + email);
-//        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-//        Cookie aToken = new Cookie("OAuthToken", token);
-//        aToken.setHttpOnly(true);
-//        aToken.setSecure(true);
-//        aToken.setPath("/");
-//        aToken.setMaxAge(60 * 60 * 1);
-//        response.addCookie(aToken);
+        Cookie aToken = new Cookie("ATOKEN", token);
+        aToken.setHttpOnly(true);
+        aToken.setSecure(true);
+        aToken.setPath("/");
+        aToken.setMaxAge(60 * 60 * 1);
+        response.addCookie(aToken);
+        super.onAuthenticationSuccess(request, response, authentication);
 //        getRedirectStrategy().sendRedirect(request, response, "http://localhost/test.html");
     }
 }

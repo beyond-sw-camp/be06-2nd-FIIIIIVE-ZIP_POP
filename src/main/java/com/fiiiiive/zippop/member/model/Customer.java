@@ -31,22 +31,19 @@ public class Customer {
     private Integer point;
     private String role;
     private Boolean enabled;
+    private Boolean inactive;
+
     @BatchSize(size=10)
     @OneToMany(mappedBy = "customer")
     @JsonManagedReference
-    private List<Post> postsList = new ArrayList<>();
-
+    private List<Post> postList = new ArrayList<>();
     @OneToMany(mappedBy = "customer")
     private List<Cart> cartList = new ArrayList<>();
-
     @OneToMany(mappedBy = "customer")
     private List<Favorite> favoriteList;
-
     @BatchSize(size=10)
     @OneToMany(mappedBy = "customer")
     private List<Comment> commentList;
-
     @OneToMany(mappedBy = "customer")
-    private List<CustomerOrders> customerOrders;
-
+    private List<CustomerOrders> customerOrdersList;
 }

@@ -74,10 +74,6 @@ public class ChatService {
             ChatRoom chatRoom = chatRoomRepository.findByName(roomName)
                     .orElseThrow(() -> new BaseException(BaseResponseMessage.CHAT_ROOM_SEARCH_FAIL));
             List<ChatMessage> messages = chatMessageRepository.findByRoomNameFetchJoin(roomName);
-
-            long endTime = System.currentTimeMillis();
-            System.out.println("성능 개선 후 실행 시간: " + (endTime - startTime) + "ms");
-
             return new BaseResponse<>(BaseResponseMessage.CHAT_HISTORY_SEARCH_SUCCESS, messages);
         } catch (Exception e) {
             throw new BaseException(BaseResponseMessage.CHAT_HISTORY_SEARCH_FAIL, e.getMessage());

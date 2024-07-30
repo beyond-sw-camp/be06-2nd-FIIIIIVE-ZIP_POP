@@ -31,7 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
                     }
                 }
             }
-            System.out.println(authorization);
             if(authorization == null){
                 log.info("인증 쿠키 없음");
                 filterChain.doFilter(request, response);

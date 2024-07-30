@@ -42,13 +42,11 @@ public class PostController {
     // @ExeTimer
     @GetMapping("/search")
     public ResponseEntity<BaseResponse<GetPostRes>> search(
-            @RequestParam Long postIdx) throws BaseException {
+        @RequestParam Long postIdx) throws BaseException {
         GetPostRes response = postService.search(postIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_IDX_SUCCESS, response));
     }
 
-    // 게시글 전체 조회
-    // @ExeTimer
     @GetMapping("/search-all")
     public ResponseEntity<BaseResponse<Page<GetPostRes>>> searchAll(
         @RequestParam int page,
@@ -57,8 +55,6 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_ALL_SUCCESS, response));
     }
 
-    // 게시글 검색어 추천 조회
-    // @ExeTimer
     @GetMapping("/search-recommend")
     public ResponseEntity<BaseResponse<List<GetPostRes>>> searchRecommend(
         @RequestParam int page,
@@ -68,8 +64,6 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_KEYWORD_SUCCESS, response));
     }
 
-    // 게시글 고객 회원 조회
-    // @ExeTimer
     @GetMapping("/search-customer")
     public ResponseEntity<BaseResponse<Page<GetPostRes>>> searchCustomer(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -79,7 +73,6 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_CUSTOMER_SUCCESS, response));
     }
 
-    // 게시글 수정
     @PatchMapping("/update")
     public ResponseEntity<BaseResponse> update(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -91,7 +84,6 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_UPDATE_SUCCESS,response));
     }
 
-    // 게시글 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponse> delete(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,

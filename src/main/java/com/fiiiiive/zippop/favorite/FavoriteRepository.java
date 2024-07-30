@@ -11,8 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
-
-    @Query("SELECT f FROM Favorite f WHERE f.customer.customerIdx = :customerIdx AND f.popupStore.storeIdx = :storeIdx")
+    @Query("SELECT f FROM Favorite f " +
+            "WHERE f.customer.customerIdx = :customerIdx " +
+            "AND f.popupStore.storeIdx = :storeIdx")
     Optional<Favorite> findByCustomerIdxAndStoreIdx(Long customerIdx, Long storeIdx);
 
     @Query("SELECT f FROM Favorite f " +

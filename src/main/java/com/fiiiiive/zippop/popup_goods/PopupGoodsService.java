@@ -41,10 +41,7 @@ public class PopupGoodsService {
     }
 
     public Page<GetPopupGoodsRes> findAll(Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupGoods> result = popupGoodsRepository.findAll(pageable); //
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
         if (result.hasContent()) {
             Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods -> GetPopupGoodsRes.builder()
                     .productIdx(popupGoods.getProductIdx())
@@ -55,17 +52,7 @@ public class PopupGoodsService {
                     .productAmount(popupGoods.getProductAmount())
                     .storeName(popupGoods.getStoreName())
                     .build());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupGoodsRepository.findAllFetchJoin(pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return getPopupGoodsResPage;
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
@@ -73,11 +60,7 @@ public class PopupGoodsService {
     }
 
     public Page<GetPopupGoodsRes> findByProductName(String productName, Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupGoods> result = popupGoodsRepository.findByProductName(productName, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods -> GetPopupGoodsRes.builder()
                     .productIdx(popupGoods.getProductIdx())
@@ -89,17 +72,7 @@ public class PopupGoodsService {
                     .storeIdx(popupGoods.getPopupStore().getStoreIdx())
                     .storeName(popupGoods.getPopupStore().getStoreName())
                     .build());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupGoodsRepository.findByProductNameFetchJoin(productName, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return getPopupGoodsResPage;
 
         } else {
@@ -108,11 +81,7 @@ public class PopupGoodsService {
     }
 
     public Page<GetPopupGoodsRes> findByStoreName(String storeName, Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupGoods> result = popupGoodsRepository.findByStoreName(storeName, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-
         if (result.hasContent()) {
             Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods -> GetPopupGoodsRes.builder()
                     .productIdx(popupGoods.getProductIdx())
@@ -124,17 +93,7 @@ public class PopupGoodsService {
                     .storeIdx(popupGoods.getPopupStore().getStoreIdx())
                     .storeName(popupGoods.getPopupStore().getStoreName())
                     .build());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupGoodsRepository.findByStoreNameFetchJoin(storeName, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return getPopupGoodsResPage;
 
         } else {
@@ -143,10 +102,7 @@ public class PopupGoodsService {
     }
 
     public Page<GetPopupGoodsRes> findByProductPrice(Integer productPrice, Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupGoods> result = popupGoodsRepository.findByProductPrice(productPrice, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
 
         if (result.hasContent()) {
             Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods -> GetPopupGoodsRes.builder()
@@ -159,16 +115,7 @@ public class PopupGoodsService {
                     .storeIdx(popupGoods.getPopupStore().getStoreIdx())
                     .storeName(popupGoods.getPopupStore().getStoreName())
                     .build());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupGoodsRepository.findByProductPriceFetchJoin(productPrice, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
 
             return getPopupGoodsResPage;
 

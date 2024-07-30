@@ -25,39 +25,35 @@ public class FavoriteService {
     private final PopupStoreRepository popupStoreRepository;
     private final CustomerRepository customerRepository;
 
-    public Boolean active(CustomUserDetails customUserDetails, Long storeIdx) throws BaseException {
+    public void active(CustomUserDetails customUserDetails, Long storeIdx) throws BaseException {
         Customer customer = customerRepository.findById(customUserDetails.getIdx())
-                .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_MEMBER_NOT_FOUND)));
+        .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_MEMBER_NOT_FOUND)));
         PopupStore popupStore = popupStoreRepository.findById(storeIdx)
-                .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_STORE_NOT_FOUND)));
+        .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_STORE_NOT_FOUND)));
         Optional<Favorite> result = favoriteRepository.findByCustomerIdxAndStoreIdx(customUserDetails.getIdx(), storeIdx);
         if(result.isPresent()){
             Favorite favorite = result.get();
             favoriteRepository.deleteById(favorite.getFavoriteIdx());
-            return false;
         } else {
             Favorite favorite = Favorite.builder()
                     .popupStore(popupStore)
                     .customer(customer)
                     .build();
             favoriteRepository.save(favorite);
-            return true;
         }
     }
 
     public List<GetFavoriteRes> list(CustomUserDetails customUserDetails) throws BaseException {
-        Optional<List<Favorite>> result = favoriteRepository.findAllByCustomerIdx(customUserDetails.getIdx());
-        if(result.isPresent()){
-            List<GetFavoriteRes> getFavoriteResList = new ArrayList<>();
-            for(Favorite favorite: result.get()){
-                GetFavoriteRes getFavoriteRes = GetFavoriteRes.builder()
-                        .popupStore(favorite.getPopupStore())
-                        .build();
-                getFavoriteResList.add(getFavoriteRes);
-            }
-            return getFavoriteResList;
-        } else {
-            throw new BaseException(BaseResponseMessage.FAVORITE_SEARCH_ALL_FAIL);
+        List<Favorite> favoriteList = favoriteRepository.findAllByCustomerIdx(customUserDetails.getIdx())
+        .orElseThrow(()->new BaseException(BaseResponseMessage.FAVORITE_SEARCH_ALL_FAIL));
+        List<GetFavoriteRes> getFavoriteResList = new ArrayList<>();
+        for(Favorite favorite: favoriteList){
+
+            GetFavoriteRes getFavoriteRes = GetFavoriteRes.builder()
+                    .popupStore(favorite.getPopupStore())
+                    .build();
+            getFavoriteResList.add(getFavoriteRes);
         }
+        return getFavoriteResList;
     }
 }

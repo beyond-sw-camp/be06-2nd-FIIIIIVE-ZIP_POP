@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 public class GetPostImageRes {
     private Long postImageIdx;
-    private String postImageUrl;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

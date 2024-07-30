@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class CreateCommentRes {
     private Long commentIdx;
-    private String commentContent;
     private String customerEmail;
-    private Integer commentLikeCount;
+    private String content;
+    private Integer likeCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -172,7 +172,6 @@ public enum BaseResponseMessage {
     POST_REGISTER_SUCCESS(true, 6000, "게시글이 성공적으로 등록되었습니다."),
     POST_REGISTER_FAIL(false, 6001, "게시글 등록에 실패했습니다."),
     POST_REGISTER_FAIL_INVALID_MEMBER(false, 6002, "인증된 사용자만이 게시글을 등록할 수 있습니다."),
-
     // 게시글 전체 조회 6100
     POST_SEARCH_ALL_SUCCESS(true, 6100, "전체 게시글을 불러오는데 성공했습니다." ),
     POST_SEARCH_ALL_FAIL(false, 6101, "전체 게시글을 불러오는데 실패했습니다."),
@@ -193,7 +192,8 @@ public enum BaseResponseMessage {
     POST_UPDATE_SUCCESS(true, 6500, "게시글 수정에 성공했습니다."),
     POST_UPDATE_FAIL(false, 6501, "게시글 수정에 실패했습니다."),
     POST_UPDATE_FAIL_INVALID_MEMBER(false, 6502, "해당 게시글의 작성자가 아닙니다." ),
-
+    POST_UPDATE_FAIL_NOT_FOUND_IMAGE(false, 6503, ""),
+    POST_UPDATE_FAIL_NOT_FOUND_POST(false, 6504, "해당 게시글을 찾을 수 없습니다."),
     // 게시글 고객 회원 삭제 6600
     POST_DELETE_SUCCESS(true, 6600, "게시글 삭제에 성공했습니다."),
     POST_DELETE_FAIL_INVALID_MEMBER(false, 6601, "해당 게시글의 작성자가 아닙니다."),

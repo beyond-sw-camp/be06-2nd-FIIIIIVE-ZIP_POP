@@ -19,8 +19,7 @@ public class PostImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postImageIdx;
-    @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
-    private String postImageUrl;
+    private String imageUrl;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

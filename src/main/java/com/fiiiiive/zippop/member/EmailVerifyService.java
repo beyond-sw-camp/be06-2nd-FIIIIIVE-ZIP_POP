@@ -12,14 +12,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EmailVerifyService {
     private final EmailVerifyRepository emailVerifyRepository;
-
     public Boolean isExist(String email, String uuid) throws BaseException {
         Optional<EmailVerify> result = emailVerifyRepository.findByEmail(email);
         if (result.isPresent()) {
             EmailVerify emailVerify = result.get();
-            if (emailVerify.getUuid().equals(uuid)) {
-                return true;
-            }
+            if (emailVerify.getUuid().equals(uuid)) { return true; }
         } else { throw new BaseException(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL); }
         return false;
     }

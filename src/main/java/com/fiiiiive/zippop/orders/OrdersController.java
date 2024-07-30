@@ -22,12 +22,11 @@ import java.io.IOException;
 public class OrdersController {
     private final OrdersService ordersService;
     @GetMapping("/verify")
-    public BaseResponse<GetOrdersRes> validation(
+    public BaseResponse<GetOrdersRes> verify(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @RequestParam String impUid,
-        @RequestParam int operation
-    ) throws BaseException, IamportResponseException, IOException{
-        GetOrdersRes response = ordersService.validation(customUserDetails, impUid, operation);
+        @RequestParam int operation) throws BaseException, IamportResponseException, IOException{
+        GetOrdersRes response = ordersService.verify(customUserDetails, impUid, operation);
         return new BaseResponse(BaseResponseMessage.POPUP_PAY_SUCCESS,response);
     }
 }

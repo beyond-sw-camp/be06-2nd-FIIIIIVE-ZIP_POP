@@ -42,11 +42,7 @@ public class PopupStore {
     private String storeContent;
     private String storeDate;
     private String category;
-//    private Integer companyIdx;
-    private Integer rating;
-
-    private String storeImage;
-    private Integer totalPeople;
+    private Integer totalPeople; // => popup_reserve로
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
@@ -59,7 +55,10 @@ public class PopupStore {
 
     @OneToMany(mappedBy = "popupStore")
     private List<Favorite> favoriteList;
-
+    @OneToMany(mappedBy = "popupStore" )
+    private List<PopupStoreImage> popupstoreImageList;
     @OneToMany(mappedBy = "popupStore")
     private List<PopupReserve> popupReserveList = new ArrayList<>();
+
 }
+

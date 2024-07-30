@@ -8,15 +8,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findByCustomerEmail(String email, Pageable pageable);
+    Optional<Page<Post>> findByCustomerEmail(String CustomerEmail, Pageable pageable);
 
     Page<Post> findAll(Pageable pageable);
 
-    @Query("SELECT p FROM Post p WHERE p.postTitle LIKE %:keyword% OR p.postContent LIKE %:keyword% OR p.customerEmail LIKE %:keyword%")
-    Page<Post> findByKeyword(Pageable pageable, @Param("keyword") String keyword);
+    Optional<Post> findByPostIdx(Long postIdx);
+
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.title LIKE %:keyword% " +
+            "OR p.content LIKE %:keyword% " +
+            "OR p.customerEmail LIKE %:keyword%")
+    Optional<Page<Post>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }

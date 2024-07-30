@@ -36,6 +36,6 @@ public class CompanyOrders {
     @JoinColumn(name = "companyIdx")
     private Company company;
     @OneToMany(mappedBy = "companyOrders")
-    private List<CompanyOrdersDetail> companyOrdersDetails = new ArrayList<>();
+    private List<CompanyOrdersDetail> companyOrdersDetailList = new ArrayList<>();
 
 }

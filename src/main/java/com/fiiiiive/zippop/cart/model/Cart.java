@@ -24,21 +24,20 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartIdx;
-    private Integer cartItemCount;
-    private Integer cartItemPrice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerIdx")
-    @JsonIgnore
-    private Customer customer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productIdx")
-    @JsonIgnore
-    private PopupGoods popupGoods;
+    private Integer itemCount;
+    private Integer itemPrice;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerIdx")
+    @JsonIgnore
+    private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productIdx")
+    @JsonIgnore
+    private PopupGoods popupGoods;
 }

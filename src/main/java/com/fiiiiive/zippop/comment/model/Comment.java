@@ -25,8 +25,8 @@ public class Comment {
     private Long commentIdx;
     @Column(nullable = false)
     private String customerEmail;
-    private String commentContent;
-    private Integer commentLikeCount;
+    private String content;
+    private Integer likeCount;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -34,12 +34,11 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommentLike> commentLikes;
+    private List<CommentLike> commentLikeList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postIdx")
     private Post post;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerIdx")
     private Customer customer;

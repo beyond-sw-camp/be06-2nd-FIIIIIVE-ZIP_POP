@@ -29,7 +29,7 @@ public interface CartRepository extends JpaRepository<Cart,Long> {
 
     @Modifying
     @Query("DELETE FROM Cart c WHERE c.cartIdx = :cartIdx and c.customer.customerIdx = :customerIdx")
-    int deleteByIdAndCustomerIdx(Long cartIdx, Long customerIdx);
+    void deleteByIdAndCustomerIdx(Long cartIdx, Long customerIdx);
 
     @Modifying
     @Query("DELETE FROM Cart c WHERE c.customer.customerIdx = :customerIdx")

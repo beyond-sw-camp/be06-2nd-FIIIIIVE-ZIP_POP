@@ -65,12 +65,7 @@ public class PopupReviewService {
     }
 
     public Page<GetPopupReviewRes> findByStoreName(String storeName, Pageable pageable) throws BaseException {
-        Long start = System.currentTimeMillis();
         Page<PopupReview> result = popupReviewRepository.findByStoreName(storeName, pageable);
-        Long end = System.currentTimeMillis();
-        Long diff = end - start;
-        System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-        System.out.println("성능 개선 전 끝");
 
         if (result.hasContent()) {
             Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> GetPopupReviewRes.builder()
@@ -80,17 +75,7 @@ public class PopupReviewService {
                     .reviewDate(popupReview.getReviewDate())
                     .storeName(popupReview.getPopupStore().getStoreName())
                     .build());
-
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 전 끝");
-
-            start = System.currentTimeMillis();
             result = popupReviewRepository.findByStoreNameFetchJoin(storeName, pageable);
-            end = System.currentTimeMillis();
-            diff = end - start;
-            System.out.println("##########################{걸린 시간 : " + diff + " }##############################");
-            System.out.println("성능 개선 후 끝");
-
             return getPopupReviewResPage;
 
         } else {

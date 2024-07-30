@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
 
-    // 댓글 조회
     @PostMapping("/register")
     public ResponseEntity<BaseResponse<CreateCommentRes>> register(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -35,7 +34,6 @@ public class CommentController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_REGISTER_SUCCESS, response));
     }
 
-    // 고객 회원이 작성한 댓글 전체 조회
     @GetMapping("/search-customer")
     public ResponseEntity<BaseResponse<Page<GetCommentRes>>> searchByCustomer(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -45,7 +43,6 @@ public class CommentController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_SUCCESS, comments));
     }
 
-    // 한 게시글의 전체 댓글 페이징 조회
     @GetMapping("/search-all")
     public ResponseEntity<BaseResponse<Page<GetCommentRes>>> searchByPost(
         @RequestParam Long postIdx,
@@ -55,7 +52,6 @@ public class CommentController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_SEARCH_ALL_SUCCESS, comments));
     }
 
-    // 댓글 수정
     @PatchMapping("/update")
     public ResponseEntity<BaseResponse> update(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -65,7 +61,6 @@ public class CommentController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.COMMENT_UPDATE_SUCCESS,response));
     }
 
-    // 댓글 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponse> delete(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -73,7 +68,7 @@ public class CommentController {
         commentService.delete(customUserDetails, commentIdx);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.COMMENT_DELETE_SUCCESS));
     }
-    // 게시글 추천: commentLikeCount에 대한 동시성 제어는 자원소모에 비해 중요도가 떨어지므로 고려하지 않는다.
+
     @GetMapping("/like")
     public ResponseEntity<BaseResponse> like(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,

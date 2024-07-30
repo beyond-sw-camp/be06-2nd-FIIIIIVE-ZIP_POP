@@ -50,15 +50,16 @@ public class MemberService {
             Optional<Company> result = companyRepository.findByEmail(request.getEmail());
             if(result.isPresent()){
                 Company company = result.get();
-                if(company.getEnabled()) {
-                    throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_EXIST);
-                } else {
+                if(!company.getEnabled() && company.getInactive()) {
                     return PostSignupRes.builder()
                             .idx(company.getCompanyIdx())
                             .enabled(company.getEnabled())
-                            .role(request.getRole())
-                            .email(request.getEmail())
+                            .role(company.getRole())
+                            .email(company.getEmail())
+                            .inactive(company.getInactive())
                             .build();
+                } else {
+                    throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_EXIST);
                 }
             } else{
                 Company company = Company.builder()
@@ -68,12 +69,14 @@ public class MemberService {
                         .crn(request.getCrn())
                         .role(request.getRole())
                         .enabled(false)
+                        .inactive(false)
                         .build();
                 companyRepository.save(company);
                 return PostSignupRes.builder()
                         .idx(company.getCompanyIdx())
                         .role(request.getRole())
                         .enabled(company.getEnabled())
+                        .inactive(company.getInactive())
                         .email(request.getEmail())
                         .build();
             }
@@ -84,15 +87,17 @@ public class MemberService {
             Optional<Customer> result = customerRepository.findByEmail(request.getEmail());
             if(result.isPresent()){
                 Customer customer = result.get();
-                if(customer.getEnabled() && customer.getPassword() == null) {
-                    throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_EXIST);
-                } else {
+                if(!customer.getEnabled() && customer.getInactive()){
                     return PostSignupRes.builder()
                             .idx(customer.getCustomerIdx())
-                            .role(request.getRole())
+                            .role(customer.getRole())
                             .enabled(customer.getEnabled())
-                            .email(request.getEmail())
+                            .inactive(customer.getInactive())
+                            .email(customer.getEmail())
                             .build();
+                }
+                else {
+                    throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_EXIST);
                 }
             } else {
                 Customer customer = Customer.builder()
@@ -102,13 +107,15 @@ public class MemberService {
                         .role(request.getRole())
                         .point(3000)
                         .enabled(false)
+                        .inactive(false)
                         .build();
                 customerRepository.save(customer);
                 return PostSignupRes.builder()
                         .idx(customer.getCustomerIdx())
-                        .role(request.getRole())
+                        .role(customer.getRole())
                         .enabled(customer.getEnabled())
-                        .email(request.getEmail())
+                        .inactive(customer.getInactive())
+                        .email(customer.getEmail())
                         .build();
             }
         }
@@ -120,6 +127,7 @@ public class MemberService {
             if(result.isPresent()){
                 Company company = result.get();
                 company.setEnabled(true);
+                company.setInactive(false);
                 companyRepository.save(company);
             } else {
                 throw new BaseException(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL);
@@ -129,6 +137,7 @@ public class MemberService {
             if(result.isPresent()) {
                 Customer customer = result.get();
                 customer.setEnabled(true);
+                customer.setInactive(false);
                 customerRepository.save(customer);
             } else {
                 throw new BaseException(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL);
@@ -141,14 +150,14 @@ public class MemberService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(response.getEmail());
         if(Objects.equals(response.getRole(), "ROLE_COMPANY")){
-            if(response.getEnabled()){
+            if(!response.getEnabled() && !response.getInactive()){
                 message.setSubject("ZIPPOP - 기업으로 가입하신걸 환영합니다.");
             } else {
                 message.setSubject("ZIPPOP - 기업회원계정 복구 이메일");
             }
         }
         else {
-            if(response.getEnabled()){
+            if(!response.getEnabled() && !response.getInactive()){
                 message.setSubject("ZIPPOP - 고객으로 가입하신걸 환영합니다.");
             } else {
                 message.setSubject("ZIPPOP - 고객회원계정 복구 이메일");
@@ -166,10 +175,11 @@ public class MemberService {
         String role = customUserDetails.getRole();
         Long idx = customUserDetails.getIdx();
         if(Objects.equals(role, "ROLE_COMPANY")){
-            Optional<Company> result = companyRepository.findByEmail(email);
+            Optional<Company> result = companyRepository.findByCompanyIdx(idx);
             if(result.isPresent()){
                 Company company = result.get();
                 company.setEnabled(false);
+                company.setInactive(true);
                 companyRepository.save(company);
                 emailVerifyRepository.deleteByEmail(email);
             } else {
