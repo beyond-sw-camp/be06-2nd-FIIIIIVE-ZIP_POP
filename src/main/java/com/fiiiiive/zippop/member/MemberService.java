@@ -44,10 +44,10 @@ public class MemberService {
 
     public PostSignupRes signup(PostSignupReq request) throws BaseException {
         if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
-            if(customerRepository.findByEmail(request.getEmail()).isPresent()) {
+            if(customerRepository.findByCustomerEmail(request.getEmail()).isPresent()) {
                 throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_CUSTOMER);
             }
-            Optional<Company> result = companyRepository.findByEmail(request.getEmail());
+            Optional<Company> result = companyRepository.findByCompanyEmail(request.getEmail());
             if(result.isPresent()){
                 Company company = result.get();
                 if(!company.getEnabled() && company.getInactive()) {
@@ -81,10 +81,10 @@ public class MemberService {
                         .build();
             }
         } else {
-            if(companyRepository.findByEmail(request.getEmail()).isPresent()) {
+            if(companyRepository.findByCompanyEmail(request.getEmail()).isPresent()) {
                 throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_COMPANY);
             }
-            Optional<Customer> result = customerRepository.findByEmail(request.getEmail());
+            Optional<Customer> result = customerRepository.findByCustomerEmail(request.getEmail());
             if(result.isPresent()){
                 Customer customer = result.get();
                 if(!customer.getEnabled() && customer.getInactive()){
@@ -123,7 +123,7 @@ public class MemberService {
 
     public Boolean activeMember(String email, String role) throws BaseException {
         if(Objects.equals(role, "ROLE_COMPANY")){
-            Optional<Company> result = companyRepository.findByEmail(email);
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
             if(result.isPresent()){
                 Company company = result.get();
                 company.setEnabled(true);
@@ -133,7 +133,7 @@ public class MemberService {
                 throw new BaseException(BaseResponseMessage.MEMBER_EMAIL_VERIFY_FAIL);
             }
         } else {
-            Optional<Customer> result = customerRepository.findByEmail(email);
+            Optional<Customer> result = customerRepository.findByCustomerEmail(email);
             if(result.isPresent()) {
                 Customer customer = result.get();
                 customer.setEnabled(true);
@@ -175,7 +175,7 @@ public class MemberService {
         String role = customUserDetails.getRole();
         Long idx = customUserDetails.getIdx();
         if(Objects.equals(role, "ROLE_COMPANY")){
-            Optional<Company> result = companyRepository.findByCompanyIdx(idx);
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
             if(result.isPresent()){
                 Company company = result.get();
                 company.setEnabled(false);
@@ -186,7 +186,7 @@ public class MemberService {
                 throw new BaseException(BaseResponseMessage.MEMBER_INACTIVE_FAIL);
             }
         } else {
-            Optional<Customer> result = customerRepository.findByEmail(customUserDetails.getEmail());
+            Optional<Customer> result = customerRepository.findByCustomerEmail(customUserDetails.getEmail());
             if(result.isPresent()) {
                 Customer customer = result.get();
                 customer.setEnabled(false);
@@ -207,7 +207,7 @@ public class MemberService {
         String email = customUserDetails.getEmail();
         String role = customUserDetails.getRole();
         if(Objects.equals(role, "ROLE_COMPANY")){
-            Optional<Company> result = companyRepository.findByEmail(email);
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
             if(result.isPresent()){
                 Company company = result.get();
                 company.setName(dto.getName());
@@ -219,7 +219,7 @@ public class MemberService {
                 throw new BaseException(BaseResponseMessage.MEMBER_EDIT_INFO_FAIL);
             }
         } else {
-            Optional<Customer> result = customerRepository.findByEmail(customUserDetails.getEmail());
+            Optional<Customer> result = customerRepository.findByCustomerEmail(customUserDetails.getEmail());
             if(result.isPresent()) {
                 Customer customer = result.get();
                 customer.setName(dto.getName());
@@ -237,7 +237,7 @@ public class MemberService {
         String email = customUserDetails.getEmail();
         String role = customUserDetails.getRole();
         if(Objects.equals(role, "ROLE_COMPANY")){
-            Optional<Company> result = companyRepository.findByEmail(email);
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
             if(result.isPresent()){
                 Company company = result.get();
                 if(passwordEncoder.matches(dto.getOriginPassword(), company.getPassword()))
@@ -252,7 +252,7 @@ public class MemberService {
                 throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL);
             }
         } else {
-            Optional<Customer> result = customerRepository.findByEmail(customUserDetails.getEmail());
+            Optional<Customer> result = customerRepository.findByCustomerEmail(customUserDetails.getEmail());
             if(result.isPresent()) {
                 Customer customer = result.get();
                 if(passwordEncoder.matches(dto.getOriginPassword(), customer.getPassword()))

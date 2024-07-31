@@ -112,7 +112,7 @@ public class CommentService {
 
     @Transactional
     public void like(CustomUserDetails customUserDetails, Long commentIdx) throws BaseException{
-        Customer customer = customerRepository.findByCustomerIdx(customUserDetails.getIdx())
+        Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
         .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_INVALID_MEMBER));
         Comment comment = commentRepository.findByCommentIdx(commentIdx)
         .orElseThrow(()-> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_COMMENT_NOT_FOUND));

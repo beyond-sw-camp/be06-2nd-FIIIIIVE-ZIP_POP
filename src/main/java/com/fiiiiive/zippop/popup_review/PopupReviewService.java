@@ -37,7 +37,7 @@ public class PopupReviewService {
             popupReview.setStoreName(popupStore.get().getStoreName());
             popupReviewRepository.save(popupReview);
 
-            popupStore.get().getReviews().add(popupReview);
+            popupStore.get().getReviewList().add(popupReview);
         } else {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
         }

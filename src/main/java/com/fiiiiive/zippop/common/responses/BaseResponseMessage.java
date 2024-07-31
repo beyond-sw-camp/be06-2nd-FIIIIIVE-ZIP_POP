@@ -53,11 +53,21 @@ public enum BaseResponseMessage {
     POPUP_STORE_REGISTER_SUCCESS(true, 3000, "팝업 스토어 등록에 성공했습니다."),
     POPUP_STORE_REGISTER_FAIL_DUPLICATION(false, 3001, "이미 등록된 팝업 스토어 입니다."),
     POPUP_STORE_REGISTER_FAIL_UNAUTHORIZED(false, 3002, "팝업 스토어 등록은 기업회원만 가능합니다."),
-    POPUP_STORE_REGISTER_FAIL_VALIDATION_FAIL(true, 3003, "팝업 스토어 등록에 실패했습니다. 결제 정보가 일치하지 않습니다."),
-
     // 팝업 스토어 조회 3100
     POPUP_STORE_SEARCH_SUCCESS(true, 3100, "팝업 스토어 목록 조회에 성공했습니다."),
     POPUP_STORE_SEARCH_FAIL_NOT_EXIST(false, 3101, "해당 팝업 스토어가 존재하지 않습니다."),
+    // 팝업 스토어 수정 3200
+    POPUP_STORE_UPDATE_SUCCESS(true, 3200, "팝업 스토어 수정에 성공했습니다."),
+    POPUP_STORE_UPDATE_FAIL_INVALID_MEMBER(false, 3201, "해당 팝업스토어를 등록한 기업회원이 아닙니다."),
+    // 팝업 스토어 삭제 3300
+    POPUP_STORE_DELETE_SUCCESS(true, 3300, "팝업 스토어 삭제에 성공했습니다."),
+    POPUP_STORE_DELETE_FAIL_NOT_FOUND(false, 3301, "팝업 스토어를 찾을 수 없어 삭제에 실패했습니다."),
+    POPUP_STORE_DELETE_FAIL_INVALID_MEMBER(false, 3302, "해당 팝업 스토어를 등록한 기업 회원이 아닙니다."),
+    // 팝업 스토어 추천 3400
+    POPUP_STORE_LIKE_SUCCESS(true, 3400, "팝업 스토어 좋아요 성공"),
+    POPUP_STORE_LIKE_FAIL_NOT_FOUND(false, 3400, "해당 팝업 스토어를 찾을 수 없습니다."),
+    POPUP_STORE_LIKE_FAIL_INVALID_MEMBER(false, 3401, "인증된 사용자 만이 추천을 누를 수 있습니다."),
+
 
     // ========================================================================================================================
     // 팝업 스토어 리뷰 4000

@@ -15,15 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class GetPopupStoreRes {
+    private Long storeIdx;
     private String storeName;
-    private String storeAddr;
+    private String storeAddress;
     private String storeDate;
     private String category;
-    private List<GetPopupReviewRes> reviews = new ArrayList<>();
-    private List<GetPopupGoodsRes> popupGoodsList = new ArrayList<>();
     private String storeContent;
-    private Integer companyIdx;
-    private Integer rating;
-    private String storeImage;
-    private Integer totalPeople;
+    private String companyEmail;
+    private Integer likeCount;
+    private List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
+    private List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
+    private List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();
 }

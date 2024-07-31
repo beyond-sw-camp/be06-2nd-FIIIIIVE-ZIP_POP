@@ -33,7 +33,7 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
         String name = oAuth2UserInfo.getName();
         String role = "ROLE_CUSTOMER";
         log.info(email + " " + name + " " + role);
-        Optional<Customer> result = customerRepository.findByEmail(email);
+        Optional<Customer> result = customerRepository.findByCustomerEmail(email);
         Customer customer = null;
         if(result.isEmpty()){
             customer = Customer.builder()

@@ -52,7 +52,7 @@ public class OrdersService {
     public GetOrdersRes verify(CustomUserDetails customUserDetails, String impUid, Integer operation) throws BaseException, IamportResponseException, IOException {
         // 기업회원 등록 수수료 결제(operation = 0 )
         if (customUserDetails.getRole().equals("ROLE_COMPANY") && operation == 0) {
-            Company company = companyRepository.findByCompanyIdx(customUserDetails.getIdx())
+            Company company = companyRepository.findByCompanyEmail(customUserDetails.getEmail())
             .orElseThrow(() -> new BaseException(POPUP_STORE_PAY_FAIL_NOT_FOUND_COMPANY));
             IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
             Payment payment = response.getResponse();
@@ -93,7 +93,7 @@ public class OrdersService {
                     .build();
         }
         else if (customUserDetails.getRole().equals("ROLE_CUSTOMER")) {
-            Customer customer = customerRepository.findByCustomerIdx(customUserDetails.getIdx())
+            Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
             .orElseThrow(() -> new BaseException(POPUP_GOODS_PAY_FAIL_NOT_FOUND_MEMBER));
             IamportResponse<Payment> response = iamportClient.paymentByImpUid(impUid);
             Payment payment = response.getResponse();
