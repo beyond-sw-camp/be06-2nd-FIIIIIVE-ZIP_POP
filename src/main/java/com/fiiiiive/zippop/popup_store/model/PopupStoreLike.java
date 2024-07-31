@@ -1,5 +1,7 @@
 package com.fiiiiive.zippop.popup_store.model;
 
+import com.fiiiiive.zippop.member.model.Customer;
+import com.fiiiiive.zippop.post.model.Post;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,18 +17,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class PopupStoreImage {
+public class PopupStoreLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long storeImageIdx;
-    @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
-    private String imageUrl;
+    private Long storeLikeIdx;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="storeIdx")
+    @JoinColumn(name="postIdx")
     private PopupStore popupStore;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="customerIdx")
+    private Customer customer;
 }
+

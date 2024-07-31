@@ -7,6 +7,8 @@ import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.CustomerRepository;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
+import com.fiiiiive.zippop.popup_store.model.PopupStoreImage;
+import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreImageRes;
 import com.fiiiiive.zippop.post.model.Post;
 import com.fiiiiive.zippop.post.model.PostImage;
 import com.fiiiiive.zippop.post.model.PostLike;
@@ -36,7 +38,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
 
     public CreatePostRes register(CustomUserDetails customUserDetails, List<String> fileNames,  CreatePostRes dto) throws BaseException {
-        Customer customer = customerRepository.findByCustomerIdx(customUserDetails.getIdx())
+        Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_REGISTER_FAIL_INVALID_MEMBER));
         Post post = Post.builder()
                 .title(dto.getTitle())
@@ -198,18 +200,14 @@ public class PostService {
         postRepository.save(post);
         List<PostImage> postImageList = postImageRepository.findByPostIdx(post.getPostIdx()).orElse(new ArrayList<>());
         List<GetPostImageRes> getPostImageResList = new ArrayList<>();
-        for (int i = 0; i < fileNames.size(); i++) {
-            PostImage postImage;
-            if (i < postImageList.size()) {
-                postImage = postImageList.get(i);
-                postImage.setImageUrl(fileNames.get(i));
-            }
-            else {
-                postImage = PostImage.builder()
-                        .imageUrl(fileNames.get(i))
-                        .post(post)
-                        .build();
-            }
+        for(PostImage postImage : postImageList){
+            postImageRepository.deleteById(postImage.getPostImageIdx());
+        }
+        for (String fileName: fileNames) {
+            PostImage postImage = PostImage.builder()
+                    .imageUrl(fileName)
+                    .post(post)
+                    .build();
             postImageRepository.save(postImage);
             GetPostImageRes getPostImageRes = GetPostImageRes.builder()
                     .postImageIdx(postImage.getPostImageIdx())

@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePopupStoreReq {
+public class UpdatePopupStoreReq {
     private String storeName;
     private String storeAddress;
     private String storeContent;

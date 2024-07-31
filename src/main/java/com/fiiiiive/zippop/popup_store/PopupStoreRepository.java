@@ -19,10 +19,10 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeName = :storeName")
     Optional<PopupStore> findByStoreNameFetchJoin(String storeName);
 
-    Page<PopupStore> findByStoreAddr(String storeAddr,Pageable pageable);
+    Page<PopupStore> findByStoreAddress(String storeAddress,Pageable pageable);
 
-    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeAddr = :storeAddr")
-    Page<PopupStore> findByStoreAddrFetchJoin(String storeAddr,Pageable pageable);
+    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeAddress = :storeAddress")
+    Page<PopupStore> findByStoreAddressFetchJoin(String storeAddress,Pageable pageable);
 
     Page<PopupStore> findByCompanyCompanyIdx(Long companyIdx,Pageable pageable);
 
@@ -30,8 +30,10 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
     Page<PopupStore> findByCompanyIdxFetchJoin(Long companyIdx,Pageable pageable);
 
 
-    Page<PopupStore> findByStoreDate (String storeDate,Pageable pageable);
+    Page<PopupStore> findBystoreEndDate (String storeDate,Pageable pageable);
 
-    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeDate = :storeDate")
-    Page<PopupStore> findByStoreDateFetchJoin(String storeDate,Pageable pageable);
+    @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.storeEndDate = :storeDate")
+    Page<PopupStore> findByStoreEndDateFetchJoin(String storeDate,Pageable pageable);
+
+    Optional<PopupStore> findByStoreIdx(Long storeIdx);
 }

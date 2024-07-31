@@ -28,37 +28,39 @@ public class PopupStore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeIdx;
-
-    @OneToMany(mappedBy = "popupStore")
-    @JsonManagedReference
-    private List<PopupReview> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "popupStore")
-    @JsonManagedReference
-    private List<PopupGoods> popupGoodsList = new ArrayList<>();
+    private String companyEmail;
     @Column(unique = true)
     private String storeName;
-    private String storeAddr;
+    private String storeAddress;
     private String storeContent;
-    private String storeDate;
+    private String storeEndDate;
     private String category;
-    private Integer totalPeople; // => popup_reserve로
+    private Integer totalPeople;
+    private Integer likeCount;
+//    private Integer totalPeople; // => popup_reserve로
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PopupReview> reviewList = new ArrayList<>();
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PopupGoods> popupGoodsList = new ArrayList<>();
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Favorite> favoriteList;
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true )
+    private List<PopupStoreImage> popupstoreImageList;
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PopupReserve> popupReserveList = new ArrayList<>();
+    @OneToMany(mappedBy = "popupStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PopupStoreLike> popupStoreLikeList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyIdx")
     @JsonBackReference
     private Company company;
-
-    @OneToMany(mappedBy = "popupStore")
-    private List<Favorite> favoriteList;
-    @OneToMany(mappedBy = "popupStore" )
-    private List<PopupStoreImage> popupstoreImageList;
-    @OneToMany(mappedBy = "popupStore")
-    private List<PopupReserve> popupReserveList = new ArrayList<>();
-
 }
 

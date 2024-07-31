@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private final CompanyRepository companyRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Customer> resultCustomer = customerRepository.findByEmail(email);
+        Optional<Customer> resultCustomer = customerRepository.findByCustomerEmail(email);
         if (resultCustomer.isPresent()) {
             Customer customer = resultCustomer.get();
             return CustomUserDetails.builder()
@@ -29,7 +29,7 @@ public class CustomUserDetailService implements UserDetailsService {
                     .enabled(customer.getEnabled())
                     .build();
         } else {
-            Optional<Company> resultCompany = companyRepository.findByEmail(email);
+            Optional<Company> resultCompany = companyRepository.findByCompanyEmail(email);
             if (resultCompany.isPresent()) {
                 Company company = resultCompany.get();
                 return CustomUserDetails.builder()
