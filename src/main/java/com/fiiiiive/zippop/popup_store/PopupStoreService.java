@@ -118,9 +118,7 @@ public class PopupStoreService {
                         .productName(popupGoods.getProductName())
                         .productPrice(popupGoods.getProductPrice())
                         .productContent(popupGoods.getProductContent())
-                        .productImg(popupGoods.getProductImg())
                         .productAmount(popupGoods.getProductAmount())
-                        .storeName(popupGoods.getStoreName())
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
@@ -165,10 +163,8 @@ public class PopupStoreService {
     }
 
     public Page<GetPopupStoreRes> searchCategory(String category, int page, int size) throws BaseException {
-        Page<PopupStore> result = popupStoreRepository.findByCategory(category, PageRequest.of(page, size));
-        if (!result.hasContent()) {
-            throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
-        }
+        Page<PopupStore> result = popupStoreRepository.findByCategory(category, PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST));
         Page<GetPopupStoreRes> getPopupStoreResList = result.map(popupStore -> {
             List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();
             List<PopupStoreImage> popupStoreImageList = popupStore.getPopupstoreImageList();
@@ -189,9 +185,7 @@ public class PopupStoreService {
                         .productName(popupGoods.getProductName())
                         .productPrice(popupGoods.getProductPrice())
                         .productContent(popupGoods.getProductContent())
-                        .productImg(popupGoods.getProductImg())
                         .productAmount(popupGoods.getProductAmount())
-                        .storeName(popupGoods.getStoreName())
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
@@ -260,9 +254,7 @@ public class PopupStoreService {
                     .productName(popupGoods.getProductName())
                     .productPrice(popupGoods.getProductPrice())
                     .productContent(popupGoods.getProductContent())
-                    .productImg(popupGoods.getProductImg())
                     .productAmount(popupGoods.getProductAmount())
-                    .storeName(popupGoods.getStoreName())
                     .build();
             getPopupGoodsResList.add(getPopupGoodsRes);
         }
@@ -332,9 +324,7 @@ public class PopupStoreService {
                         .productName(popupGoods.getProductName())
                         .productPrice(popupGoods.getProductPrice())
                         .productContent(popupGoods.getProductContent())
-                        .productImg(popupGoods.getProductImg())
                         .productAmount(popupGoods.getProductAmount())
-                        .storeName(popupGoods.getStoreName())
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
@@ -406,9 +396,7 @@ public class PopupStoreService {
                         .productName(popupGoods.getProductName())
                         .productPrice(popupGoods.getProductPrice())
                         .productContent(popupGoods.getProductContent())
-                        .productImg(popupGoods.getProductImg())
                         .productAmount(popupGoods.getProductAmount())
-                        .storeName(popupGoods.getStoreName())
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
@@ -455,8 +443,8 @@ public class PopupStoreService {
         return getPopupStoreResList;
     }
 
-    public Page<GetPopupStoreRes> searchDate(String storeDate, Pageable pageable) throws BaseException{
-        Page<PopupStore> result = popupStoreRepository.findBystoreEndDate(storeDate, pageable);
+    public Page<GetPopupStoreRes> searchDate(String storeDate, int page, int size) throws BaseException{
+        Page<PopupStore> result = popupStoreRepository.findBystoreEndDate(storeDate, PageRequest.of(page, size));
         if (!result.hasContent()) {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
         }
@@ -480,9 +468,7 @@ public class PopupStoreService {
                         .productName(popupGoods.getProductName())
                         .productPrice(popupGoods.getProductPrice())
                         .productContent(popupGoods.getProductContent())
-                        .productImg(popupGoods.getProductImg())
                         .productAmount(popupGoods.getProductAmount())
-                        .storeName(popupGoods.getStoreName())
                         .build();
                 getPopupGoodsResList.add(getPopupGoodsRes);
             }
@@ -541,6 +527,7 @@ public class PopupStoreService {
         popupStore.setStoreAddress(dto.getStoreAddress());
         popupStore.setStoreEndDate(dto.getStoreEndDate());
         popupStoreRepository.save(popupStore);
+        popupStore.getPopupstoreImageList();
         List<PopupStoreImage> popupStoreImageList  = popupStoreImageRepository.findByStoreIdx(popupStore.getStoreIdx()).orElse(new ArrayList<>());
         List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();
         for(PopupStoreImage popupStoreImage : popupStoreImageList){

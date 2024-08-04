@@ -32,10 +32,10 @@ public class PopupReviewController {
     // 리뷰 등록
     @PostMapping(value = "/register")
     public ResponseEntity<BaseResponse> register(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails,
-            @RequestParam Long storeIdx,
-            @RequestPart("files") MultipartFile[] files,
-            @RequestPart("dto") CreatePopupReviewReq dto) throws BaseException {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long storeIdx,
+        @RequestPart("files") MultipartFile[] files,
+        @RequestPart("dto") CreatePopupReviewReq dto) throws BaseException {
         List<String> fileNames = cloudFileUpload.multipleUpload(files);
         CreatePopupReviewRes response = popupReviewService.register(customUserDetails, storeIdx, fileNames, dto);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_REGISTER_SUCCESS, response));
@@ -44,9 +44,9 @@ public class PopupReviewController {
     // 스토어의 인덱스 번호로 등록된 리뷰 조회
     @GetMapping(value = "/search-store")
     public ResponseEntity<BaseResponse<Page<GetPopupReviewRes>>> searchStore(
-            @RequestParam Long storeIdx,
-            @RequestParam int page,
-            @RequestParam int size) throws BaseException {
+        @RequestParam Long storeIdx,
+        @RequestParam int page,
+        @RequestParam int size) throws BaseException {
         Page<GetPopupReviewRes> response = popupReviewService.searchStore(storeIdx, page, size);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, response));
     }
