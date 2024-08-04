@@ -10,6 +10,8 @@ import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
+import com.fiiiiive.zippop.popup_review.model.PopupReviewImage;
+import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewImageRes;
 import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.model.PopupStoreImage;
@@ -125,12 +127,25 @@ public class PopupStoreService {
             List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
             List<PopupReview> popupReviewList = popupStore.getReviewList();
             for (PopupReview popupReview : popupReviewList) {
+                List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+                List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+                for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                    GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                            .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                            .imageUrl(popupReviewImage.getImageUrl())
+                            .createdAt(popupReview.getCreatedAt())
+                            .updatedAt(popupReview.getUpdatedAt())
+                            .build();
+                    getPopupReviewImageResList.add(getPopupReviewImageRes);
+                }
                 GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                        .reviewIdx(popupReview.getReviewIdx())
                         .reviewTitle(popupReview.getReviewTitle())
                         .reviewContent(popupReview.getReviewContent())
                         .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getStoreName())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .getPopupReviewImageResList(getPopupReviewImageResList)
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
@@ -183,12 +198,25 @@ public class PopupStoreService {
             List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
             List<PopupReview> popupReviewList = popupStore.getReviewList();
             for (PopupReview popupReview : popupReviewList) {
+                List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+                List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+                for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                    GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                            .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                            .imageUrl(popupReviewImage.getImageUrl())
+                            .createdAt(popupReview.getCreatedAt())
+                            .updatedAt(popupReview.getUpdatedAt())
+                            .build();
+                    getPopupReviewImageResList.add(getPopupReviewImageRes);
+                }
                 GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                        .reviewIdx(popupReview.getReviewIdx())
                         .reviewTitle(popupReview.getReviewTitle())
                         .reviewContent(popupReview.getReviewContent())
                         .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getStoreName())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .getPopupReviewImageResList(getPopupReviewImageResList)
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
@@ -241,12 +269,25 @@ public class PopupStoreService {
         List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
         List<PopupReview> popupReviewList = popupStore.getReviewList();
         for (PopupReview popupReview : popupReviewList) {
+            List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+            List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+            for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                        .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                        .imageUrl(popupReviewImage.getImageUrl())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .build();
+                getPopupReviewImageResList.add(getPopupReviewImageRes);
+            }
             GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                    .reviewIdx(popupReview.getReviewIdx())
                     .reviewTitle(popupReview.getReviewTitle())
                     .reviewContent(popupReview.getReviewContent())
                     .rating(popupReview.getRating())
-                    .reviewDate(popupReview.getReviewDate())
-                    .storeName(popupReview.getStoreName())
+                    .createdAt(popupReview.getCreatedAt())
+                    .updatedAt(popupReview.getUpdatedAt())
+                    .getPopupReviewImageResList(getPopupReviewImageResList)
                     .build();
             getPopupReviewResList.add(getPopupReviewRes);
         }
@@ -271,7 +312,7 @@ public class PopupStoreService {
         if (!result.hasContent()) {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_SEARCH_FAIL_NOT_EXIST);
         }
-        Page<GetPopupStoreRes> getPopupStoreResList = result.map(popupStore -> {
+        Page<GetPopupStoreRes> getPopupStoreResPage = result.map(popupStore -> {
             List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();
             List<PopupStoreImage> popupStoreImageList = popupStore.getPopupstoreImageList();
             for (PopupStoreImage popupStoreImage : popupStoreImageList) {
@@ -300,12 +341,25 @@ public class PopupStoreService {
             List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
             List<PopupReview> popupReviewList = popupStore.getReviewList();
             for (PopupReview popupReview : popupReviewList) {
+                List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+                List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+                for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                    GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                            .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                            .imageUrl(popupReviewImage.getImageUrl())
+                            .createdAt(popupReview.getCreatedAt())
+                            .updatedAt(popupReview.getUpdatedAt())
+                            .build();
+                    getPopupReviewImageResList.add(getPopupReviewImageRes);
+                }
                 GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                        .reviewIdx(popupReview.getReviewIdx())
                         .reviewTitle(popupReview.getReviewTitle())
                         .reviewContent(popupReview.getReviewContent())
                         .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getStoreName())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .getPopupReviewImageResList(getPopupReviewImageResList)
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
@@ -324,7 +378,7 @@ public class PopupStoreService {
                     .build();
             return getPopupStoreRes;
         });
-        return getPopupStoreResList;
+        return getPopupStoreResPage;
     }
 
     public Page<GetPopupStoreRes> searchCompany(CustomUserDetails customUserDetails, int page, int size) throws BaseException{
@@ -361,12 +415,25 @@ public class PopupStoreService {
             List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
             List<PopupReview> popupReviewList = popupStore.getReviewList();
             for (PopupReview popupReview : popupReviewList) {
+                List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+                List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+                for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                    GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                            .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                            .imageUrl(popupReviewImage.getImageUrl())
+                            .createdAt(popupReview.getCreatedAt())
+                            .updatedAt(popupReview.getUpdatedAt())
+                            .build();
+                    getPopupReviewImageResList.add(getPopupReviewImageRes);
+                }
                 GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                        .reviewIdx(popupReview.getReviewIdx())
                         .reviewTitle(popupReview.getReviewTitle())
                         .reviewContent(popupReview.getReviewContent())
                         .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getStoreName())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .getPopupReviewImageResList(getPopupReviewImageResList)
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
@@ -422,12 +489,25 @@ public class PopupStoreService {
             List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
             List<PopupReview> popupReviewList = popupStore.getReviewList();
             for (PopupReview popupReview : popupReviewList) {
+                List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+                List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+                for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                    GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                            .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                            .imageUrl(popupReviewImage.getImageUrl())
+                            .createdAt(popupReview.getCreatedAt())
+                            .updatedAt(popupReview.getUpdatedAt())
+                            .build();
+                    getPopupReviewImageResList.add(getPopupReviewImageRes);
+                }
                 GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                        .reviewIdx(popupReview.getReviewIdx())
                         .reviewTitle(popupReview.getReviewTitle())
                         .reviewContent(popupReview.getReviewContent())
                         .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getStoreName())
+                        .createdAt(popupReview.getCreatedAt())
+                        .updatedAt(popupReview.getUpdatedAt())
+                        .getPopupReviewImageResList(getPopupReviewImageResList)
                         .build();
                 getPopupReviewResList.add(getPopupReviewRes);
             }
@@ -468,9 +548,9 @@ public class PopupStoreService {
         }
         for (String fileName: fileNames) {
             PopupStoreImage popupstoreImage = PopupStoreImage.builder()
-                        .imageUrl(fileName)
-                        .popupStore(popupStore)
-                        .build();
+                    .imageUrl(fileName)
+                    .popupStore(popupStore)
+                    .build();
             popupStoreImageRepository.save(popupstoreImage);
             GetPopupStoreImageRes getPopupStoreImageRes = GetPopupStoreImageRes.builder()
                     .storeImageIdx(popupstoreImage.getStoreImageIdx())

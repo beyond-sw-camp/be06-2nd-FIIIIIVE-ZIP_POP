@@ -9,10 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreatePopupReviewReq {
-
     private String reviewTitle;
     private String reviewContent;
     private Integer rating;
-    private String reviewDate;
-    private String storeName;
 }

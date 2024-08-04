@@ -1,7 +1,5 @@
 package com.fiiiiive.zippop.popup_review.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,28 +16,18 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class PopupReview {
+public class PopupReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewIdx;
-    private String reviewTitle;
-    private String reviewContent;
-    private Integer rating;
-    private String customerEmail;
+    private Long reviewImageIdx;
+    @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
+    private String imageUrl;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "popupReview")
-    private List<PopupReviewImage> popupReviewImageList;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerIdx")
-    private Customer customer;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "storeIdx")
-    @JsonBackReference
-    private PopupStore popupStore;
+    @JoinColumn(name="reviewIdx")
+    private PopupReview popupReview;
 }
-

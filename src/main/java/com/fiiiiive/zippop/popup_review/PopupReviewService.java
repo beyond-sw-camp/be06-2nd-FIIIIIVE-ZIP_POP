@@ -3,13 +3,21 @@ package com.fiiiiive.zippop.popup_review;
 
 import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
+import com.fiiiiive.zippop.member.CustomerRepository;
+import com.fiiiiive.zippop.member.model.CustomUserDetails;
+import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.popup_review.model.PopupReview;
+import com.fiiiiive.zippop.popup_review.model.PopupReviewImage;
 import com.fiiiiive.zippop.popup_review.model.request.CreatePopupReviewReq;
+import com.fiiiiive.zippop.popup_review.model.response.CreatePopupReviewRes;
+import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewImageRes;
 import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
+import com.fiiiiive.zippop.popup_store.model.PopupStoreImage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,70 +26,110 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class PopupReviewService {
-
     private final PopupReviewRepository popupReviewRepository;
     private final PopupStoreRepository popupStoreRepository;
+    private final PopupReviewImageRepository popupReviewImageRepository;
+    private final CustomerRepository customerRepository;
 
-    public void register(CreatePopupReviewReq createPopupReviewReq) throws BaseException {
+    public CreatePopupReviewRes register(CustomUserDetails customUserDetails, Long storeIdx, List<String> fileNames, CreatePopupReviewReq dto) throws BaseException {
+        Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_INVALID_MEMBER));
+        PopupStore popupStore = popupStoreRepository.findById(storeIdx)
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST));
         PopupReview popupReview = PopupReview.builder()
-                .reviewTitle(createPopupReviewReq.getReviewTitle())
-                .reviewContent(createPopupReviewReq.getReviewContent())
-                .reviewDate(createPopupReviewReq.getReviewDate())
-                .rating(createPopupReviewReq.getRating())
-                .popupStore(popupStoreRepository.findByStoreName(createPopupReviewReq.getStoreName()).get())
+                .reviewTitle(dto.getReviewTitle())
+                .reviewContent(dto.getReviewContent())
+                .rating(dto.getRating())
+                .popupStore(popupStore)
+                .customer(customer)
+                .build();
+        popupReviewRepository.save(popupReview);
+        List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+        for(String fileName: fileNames) {
+            PopupReviewImage popupReviewImage = PopupReviewImage.builder()
+                    .imageUrl(fileName)
+                    .popupReview(popupReview)
+                    .build();
+            popupReviewImageRepository.save(popupReviewImage);
+            GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                    .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                    .imageUrl(popupReviewImage.getImageUrl())
+                    .createdAt(popupReviewImage.getCreatedAt())
+                    .updatedAt(popupReviewImage.getUpdatedAt())
+                    .build();
+            getPopupReviewImageResList.add(getPopupReviewImageRes);
+        }
+        return CreatePopupReviewRes.builder()
+                .reviewIdx(popupReview.getReviewIdx())
+                .reviewTitle(popupReview.getReviewTitle())
+                .reviewContent(popupReview.getReviewContent())
+                .rating(popupReview.getRating())
+                .getPopupReviewImageResList(getPopupReviewImageResList)
+                .createdAt(popupReview.getCreatedAt())
+                .updatedAt(popupReview.getUpdatedAt())
                 .build();
 
-        Optional<PopupStore> popupStore = Optional.of(popupStoreRepository.findByStoreName(createPopupReviewReq.getStoreName()).get());
-        if (popupStore.isPresent()) {
-            popupReview.setPopupStore(popupStore.get());
-            popupReview.setStoreName(popupStore.get().getStoreName());
-            popupReviewRepository.save(popupReview);
+    }
 
-            popupStore.get().getReviewList().add(popupReview);
-        } else {
+    public Page<GetPopupReviewRes> searchStore(Long storeIdx, int page, int size) throws BaseException {
+        Page<PopupReview> result = popupReviewRepository.findByStoreIdx(storeIdx, PageRequest.of(page, size));
+        if (!result.hasContent()) {
             throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
         }
-    }
-
-    public List<GetPopupReviewRes> findAll() throws BaseException {
-        Optional<List<PopupReview>> result = Optional.of(popupReviewRepository.findAll());
-        if (result.isPresent()) {
-            List<GetPopupReviewRes> popupReviewResList = new ArrayList<>();
-            for (PopupReview popupReview : result.get()) {
-                GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
-                        .reviewTitle(popupReview.getReviewTitle())
-                        .reviewContent(popupReview.getReviewContent())
-                        .rating(popupReview.getRating())
-                        .reviewDate(popupReview.getReviewDate())
-                        .storeName(popupReview.getPopupStore().getStoreName())
-                        .build();
-                popupReviewResList.add(getPopupReviewRes);
+        Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> {
+            List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+            List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+            for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                    .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                    .imageUrl(popupReviewImage.getImageUrl())
+                    .createdAt(popupReviewImage.getCreatedAt())
+                    .updatedAt(popupReviewImage.getUpdatedAt())
+                    .build();
+                getPopupReviewImageResList.add(getPopupReviewImageRes);
             }
-
-            return popupReviewResList;
-        } else {
-            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_CONTENTS_EMPTY);
-        }
-    }
-
-    public Page<GetPopupReviewRes> findByStoreName(String storeName, Pageable pageable) throws BaseException {
-        Page<PopupReview> result = popupReviewRepository.findByStoreName(storeName, pageable);
-
-        if (result.hasContent()) {
-            Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> GetPopupReviewRes.builder()
+            GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                    .reviewIdx(popupReview.getReviewIdx())
                     .reviewTitle(popupReview.getReviewTitle())
                     .reviewContent(popupReview.getReviewContent())
                     .rating(popupReview.getRating())
-                    .reviewDate(popupReview.getReviewDate())
-                    .storeName(popupReview.getPopupStore().getStoreName())
-                    .build());
-            result = popupReviewRepository.findByStoreNameFetchJoin(storeName, pageable);
-            return getPopupReviewResPage;
-
-        } else {
-            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
-        }
+                    .createdAt(popupReview.getCreatedAt())
+                    .updatedAt(popupReview.getUpdatedAt())
+                    .getPopupReviewImageResList(getPopupReviewImageResList)
+                    .build();
+            return getPopupReviewRes;
+        });
+        return getPopupReviewResPage;
     }
 
-
+    public Page<GetPopupReviewRes> searchCustomer(CustomUserDetails customUserDetails, int page, int size) throws BaseException {
+        Page<PopupReview> result = popupReviewRepository.findByCustomerIdx(customUserDetails.getIdx(), PageRequest.of(page, size));
+        if (!result.hasContent()) {
+            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
+        }
+        Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> {
+            List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
+            List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
+            for(PopupReviewImage popupReviewImage : popupReviewImageList){
+                GetPopupReviewImageRes getPopupReviewImageRes = GetPopupReviewImageRes.builder()
+                        .reviewImageIdx(popupReviewImage.getReviewImageIdx())
+                        .imageUrl(popupReviewImage.getImageUrl())
+                        .createdAt(popupReviewImage.getCreatedAt())
+                        .updatedAt(popupReviewImage.getUpdatedAt())
+                        .build();
+                getPopupReviewImageResList.add(getPopupReviewImageRes);
+            }
+            GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
+                    .reviewIdx(popupReview.getReviewIdx())
+                    .reviewTitle(popupReview.getReviewTitle())
+                    .reviewContent(popupReview.getReviewContent())
+                    .rating(popupReview.getRating())
+                    .createdAt(popupReview.getCreatedAt())
+                    .updatedAt(popupReview.getUpdatedAt())
+                    .getPopupReviewImageResList(getPopupReviewImageResList)
+                    .build();
+            return getPopupReviewRes;
+        });
+        return getPopupReviewResPage;
+    }
 }

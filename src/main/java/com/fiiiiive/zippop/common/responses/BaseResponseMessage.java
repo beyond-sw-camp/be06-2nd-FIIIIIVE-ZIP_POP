@@ -74,8 +74,8 @@ public enum BaseResponseMessage {
     // 팝업 스토어 리뷰 등록 4000
     POPUP_STORE_REVIEW_SUCCESS(true, 4000, "팝업 스토어 리뷰 등록에 성공했습니다."),
     POPUP_STORE_REVIEW_FAIL_CONTENTS_EMPTY(false, 4001, "팝업 스토어 리뷰 내용을 작성해주세요"),
-    POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST(false, 4002, "팝업 스토어 리뷰 내용을 작성해주세요"),
-
+    POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST(false, 4002, "해당 팝업 스토어를 찾을 수 없습니다."),
+    POPUP_STORE_REVIEW_FAIL_INVALID_MEMBER(false, 4003, "인증된 사용자만이 리뷰를 등록할 수 있습니다."),
     // ========================================================================================================================
     // 팝업 예약 9000
     // 팝업 예약 생성 9000
