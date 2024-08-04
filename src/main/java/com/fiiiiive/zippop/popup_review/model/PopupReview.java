@@ -32,7 +32,7 @@ public class PopupReview {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "popupReview")
+    @OneToMany(mappedBy = "popupReview", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PopupReviewImage> popupReviewImageList;
 
     @ManyToOne(fetch = FetchType.LAZY)

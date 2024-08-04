@@ -9,7 +9,7 @@ import java.util.*;
 
 public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
 
-    Page<PopupStore> findByCategory(String category, Pageable pageable);
+    Optional<Page<PopupStore>> findByCategory(String category, Pageable pageable);
 
     @Query("SELECT ps FROM PopupStore ps JOIN FETCH ps.popupGoodsList WHERE ps.category = :category")
     Page<PopupStore> findByCategoryFetchJoin(String category, Pageable pageable);

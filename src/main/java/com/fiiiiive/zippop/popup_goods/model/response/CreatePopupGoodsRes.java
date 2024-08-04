@@ -1,9 +1,6 @@
 package com.fiiiiive.zippop.popup_goods.model.response;
 
-import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoodsImage;
-import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreImageRes;
-import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GetPopupGoodsRes {
+public class CreatePopupGoodsRes {
     private Long productIdx;
     private String productName;
     private Integer productPrice;
-    private String productContent;
     private Integer productAmount;
+    private String productContent;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<GetPopupGoodsImageRes> getPopupGoodsImageResList;
+    private List<GetPopupGoodsImageRes> popupGoodsImageList;
 }

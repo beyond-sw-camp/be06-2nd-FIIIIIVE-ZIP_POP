@@ -101,9 +101,11 @@ public enum BaseResponseMessage {
     POPUP_GOODS_REGISTER_FAIL_NAME_EMPTY(false, 4003, "상품명을 입력해주세요"),
     POPUP_GOODS_REGISTER_FAIL_PRICE_EMPTY(false, 4004, "상품 가격을 입력해주세요"),
     POPUP_GOODS_REGISTER_FAIL_AMOUNT_EMPTY(false, 4005, "등록할 상품의 수량을 입력해주세요"),
+    POPUP_GOODS_REGISTER_FAIL_STORE_NOT_FOUND(false, 4006, "해당 스토어를 찾을 수 없습니다."),
     // 팝업 굿즈 조회 4100
     POPUP_GOODS_SEARCH_SUCCESS(true, 4100, "팝업 굿즈 조회에 성공했습니다."),
     POPUP_GOODS_SEARCH_FAIL(false, 4101, "팝업 굿즈 조회에 실패했습니다."),
+    POPUP_GOODS_SEARCH_FAIL_STORE_NOT_NOT_FOUND(false, 4102, "해당 스토어를 찾을 수 없습니다."),
     // 팝업 굿즈 수정 4200
     POPUP_GOODS_UPDATE_SUCCESS(true, 4200, "팝업 굿즈 수정에 성공했습니다."),
     POPUP_GOODS_UPDATE_FAIL(false, 4201, "팝업 굿즈 수정에 실패했습니다."),

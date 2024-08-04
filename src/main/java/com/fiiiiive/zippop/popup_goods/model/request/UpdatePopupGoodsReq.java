@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreatePopupGoodsReq {
+public class UpdatePopupGoodsReq {
     private String productName;
     private Integer productPrice;
     private Integer productAmount;

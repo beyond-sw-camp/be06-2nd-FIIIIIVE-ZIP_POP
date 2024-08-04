@@ -38,16 +38,16 @@ public class PopupStoreController {
     public ResponseEntity<BaseResponse> register(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @RequestPart("files") MultipartFile[] files,
-        @RequestPart("dto") CreatePopupStoreReq createPopupStoreReq) throws Exception {
+        @RequestPart("dto") CreatePopupStoreReq dto) throws BaseException {
         List<String> fileNames = cloudFileUpload.multipleUpload(files);
-        CreatePopupStoreRes response = popupStoreService.register(customUserDetails, createPopupStoreReq, fileNames);
+        CreatePopupStoreRes response = popupStoreService.register(customUserDetails, dto, fileNames);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_REGISTER_SUCCESS, response));
     }
 
     @GetMapping("/search-all")
-    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> search(
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> search (
         @RequestParam int page,
-        @RequestParam int size) throws Exception {
+        @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreList = popupStoreService.searchAll(page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreList));
     }
@@ -56,14 +56,14 @@ public class PopupStoreController {
     public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCategory(
         @RequestParam String category,
         @RequestParam int page,
-        @RequestParam int size) throws Exception {
+        @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchCategory(category, page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
     }
 
     @GetMapping("/search-store")
     public ResponseEntity<BaseResponse<GetPopupStoreRes>> searchStore(
-        @RequestParam String storeName) throws Exception {
+        @RequestParam String storeName) throws BaseException {
         GetPopupStoreRes getPopupStoreRes = popupStoreService.searchStore(storeName);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, getPopupStoreRes));
     }
@@ -72,7 +72,7 @@ public class PopupStoreController {
     public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchAddress(
         @RequestParam String storeAddress,
         @RequestParam int page,
-        @RequestParam int size) throws Exception {
+        @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreResPage = popupStoreService.searchAddress(storeAddress, page, size);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResPage));
     }
@@ -81,9 +81,9 @@ public class PopupStoreController {
     public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchStoreDate(
         @RequestParam String storeEndDate,
         @RequestParam int page,
-        @RequestParam int size) throws Exception {
+        @RequestParam int size) throws BaseException {
         Pageable pageable = PageRequest.of(page, size);
-        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchDate(storeEndDate, pageable);
+        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchDate(storeEndDate, page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
     }
 
@@ -91,7 +91,7 @@ public class PopupStoreController {
     public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCompany(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @RequestParam int page,
-        @RequestParam int size) throws Exception {
+        @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchCompany(customUserDetails, page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
     }

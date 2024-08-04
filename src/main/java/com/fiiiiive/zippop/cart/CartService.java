@@ -83,9 +83,7 @@ public class CartService {
                     .productName(cart.getPopupGoods().getProductName())
                     .productPrice(cart.getPopupGoods().getProductPrice())
                     .productContent(cart.getPopupGoods().getProductContent())
-                    .productImg(cart.getPopupGoods().getProductImg())
                     .productAmount(cart.getPopupGoods().getProductAmount())
-                    .storeName(cart.getPopupGoods().getStoreName())
                     .build();
             GetCartRes getCartRes = GetCartRes.builder()
                     .cartIdx(cart.getCartIdx())
