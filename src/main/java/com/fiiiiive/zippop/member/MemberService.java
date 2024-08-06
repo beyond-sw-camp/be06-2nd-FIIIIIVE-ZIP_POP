@@ -8,6 +8,7 @@ import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.member.model.request.EditInfoReq;
 import com.fiiiiive.zippop.member.model.request.EditPasswordReq;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
+import com.fiiiiive.zippop.member.model.response.GetPointRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -267,6 +268,13 @@ public class MemberService {
                 throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL);
             }
         }
+    }
+    public GetPointRes getUserPoints(Long customerIdx) {
+        Customer customer = customerRepository.findById(customerIdx).orElseThrow(() -> new RuntimeException("User not found"));
+        return GetPointRes.builder()
+                .customer_idx(customer.getCustomerIdx())
+                .point(customer.getPoint())
+                .build();
     }
 
 }

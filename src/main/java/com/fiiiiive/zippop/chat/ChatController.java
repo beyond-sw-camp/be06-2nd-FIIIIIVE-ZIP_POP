@@ -1,7 +1,6 @@
 package com.fiiiiive.zippop.chat;
 
 import com.fiiiiive.zippop.chat.chatmessage.ChatMessage;
-//import com.fiiiiive.zippop.chat.chatuser.ChatUserSessionService;
 import com.fiiiiive.zippop.chat.model.request.ChatMessageReq;
 import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
