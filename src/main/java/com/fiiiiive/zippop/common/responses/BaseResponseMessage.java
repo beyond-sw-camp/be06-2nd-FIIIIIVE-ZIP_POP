@@ -166,7 +166,9 @@ public enum BaseResponseMessage {
     // 장바구니 전체삭제 5400
     CART_DELETE_ALL_SUCCESS(true, 5400, "장바구니 전체 삭제에 성공했습니다."),
     CART_DELETE_ALL_FAIL(false, 5401, "장바구니 전체 삭제에 실패했습니다."),
-
+    //장바구니 포인트 5500
+    CART_POINT_SEARCH_SUCCESS(true,5500,"포인트 조회에 성공했습니다."),
+    CART_POINT_SEARCH_FAIL(false,5501,"포인트 조회에 실패했습니다"),
     // ========================================================================================================================
     // 찜 6000
     // 찜 등록 6100
@@ -273,7 +275,11 @@ public enum BaseResponseMessage {
     CHAT_ROOM_SEARCH_FAIL(false, 8601, "채팅 기록 조회에 실패했습니다."),
     // 채팅 메세지 전송 8400
     CHAT_MESSAGE_SEND_SUCCESS(true, 8300, "채팅 메시지 전송에 성공했습니다."),
-    CHAT_MESSAGE_SEND_FAIL(false, 8301, "채팅 메시지 전송에 실패했습니다.");
+    CHAT_MESSAGE_SEND_FAIL(false, 8301, "채팅 메시지 전송에 실패했습니다."),
+
+    //채팅 유저 확인 8500
+    CHAT_USER_FOUND(true,8500,"사용자가 존재합니다."),
+    USER_NOT_FOUND(false,8401 ,"사용자가 존재하지 않습니다" );
 
     // ========================================================================================================================
     private Boolean success;
