@@ -9,7 +9,9 @@ import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.CustomerRepository;
+import com.fiiiiive.zippop.member.MemberService;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
+import com.fiiiiive.zippop.member.model.response.GetPointRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +29,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CartController {
     private final CartService cartService;
+<<<<<<< Updated upstream
     private final CustomerRepository customerRepository;
 
 //    @ExeTimer
+=======
+    private final MemberService memberService;
+>>>>>>> Stashed changes
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestBody CreateCartReq dto) throws Exception {
         CreateCartRes response = cartService.register(customUserDetails, dto);
@@ -55,6 +61,7 @@ public class CartController {
         cartService.deleteAll(customUserDetails);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_DELETE_ALL_SUCCESS));
     }
+<<<<<<< Updated upstream
 
     @DeleteMapping("/delete-cart")
     public ResponseEntity<BaseResponse> deleteByCartIdx(@AuthenticationPrincipal CustomUserDetails customUserDetails, @RequestParam Long cartIdx) throws BaseException {
@@ -66,4 +73,11 @@ public class CartController {
 
     // 장바구니에서 결제버튼클릭시 리다이렉션과 함께 결제에게 전송
 
+=======
+    @GetMapping("/points")
+    public ResponseEntity<BaseResponse> getUserPoints(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        GetPointRes response = memberService.getUserPoints(customUserDetails.getIdx());
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_POINT_SEARCH_SUCCESS, response));
+    }
+>>>>>>> Stashed changes
 }

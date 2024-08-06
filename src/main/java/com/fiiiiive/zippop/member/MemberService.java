@@ -6,6 +6,7 @@ import com.fiiiiive.zippop.member.model.Company;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
+import com.fiiiiive.zippop.member.model.response.GetPointRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
@@ -173,4 +174,82 @@ public class MemberService {
             }
         }
     }
+<<<<<<< Updated upstream
+=======
+
+    @Transactional(rollbackFor = Exception.class)
+    public void editInfo(CustomUserDetails customUserDetails, EditInfoReq dto) throws BaseException {
+        String email = customUserDetails.getEmail();
+        String role = customUserDetails.getRole();
+        if(Objects.equals(role, "ROLE_COMPANY")){
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
+            if(result.isPresent()){
+                Company company = result.get();
+                company.setName(dto.getName());
+                company.setAddress(dto.getAddress());
+                company.setCrn(dto.getCrn());
+                company.setPhoneNumber(dto.getPhoneNumber());
+                companyRepository.save(company);
+            } else {
+                throw new BaseException(BaseResponseMessage.MEMBER_EDIT_INFO_FAIL);
+            }
+        } else {
+            Optional<Customer> result = customerRepository.findByCustomerEmail(customUserDetails.getEmail());
+            if(result.isPresent()) {
+                Customer customer = result.get();
+                customer.setName(dto.getName());
+                customer.setAddress(dto.getAddress());
+                customer.setPhoneNumber(dto.getPhoneNumber());
+                customerRepository.save(customer);
+            } else {
+                throw new BaseException(BaseResponseMessage.MEMBER_EDIT_INFO_FAIL);
+            }
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void editPassword(CustomUserDetails customUserDetails, EditPasswordReq dto) throws BaseException {
+        String email = customUserDetails.getEmail();
+        String role = customUserDetails.getRole();
+        if(Objects.equals(role, "ROLE_COMPANY")){
+            Optional<Company> result = companyRepository.findByCompanyEmail(email);
+            if(result.isPresent()){
+                Company company = result.get();
+                if(passwordEncoder.matches(dto.getOriginPassword(), company.getPassword()))
+                {
+                    company.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+                    companyRepository.save(company);
+                }
+                else {
+                    throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL_PASSWORD_NOT_MATCH);
+                }
+            } else {
+                throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL);
+            }
+        } else {
+            Optional<Customer> result = customerRepository.findByCustomerEmail(customUserDetails.getEmail());
+            if(result.isPresent()) {
+                Customer customer = result.get();
+                if(passwordEncoder.matches(dto.getOriginPassword(), customer.getPassword()))
+                {
+                    customer.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+                    customerRepository.save(customer);
+                }
+                else {
+                    throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL_PASSWORD_NOT_MATCH);
+                }
+            } else {
+                throw new BaseException(BaseResponseMessage.MEMBER_EDIT_PASSWORD_FAIL);
+            }
+        }
+    }
+    public GetPointRes getUserPoints(Long customerIdx) {
+        Customer customer = customerRepository.findById(customerIdx).orElseThrow(() -> new RuntimeException("User not found"));
+        return GetPointRes.builder()
+                .customer_idx(customer.getCustomerIdx())
+                .point(customer.getPoint())
+                .build();
+    }
+
+>>>>>>> Stashed changes
 }

@@ -1,5 +1,6 @@
 package com.fiiiiive.zippop.chat.chatmessage;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fiiiiive.zippop.chat.chatroom.ChatRoom;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +12,7 @@ import lombok.*;
 
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
