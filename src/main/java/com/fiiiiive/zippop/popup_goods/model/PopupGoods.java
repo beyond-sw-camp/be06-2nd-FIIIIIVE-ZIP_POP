@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,6 +30,7 @@ public class PopupGoods {
     private Integer productPrice;
     private String productContent;
     private Integer productAmount;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
@@ -36,9 +38,8 @@ public class PopupGoods {
 
     @OneToMany(mappedBy = "popupGoods")
     private List<Cart> carts;
-
     @OneToMany(mappedBy = "popupGoods", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PopupGoodsImage> popupGoodsImageList;
+    private List<PopupGoodsImage> popupGoodsImageList = new ArrayList<>();;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "storeIdx")

@@ -37,6 +37,7 @@ public class PopupReviewService {
         PopupStore popupStore = popupStoreRepository.findById(storeIdx)
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST));
         PopupReview popupReview = PopupReview.builder()
+                .customerEmail(customUserDetails.getEmail())
                 .reviewTitle(dto.getReviewTitle())
                 .reviewContent(dto.getReviewContent())
                 .rating(dto.getRating())
@@ -61,6 +62,7 @@ public class PopupReviewService {
         }
         return CreatePopupReviewRes.builder()
                 .reviewIdx(popupReview.getReviewIdx())
+                .customerEmail(popupReview.getCustomerEmail())
                 .reviewTitle(popupReview.getReviewTitle())
                 .reviewContent(popupReview.getReviewContent())
                 .rating(popupReview.getRating())
@@ -68,14 +70,11 @@ public class PopupReviewService {
                 .createdAt(popupReview.getCreatedAt())
                 .updatedAt(popupReview.getUpdatedAt())
                 .build();
-
     }
 
     public Page<GetPopupReviewRes> searchStore(Long storeIdx, int page, int size) throws BaseException {
-        Page<PopupReview> result = popupReviewRepository.findByStoreIdx(storeIdx, PageRequest.of(page, size));
-        if (!result.hasContent()) {
-            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
-        }
+        Page<PopupReview> result = popupReviewRepository.findByStoreIdx(storeIdx, PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST));
         Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> {
             List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
             List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
@@ -90,6 +89,7 @@ public class PopupReviewService {
             }
             GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
                     .reviewIdx(popupReview.getReviewIdx())
+                    .customerEmail(popupReview.getCustomerEmail())
                     .reviewTitle(popupReview.getReviewTitle())
                     .reviewContent(popupReview.getReviewContent())
                     .rating(popupReview.getRating())
@@ -103,10 +103,8 @@ public class PopupReviewService {
     }
 
     public Page<GetPopupReviewRes> searchCustomer(CustomUserDetails customUserDetails, int page, int size) throws BaseException {
-        Page<PopupReview> result = popupReviewRepository.findByCustomerIdx(customUserDetails.getIdx(), PageRequest.of(page, size));
-        if (!result.hasContent()) {
-            throw new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST);
-        }
+        Page<PopupReview> result = popupReviewRepository.findByCustomerEmail(customUserDetails.getEmail(), PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_STORE_REVIEW_FAIL_STORE_NOT_EXIST));
         Page<GetPopupReviewRes> getPopupReviewResPage = result.map(popupReview -> {
             List<GetPopupReviewImageRes> getPopupReviewImageResList = new ArrayList<>();
             List<PopupReviewImage> popupReviewImageList = popupReview.getPopupReviewImageList();
@@ -121,6 +119,7 @@ public class PopupReviewService {
             }
             GetPopupReviewRes getPopupReviewRes = GetPopupReviewRes.builder()
                     .reviewIdx(popupReview.getReviewIdx())
+                    .customerEmail(popupReview.getCustomerEmail())
                     .reviewTitle(popupReview.getReviewTitle())
                     .reviewContent(popupReview.getReviewContent())
                     .rating(popupReview.getRating())

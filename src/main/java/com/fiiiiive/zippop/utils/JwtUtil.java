@@ -36,11 +36,6 @@ public class JwtUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
     }
 
-    // 예약 인덱스 조회
-    public String getReserveIdx(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("reserveIdx", String.class);
-    }
-
     // 멤버 이메일 조회
     public String getEmail(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
@@ -61,6 +56,11 @@ public class JwtUtil {
                 .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 100000))
                 .signWith(secretKey)
                 .compact();
+    }
+
+    // 예약 인덱스 조회
+    public String getReserveIdx(String token) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("reserveIdx", String.class);
     }
 
     // 예약 토큰 생성

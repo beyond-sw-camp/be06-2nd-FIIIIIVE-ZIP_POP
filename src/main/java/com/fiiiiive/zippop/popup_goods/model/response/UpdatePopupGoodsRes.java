@@ -3,6 +3,7 @@ package com.fiiiiive.zippop.popup_goods.model.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,5 +19,5 @@ public class UpdatePopupGoodsRes {
     private String productContent;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<GetPopupGoodsImageRes> popupGoodsImageList;
+    private List<GetPopupGoodsImageRes> popupGoodsImageList = new ArrayList<>();;
 }

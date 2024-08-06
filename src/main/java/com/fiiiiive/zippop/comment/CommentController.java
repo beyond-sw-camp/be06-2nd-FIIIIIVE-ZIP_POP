@@ -34,15 +34,6 @@ public class CommentController {
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_REGISTER_SUCCESS, response));
     }
 
-    @GetMapping("/search-customer")
-    public ResponseEntity<BaseResponse<Page<GetCommentRes>>> searchByCustomer(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam int page,
-        @RequestParam int size) throws BaseException {
-        Page<GetCommentRes> comments = commentService.searchCustomer(page, size, customUserDetails);
-        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_SUCCESS, comments));
-    }
-
     @GetMapping("/search-all")
     public ResponseEntity<BaseResponse<Page<GetCommentRes>>> searchByPost(
         @RequestParam Long postIdx,
@@ -50,6 +41,15 @@ public class CommentController {
         @RequestParam int size) throws BaseException {
         Page<GetCommentRes> comments = commentService.searchAll(page, size, postIdx);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_SEARCH_ALL_SUCCESS, comments));
+    }
+
+    @GetMapping("/search-customer")
+    public ResponseEntity<BaseResponse<Page<GetCommentRes>>> searchByCustomer(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam int page,
+            @RequestParam int size) throws BaseException {
+        Page<GetCommentRes> comments = commentService.searchCustomer(page, size, customUserDetails);
+        return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_SUCCESS, comments));
     }
 
     @PatchMapping("/update")

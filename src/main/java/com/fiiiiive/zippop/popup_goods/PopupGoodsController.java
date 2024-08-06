@@ -38,6 +38,7 @@ public class PopupGoodsController {
     private final PopupGoodsService popupGoodsService;
     private final CloudFileUpload cloudFileUpload;
 
+    // 팝업 굿즈 수정 등록
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -49,6 +50,17 @@ public class PopupGoodsController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_REGISTER_SUCCESS, response));
     }
 
+    // 상품 이름으로 조회
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search(
+            @RequestParam String productName,
+            @RequestParam int page,
+            @RequestParam int size) throws Exception {
+        Page<GetPopupGoodsRes> popupGoodsPage = popupGoodsService.search(productName, page, size);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
+    }
+
+    // 팝업스토어 인덱스로 조회
     @GetMapping("/search-store")
     public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> searchStore(
         @RequestParam Long storeIdx,
@@ -58,15 +70,7 @@ public class PopupGoodsController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<BaseResponse<Page<GetPopupGoodsRes>>> search(
-        @RequestParam String productName,
-        @RequestParam int page,
-        @RequestParam int size) throws Exception {
-        Page<GetPopupGoodsRes> popupGoodsPage = popupGoodsService.search(productName, page, size);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_GOODS_SEARCH_SUCCESS, popupGoodsPage));
-    }
-
+    // 팝업 굿즈 수정
     @PatchMapping("/update")
     public ResponseEntity<BaseResponse> update(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -78,6 +82,7 @@ public class PopupGoodsController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_UPDATE_SUCCESS,response));
     }
 
+    // 팝업 굿즈 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponse> delete(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,

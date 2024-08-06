@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,17 +24,18 @@ public class PopupReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewIdx;
+    private String customerEmail;
     private String reviewTitle;
     private String reviewContent;
-    private Integer rating;
-    private String customerEmail;
+    private Integer rating; // 평점
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "popupReview", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PopupReviewImage> popupReviewImageList;
+    private List<PopupReviewImage> popupReviewImageList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerIdx")

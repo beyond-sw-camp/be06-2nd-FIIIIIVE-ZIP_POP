@@ -138,6 +138,8 @@ public enum BaseResponseMessage {
     POPUP_GOODS_PAY_FAIL_LIMIT_EXCEEDED(false, 4407, "사전 예매 굿즈는 품목 당 하나만 구매 가능합니다."),
     POPUP_GOODS_PAY_FAIL_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
     POPUP_GOODS_PAY_FAIL_NOT_FOUND_MEMBER(false, 4408, "결제 정보에 해당하는 유저가 없습니다."),
+    POPUP_ORDERS_SEARCH_SUCCESS(true, 4409, "결제 내역 조회에 성공했습니다."),
+
 
 
 

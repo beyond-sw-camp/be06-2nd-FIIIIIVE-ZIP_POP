@@ -6,6 +6,7 @@ import com.fiiiiive.zippop.popup_review.model.response.GetPopupReviewRes;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +17,17 @@ import java.util.List;
 @Builder
 public class GetPopupStoreRes {
     private Long storeIdx;
-    private String storeName;
-    private String storeAddress;
-    private String storeDate;
-    private String category;
-    private String storeContent;
     private String companyEmail;
+    private String storeName;
+    private String storeContent;
+    private String storeAddress;
+    private String category;
     private Integer likeCount;
+    private Integer totalPeople;
+    private LocalDateTime storeStartDate;
+    private LocalDateTime storeEndDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private List<GetPopupReviewRes> getPopupReviewResList = new ArrayList<>();
     private List<GetPopupGoodsRes> getPopupGoodsResList = new ArrayList<>();
     private List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();

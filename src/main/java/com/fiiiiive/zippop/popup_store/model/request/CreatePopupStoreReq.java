@@ -2,6 +2,8 @@ package com.fiiiiive.zippop.popup_store.model.request;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -11,6 +13,8 @@ public class CreatePopupStoreReq {
     private String storeName;
     private String storeAddress;
     private String storeContent;
-    private String storeEndDate;
     private String category;
+    private Integer totalPeople;
+    private LocalDateTime storeStartDate;
+    private LocalDateTime storeEndDate;
 }

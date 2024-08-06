@@ -33,11 +33,12 @@ public class PopupStore {
     private String storeName;
     private String storeAddress;
     private String storeContent;
-    private String storeEndDate;
+    private LocalDateTime storeStartDate;
+    private LocalDateTime storeEndDate;
     private String category;
     private Integer totalPeople;
     private Integer likeCount;
-//    private Integer totalPeople; // => popup_reserve로
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

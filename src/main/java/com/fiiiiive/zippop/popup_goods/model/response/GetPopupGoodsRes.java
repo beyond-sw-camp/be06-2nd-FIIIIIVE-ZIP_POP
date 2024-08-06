@@ -7,6 +7,7 @@ import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -22,5 +23,5 @@ public class GetPopupGoodsRes {
     private Integer productAmount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<GetPopupGoodsImageRes> getPopupGoodsImageResList;
+    private List<GetPopupGoodsImageRes> getPopupGoodsImageResList = new ArrayList<>();;
 }

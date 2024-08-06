@@ -23,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -34,6 +35,7 @@ public class PopupStoreController {
     private final PopupStoreService popupStoreService;
     private final CloudFileUpload cloudFileUpload;
 
+    // 팝업 스토어 등록
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -44,19 +46,94 @@ public class PopupStoreController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_REGISTER_SUCCESS, response));
     }
 
+    // 팝업 스토어 단일 조회
+    // @ExeTimer
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponse<GetPopupStoreRes>> search(
+        @RequestParam Long storeIdx) throws BaseException {
+        GetPopupStoreRes getPopupStoreRes = popupStoreService.search(storeIdx);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, getPopupStoreRes));
+    }
+
+    // 팝업 스토어 전체 조회
+    // @ExeTimer
     @GetMapping("/search-all")
-    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> search (
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchAll (
         @RequestParam int page,
         @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreList = popupStoreService.searchAll(page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreList));
     }
 
-    @GetMapping("/search-category")
-    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCategory(
-        @RequestParam String category,
+
+    // 기업이 등록한 팝업 스토어 조회
+    // @ExeTimer
+    @GetMapping("/search-company")
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCompany(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
         @RequestParam int page,
         @RequestParam int size) throws BaseException {
+        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchCompany(customUserDetails, page, size);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
+    }
+
+    // 팝업스토어 키워드 기반 검색
+    // @ExeTimer
+    @GetMapping("/search-keyword")
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchKeyword(
+            @RequestParam String keyword,
+            @RequestParam int page,
+            @RequestParam int size) throws BaseException {
+        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchKeyword(keyword, page, size);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
+    }
+
+    // 팝업스토어 날짜 범위 기반 검색
+    @GetMapping("/search-daterange")
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchStoreDate(
+            @RequestParam LocalDateTime storeStartDate,
+            @RequestParam LocalDateTime storeEndDate,
+            @RequestParam int page,
+            @RequestParam int size) throws BaseException {
+        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchDateRange(storeStartDate, storeEndDate, page, size);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
+    }
+
+    // 팝업 스토어 수정
+    @PatchMapping("/update")
+    public ResponseEntity<BaseResponse> update(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long storeIdx,
+        @RequestPart(name = "dto") UpdatePopupStoreReq dto,
+        @RequestPart(name = "files") MultipartFile[] files) throws BaseException {
+        List<String> fileNames = cloudFileUpload.multipleUpload(files);
+        UpdatePopupStoreRes response = popupStoreService.update(customUserDetails, storeIdx, dto, fileNames);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_UPDATE_SUCCESS,response));
+    }
+
+    // 팝업 스토어 삭제
+    @DeleteMapping("/delete")
+    public ResponseEntity<BaseResponse> delete(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long storeIdx) throws BaseException {
+        popupStoreService.delete(customUserDetails, storeIdx);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_DELETE_SUCCESS));
+    }
+
+    // 팝업 스토어 좋아요
+    @GetMapping("/like")
+    public ResponseEntity<BaseResponse> like(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        @RequestParam Long storeIdx) throws BaseException {
+        popupStoreService.like(customUserDetails, storeIdx);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_LIKE_SUCCESS));
+    }
+
+    @GetMapping("/search-category")
+    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCategory(
+            @RequestParam String category,
+            @RequestParam int page,
+            @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchCategory(category, page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
     }
@@ -75,51 +152,5 @@ public class PopupStoreController {
         @RequestParam int size) throws BaseException {
         Page<GetPopupStoreRes> popupStoreResPage = popupStoreService.searchAddress(storeAddress, page, size);
         return ResponseEntity.ok(new BaseResponse<>(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResPage));
-    }
-
-    @GetMapping("/search-date")
-    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchStoreDate(
-        @RequestParam String storeEndDate,
-        @RequestParam int page,
-        @RequestParam int size) throws BaseException {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchDate(storeEndDate, page, size);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
-    }
-
-    @GetMapping("/search-company")
-    public ResponseEntity<BaseResponse<Page<GetPopupStoreRes>>> searchCompany(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam int page,
-        @RequestParam int size) throws BaseException {
-        Page<GetPopupStoreRes> popupStoreResList = popupStoreService.searchCompany(customUserDetails, page, size);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_SEARCH_SUCCESS, popupStoreResList));
-    }
-
-    @PatchMapping("/update")
-    public ResponseEntity<BaseResponse> update(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam Long storeIdx,
-        @RequestPart(name = "dto") UpdatePopupStoreReq dto,
-        @RequestPart(name = "files") MultipartFile[] files) throws BaseException {
-        List<String> fileNames = cloudFileUpload.multipleUpload(files);
-        UpdatePopupStoreRes response = popupStoreService.update(customUserDetails, storeIdx, dto, fileNames);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_UPDATE_SUCCESS,response));
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<BaseResponse> delete(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam Long storeIdx) throws BaseException {
-        popupStoreService.delete(customUserDetails, storeIdx);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_DELETE_SUCCESS));
-    }
-
-    @GetMapping("/like")
-    public ResponseEntity<BaseResponse> like(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam Long storeIdx) throws BaseException {
-        popupStoreService.like(customUserDetails, storeIdx);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POPUP_STORE_LIKE_SUCCESS));
     }
 }

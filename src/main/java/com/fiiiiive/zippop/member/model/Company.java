@@ -29,6 +29,7 @@ public class Company {
     private Boolean enabled;
     private Boolean inactive;
     private String role;
+
     @OneToMany(mappedBy = "company")
     @JsonManagedReference
     private List<PopupStore> popupStoreList = new ArrayList<>();

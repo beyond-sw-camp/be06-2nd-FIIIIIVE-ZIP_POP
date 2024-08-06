@@ -20,6 +20,7 @@ public class PostImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postImageIdx;
     private String imageUrl;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

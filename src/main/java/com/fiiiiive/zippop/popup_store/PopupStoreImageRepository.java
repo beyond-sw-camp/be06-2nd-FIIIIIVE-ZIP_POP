@@ -10,7 +10,4 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PopupStoreImageRepository extends JpaRepository<PopupStoreImage, Long> {
-    @Query("SELECT psi FROM PopupStoreImage psi WHERE psi.popupStore.storeIdx = :storeIdx")
-    Optional<List<PopupStoreImage>> findByStoreIdx(Long storeIdx);
-}
+public interface PopupStoreImageRepository extends JpaRepository<PopupStoreImage, Long> { }

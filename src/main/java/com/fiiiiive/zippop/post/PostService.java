@@ -75,97 +75,9 @@ public class PostService {
                 .build();
     }
 
-    public Page<GetPostRes> searchCustomer(CustomUserDetails customUserDetails, int page, int size) throws BaseException {
-        Page<Post> result = postRepository.findByCustomerEmail(customUserDetails.getEmail(), PageRequest.of(page, size))
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_CUSTOMER_FAIL));
-        Page<GetPostRes> getPostResPage = result.map(post-> {
-        List<PostImage> postImages = post.getPostImageList();
-        List<GetPostImageRes> getPostImageResList = new ArrayList<>();
-        for (PostImage postImage : postImages) {
-            GetPostImageRes getPostImageRes = GetPostImageRes.builder()
-                    .postImageIdx(postImage.getPostImageIdx())
-                    .imageUrl(postImage.getImageUrl())
-                    .createdAt(post.getCreatedAt())
-                    .updatedAt(post.getUpdatedAt())
-                    .build();
-            getPostImageResList.add(getPostImageRes);
-        }
-        return GetPostRes.builder()
-                .postIdx(post.getPostIdx())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likeCount(post.getLikeCount())
-                .getPostImageResList(getPostImageResList)
-                .customerEmail(post.getCustomer().getEmail())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
-                .build();
-        });
-        return getPostResPage;
-    }
-
-    public Page<GetPostRes> searchAll(int page, int size) throws BaseException {
-        Page<Post> result = postRepository.findAll(PageRequest.of(page, size));
-        if (!result.hasContent()) {
-            throw new BaseException(BaseResponseMessage.POST_SEARCH_ALL_FAIL);
-        }
-        Page<GetPostRes> getPostResPage = result.map(post-> {
-        List<PostImage> postImages = post.getPostImageList();
-        List<GetPostImageRes> getPostImageResList = new ArrayList<>();
-        for (PostImage postImage : postImages) {
-            GetPostImageRes getPostImageRes = GetPostImageRes.builder()
-                    .postImageIdx(postImage.getPostImageIdx())
-                    .imageUrl(postImage.getImageUrl())
-                    .createdAt(post.getCreatedAt())
-                    .updatedAt(post.getUpdatedAt())
-                    .build();
-            getPostImageResList.add(getPostImageRes);
-        }
-        return GetPostRes.builder()
-                .postIdx(post.getPostIdx())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likeCount(post.getLikeCount())
-                .getPostImageResList(getPostImageResList)
-                .customerEmail(post.getCustomer().getEmail())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
-                .build();
-        });
-        return getPostResPage;
-    }
-
-    public Page<GetPostRes> searchRecommend(int page, int size, String keyword) throws BaseException {
-        Page<Post> result = postRepository.findByKeyword(keyword, PageRequest.of(page, size))
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_IDX_FAIL));
-        Page<GetPostRes> getPostResPage = result.map(post-> {
-            List<PostImage> postImages = post.getPostImageList();
-            List<GetPostImageRes> getPostImageResList = new ArrayList<>();
-            for (PostImage postImage : postImages) {
-                GetPostImageRes getPostImageRes = GetPostImageRes.builder()
-                        .postImageIdx(postImage.getPostImageIdx())
-                        .imageUrl(postImage.getImageUrl())
-                        .createdAt(post.getCreatedAt())
-                        .updatedAt(post.getUpdatedAt())
-                        .build();
-                getPostImageResList.add(getPostImageRes);
-            }
-            return GetPostRes.builder()
-                    .postIdx(post.getPostIdx())
-                    .title(post.getTitle())
-                    .content(post.getContent())
-                    .getPostImageResList(getPostImageResList)
-                    .customerEmail(post.getCustomer().getEmail())
-                    .createdAt(post.getCreatedAt())
-                    .updatedAt(post.getUpdatedAt())
-                    .build();
-        });
-        return getPostResPage;
-    }
-
     public GetPostRes search(Long postIdx) throws BaseException {
         Post post = postRepository.findByPostIdx(postIdx)
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_IDX_FAIL));
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_IDX_FAIL));
         List<PostImage> postImageList = post.getPostImageList();
         List<GetPostImageRes> getPostImageResList = new ArrayList<>();
         for(PostImage postImage: postImageList) {
@@ -187,6 +99,94 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .build();
+    }
+
+    public Page<GetPostRes> searchAll(int page, int size) throws BaseException {
+        Page<Post> result = postRepository.findAll(PageRequest.of(page, size));
+        if (!result.hasContent()) {
+            throw new BaseException(BaseResponseMessage.POST_SEARCH_ALL_FAIL);
+        }
+        Page<GetPostRes> getPostResPage = result.map(post-> {
+        List<PostImage> postImages = post.getPostImageList();
+        List<GetPostImageRes> getPostImageResList = new ArrayList<>();
+        for (PostImage postImage : postImages) {
+            GetPostImageRes getPostImageRes = GetPostImageRes.builder()
+                    .postImageIdx(postImage.getPostImageIdx())
+                    .imageUrl(postImage.getImageUrl())
+                    .createdAt(post.getCreatedAt())
+                    .updatedAt(post.getUpdatedAt())
+                    .build();
+            getPostImageResList.add(getPostImageRes);
+        }
+        return GetPostRes.builder()
+                .postIdx(post.getPostIdx())
+                .customerEmail(post.getCustomer().getEmail())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .likeCount(post.getLikeCount())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .getPostImageResList(getPostImageResList)
+                .build();
+        });
+        return getPostResPage;
+    }
+
+    public Page<GetPostRes> searchCustomer(CustomUserDetails customUserDetails, int page, int size) throws BaseException {
+        Page<Post> result = postRepository.findByCustomerEmail(customUserDetails.getEmail(), PageRequest.of(page, size))
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_CUSTOMER_FAIL));
+        Page<GetPostRes> getPostResPage = result.map(post-> {
+            List<PostImage> postImages = post.getPostImageList();
+            List<GetPostImageRes> getPostImageResList = new ArrayList<>();
+            for (PostImage postImage : postImages) {
+                GetPostImageRes getPostImageRes = GetPostImageRes.builder()
+                        .postImageIdx(postImage.getPostImageIdx())
+                        .imageUrl(postImage.getImageUrl())
+                        .createdAt(post.getCreatedAt())
+                        .updatedAt(post.getUpdatedAt())
+                        .build();
+                getPostImageResList.add(getPostImageRes);
+            }
+            return GetPostRes.builder()
+                    .postIdx(post.getPostIdx())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .likeCount(post.getLikeCount())
+                    .getPostImageResList(getPostImageResList)
+                    .customerEmail(post.getCustomer().getEmail())
+                    .createdAt(post.getCreatedAt())
+                    .updatedAt(post.getUpdatedAt())
+                    .build();
+        });
+        return getPostResPage;
+    }
+
+    public Page<GetPostRes> searchKeyword(String keyword, int page, int size) throws BaseException {
+        Page<Post> result = postRepository.findByKeyword(keyword, PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_SEARCH_BY_IDX_FAIL));
+        Page<GetPostRes> getPostResPage = result.map(post-> {
+            List<PostImage> postImages = post.getPostImageList();
+            List<GetPostImageRes> getPostImageResList = new ArrayList<>();
+            for (PostImage postImage : postImages) {
+                GetPostImageRes getPostImageRes = GetPostImageRes.builder()
+                        .postImageIdx(postImage.getPostImageIdx())
+                        .imageUrl(postImage.getImageUrl())
+                        .createdAt(post.getCreatedAt())
+                        .updatedAt(post.getUpdatedAt())
+                        .build();
+                getPostImageResList.add(getPostImageRes);
+            }
+            return GetPostRes.builder()
+                    .postIdx(post.getPostIdx())
+                    .customerEmail(post.getCustomer().getEmail())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .getPostImageResList(getPostImageResList)
+                    .createdAt(post.getCreatedAt())
+                    .updatedAt(post.getUpdatedAt())
+                    .build();
+        });
+        return getPostResPage;
     }
 
     public UpdatePostRes update(CustomUserDetails customUserDetails, Long postIdx, UpdatePostReq dto, List<String> fileNames) throws BaseException {
@@ -222,9 +222,9 @@ public class PostService {
                 .customerEmail(post.getCustomerEmail())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .getPostImageResList(getPostImageResList)
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
+                .getPostImageResList(getPostImageResList)
                 .build();
     }
 
@@ -243,7 +243,7 @@ public class PostService {
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_LIKE_FAIL_POST_NOT_FOUND));
         Customer customer = customerRepository.findById(customUserDetails.getIdx())
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POST_LIKE_FAIL_INVALID_MEMBER));
-        Optional<PostLike> result = postLikeRepository.findByCustomerIdxAndPostIdx(customUserDetails.getIdx(), postIdx);
+        Optional<PostLike> result = postLikeRepository.findByCustomerEmailAndPostIdx(customUserDetails.getEmail(), postIdx);
         if (result.isEmpty()) {
             post.setLikeCount(post.getLikeCount() + 1);
             postRepository.save(post);
@@ -255,7 +255,7 @@ public class PostService {
         } else {
             post.setLikeCount(post.getLikeCount() - 1);
             postRepository.save(post);
-            postLikeRepository.deleteByCustomerIdxAndPostIdx(customer.getCustomerIdx(), postIdx);
+            postLikeRepository.deleteByCustomerEmailAndPostIdx(customer.getEmail(), postIdx);
         }
     }
 }

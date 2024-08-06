@@ -27,6 +27,7 @@ public class Post {
     private String title;
     private String content;
     private Integer likeCount;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

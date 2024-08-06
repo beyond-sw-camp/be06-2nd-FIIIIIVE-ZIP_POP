@@ -20,6 +20,7 @@ public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postLikeIdx;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

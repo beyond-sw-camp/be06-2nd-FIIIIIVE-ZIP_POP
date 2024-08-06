@@ -56,9 +56,9 @@ public class CommentService {
                 .build();
     }
 
-    public Page<GetCommentRes> searchCustomer(int page, int size, CustomUserDetails customUserDetails) throws BaseException {
-        Page<Comment> result = commentRepository.findByCustomerIdx(customUserDetails.getIdx(), PageRequest.of(page, size))
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_FAIL));
+    public Page<GetCommentRes> searchAll(int page, int size, Long postIdx) throws BaseException {
+        Page<Comment> result = commentRepository.findByPostIdx(postIdx, PageRequest.of(page, size))
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_ALL_FAIL));
         Page<GetCommentRes> getCommentResPage = result.map(comment-> GetCommentRes.builder()
                 .commentIdx(comment.getCommentIdx())
                 .customerEmail(comment.getCustomer().getEmail())
@@ -70,9 +70,9 @@ public class CommentService {
         return getCommentResPage;
     }
 
-    public Page<GetCommentRes> searchAll(int page, int size, Long postIdx) throws BaseException {
-        Page<Comment> result = commentRepository.findByPostIdx(postIdx, PageRequest.of(page, size))
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_ALL_FAIL));
+    public Page<GetCommentRes> searchCustomer(int page, int size, CustomUserDetails customUserDetails) throws BaseException {
+        Page<Comment> result = commentRepository.findByCustomerEmail(customUserDetails.getEmail(), PageRequest.of(page, size))
+        .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_SEARCH_BY_CUSTOMER_FAIL));
         Page<GetCommentRes> getCommentResPage = result.map(comment-> GetCommentRes.builder()
                 .commentIdx(comment.getCommentIdx())
                 .customerEmail(comment.getCustomer().getEmail())
@@ -116,7 +116,7 @@ public class CommentService {
         .orElseThrow(() -> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_INVALID_MEMBER));
         Comment comment = commentRepository.findByCommentIdx(commentIdx)
         .orElseThrow(()-> new BaseException(BaseResponseMessage.COMMENT_LIKE_FAIL_COMMENT_NOT_FOUND));
-        Optional<CommentLike> result = commentLikeRepository.findByCustomerIdxAndCommentIdx(customUserDetails.getIdx(), commentIdx);
+        Optional<CommentLike> result = commentLikeRepository.findByCustomerEmailAndCommentIdx(customUserDetails.getEmail(), commentIdx);
         if(result.isEmpty()){
             comment.setLikeCount(comment.getLikeCount() + 1);
             commentRepository.save(comment);
@@ -128,7 +128,7 @@ public class CommentService {
         } else {
             comment.setLikeCount(comment.getLikeCount() - 1);
             commentRepository.save(comment);
-            commentLikeRepository.deleteByCustomerIdxAndCommentIdx(customer.getCustomerIdx(), commentIdx);
+            commentLikeRepository.deleteByCustomerEmailAndCommentIdx(customer.getEmail(), commentIdx);
         }
     }
 }

@@ -19,8 +19,8 @@ public class PopupGoodsImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long PopupGoodsImageIdx;
-    @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
     private String imageUrl;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

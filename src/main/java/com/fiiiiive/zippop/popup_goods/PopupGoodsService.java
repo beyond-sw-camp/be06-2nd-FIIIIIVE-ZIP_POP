@@ -33,8 +33,8 @@ import java.util.Optional;
 public class PopupGoodsService {
     private final PopupGoodsRepository popupGoodsRepository;
     private final PopupStoreRepository popupStoreRepository;
-    private final CompanyRepository companyRepository;
     private final PopupGoodsImageRepository popupGoodsImageRepository;
+
     public CreatePopupGoodsRes register(CustomUserDetails customUserDetails, Long storeIdx, List<String> fileNames, CreatePopupGoodsReq dto) throws BaseException {
         PopupStore popupStore = popupStoreRepository.findById(storeIdx)
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_GOODS_REGISTER_FAIL_STORE_NOT_FOUND));
@@ -76,9 +76,9 @@ public class PopupGoodsService {
                 .build();
     }
 
-    public Page<GetPopupGoodsRes> searchStore(Long storeIdx, int page, int size) throws BaseException {
-        Page<PopupGoods> result = popupGoodsRepository.findByStoreIdx(storeIdx, PageRequest.of(page, size))
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_GOODS_SEARCH_FAIL_STORE_NOT_NOT_FOUND));
+    public Page<GetPopupGoodsRes> search(String productName, int page, int size) throws BaseException {
+        Page<PopupGoods> result = popupGoodsRepository.findByProductName(productName, PageRequest.of(page, size))
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_GOODS_SEARCH_FAIL_STORE_NOT_NOT_FOUND));
         Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods ->{
             List<GetPopupGoodsImageRes> getPopupGoodsImageResList = new ArrayList<>();
             List<PopupGoodsImage> popupGoodsImageList = popupGoods.getPopupGoodsImageList();
@@ -104,8 +104,8 @@ public class PopupGoodsService {
         return getPopupGoodsResPage;
     }
 
-    public Page<GetPopupGoodsRes> search(String productName, int page, int size) throws BaseException {
-        Page<PopupGoods> result = popupGoodsRepository.findByProductName(productName, PageRequest.of(page, size))
+    public Page<GetPopupGoodsRes> searchStore(Long storeIdx, int page, int size) throws BaseException {
+        Page<PopupGoods> result = popupGoodsRepository.findByStoreIdx(storeIdx, PageRequest.of(page, size))
         .orElseThrow(() -> new BaseException(BaseResponseMessage.POPUP_GOODS_SEARCH_FAIL_STORE_NOT_NOT_FOUND));
         Page<GetPopupGoodsRes> getPopupGoodsResPage = result.map(popupGoods ->{
             List<GetPopupGoodsImageRes> getPopupGoodsImageResList = new ArrayList<>();

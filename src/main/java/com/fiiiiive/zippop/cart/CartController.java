@@ -36,20 +36,20 @@ public class CartController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_REGISTER_SUCCESS, response));
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<BaseResponse> count(
-        @AuthenticationPrincipal CustomUserDetails customUserDetails,
-        @RequestParam Long cartIdx,
-        @RequestParam Long operation) throws BaseException {
-        CountCartRes response  = cartService.count(customUserDetails, cartIdx, operation);
-        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_COUNT_SUCCESS, response));
-    }
-
     @GetMapping("/search-all")
     public ResponseEntity<BaseResponse> searchAll(
         @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
         List<GetCartRes> response = cartService.searchAll(customUserDetails);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_SEARCH_LIST_SUCESS, response));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<BaseResponse> count(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails,
+            @RequestParam Long cartIdx,
+            @RequestParam Long operation) throws BaseException {
+        CountCartRes response  = cartService.count(customUserDetails, cartIdx, operation);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.CART_COUNT_SUCCESS, response));
     }
 
     @DeleteMapping("/delete")

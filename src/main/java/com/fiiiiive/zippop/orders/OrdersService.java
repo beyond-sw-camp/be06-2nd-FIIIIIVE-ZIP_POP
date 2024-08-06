@@ -12,7 +12,7 @@ import com.fiiiiive.zippop.orders.model.CompanyOrders;
 import com.fiiiiive.zippop.orders.model.CustomerOrders;
 import com.fiiiiive.zippop.orders.model.CustomerOrdersDetail;
 import com.fiiiiive.zippop.orders.model.CompanyOrdersDetail;
-import com.fiiiiive.zippop.orders.model.response.GetOrdersRes;
+import com.fiiiiive.zippop.orders.model.response.VerifyOrdersRes;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsRepository;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.*;
 
@@ -49,7 +48,7 @@ public class OrdersService {
     private final PopupStoreRepository popupStoreRepository;
 
     @Transactional
-    public GetOrdersRes verify(CustomUserDetails customUserDetails, String impUid, Integer operation) throws BaseException, IamportResponseException, IOException {
+    public VerifyOrdersRes verify(CustomUserDetails customUserDetails, String impUid, Integer operation) throws BaseException, IamportResponseException, IOException {
         // 기업회원 등록 수수료 결제(operation = 0 )
         if (customUserDetails.getRole().equals("ROLE_COMPANY") && operation == 0) {
             Company company = companyRepository.findByCompanyEmail(customUserDetails.getEmail())
@@ -85,7 +84,7 @@ public class OrdersService {
                     .popupStore(popupStore)
                     .build();
             companyOrdersDetailRepository.save(companyOrdersDetail);
-            return GetOrdersRes.builder()
+            return VerifyOrdersRes.builder()
                     .impUid(impUid)
                     .storeIdx(storeIdx)
                     .totalPrice(expectedPrice)
@@ -150,7 +149,8 @@ public class OrdersService {
             }
             if (!payedPrice.equals(totalPurchasePrice)){
                 throw new BaseException(POPUP_GOODS_PAY_FAIL_VALIDATION_ERROR);
-            } else {
+            }
+            else {
                 customerRepository.save(customer);
                 CustomerOrders customerOrders = CustomerOrders.builder()
                         .impUid(impUid)
@@ -184,7 +184,7 @@ public class OrdersService {
                         customerOrdersDetailRepository.save(customerOrdersDetail);
                     }
                 }
-                return GetOrdersRes.builder()
+                return VerifyOrdersRes.builder()
                         .impUid(impUid)
                         .productIdxMap(goodsMap)
                         .totalPrice(totalPurchasePrice)
@@ -194,5 +194,13 @@ public class OrdersService {
             throw new BaseException(POPUP_PAY_FAIL_NOT_INVALID);
         }
     }
+
+//    public List<VerifyOrdersRes> searchCustomer(CustomUserDetails customUserDetails) throws BaseException {
+//        List<CompanyOrders> companyOrders =
+//    }
+//
+//    public List<VerifyOrdersRes> searchCustomer(CustomUserDetails customUserDetails) throws BaseException {
+//
+//    }
 }
 

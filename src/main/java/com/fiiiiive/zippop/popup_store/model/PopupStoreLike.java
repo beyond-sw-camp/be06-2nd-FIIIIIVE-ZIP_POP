@@ -21,6 +21,7 @@ public class PopupStoreLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long storeLikeIdx;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

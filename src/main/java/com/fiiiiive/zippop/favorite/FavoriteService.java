@@ -30,7 +30,7 @@ public class FavoriteService {
         .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_MEMBER_NOT_FOUND)));
         PopupStore popupStore = popupStoreRepository.findById(storeIdx)
         .orElseThrow(() -> (new BaseException(BaseResponseMessage.FAVORITE_ACTIVE_FAIL_STORE_NOT_FOUND)));
-        Optional<Favorite> result = favoriteRepository.findByCustomerIdxAndStoreIdx(customUserDetails.getIdx(), storeIdx);
+        Optional<Favorite> result = favoriteRepository.findByCustomerEmailAndStoreIdx(customUserDetails.getEmail(), storeIdx);
         if(result.isPresent()){
             Favorite favorite = result.get();
             favoriteRepository.deleteById(favorite.getFavoriteIdx());
@@ -44,11 +44,10 @@ public class FavoriteService {
     }
 
     public List<GetFavoriteRes> list(CustomUserDetails customUserDetails) throws BaseException {
-        List<Favorite> favoriteList = favoriteRepository.findAllByCustomerIdx(customUserDetails.getIdx())
+        List<Favorite> favoriteList = favoriteRepository.findAllByCustomerEmail(customUserDetails.getEmail())
         .orElseThrow(()->new BaseException(BaseResponseMessage.FAVORITE_SEARCH_ALL_FAIL));
         List<GetFavoriteRes> getFavoriteResList = new ArrayList<>();
         for(Favorite favorite: favoriteList){
-
             GetFavoriteRes getFavoriteRes = GetFavoriteRes.builder()
                     .popupStore(favorite.getPopupStore())
                     .build();

@@ -19,18 +19,12 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "cart")
-@EntityListeners(AuditingEntityListener.class)
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartIdx;
     private Integer itemCount;
     private Integer itemPrice;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerIdx")

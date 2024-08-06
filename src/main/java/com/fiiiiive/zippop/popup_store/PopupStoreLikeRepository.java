@@ -13,11 +13,11 @@ public interface PopupStoreLikeRepository extends JpaRepository<PopupStoreLike, 
     @Query("SELECT psl FROM PopupStoreLike psl " +
             "JOIN FETCH psl.customer " +
             "JOIN FETCH psl.popupStore " +
-            "WHERE psl.customer.customerIdx = :customerIdx AND psl.popupStore.storeIdx = :storeIdx")
-    Optional<PopupStoreLike> findByCustomerIdxAndStoreIdx(Long customerIdx, Long storeIdx);
+            "WHERE psl.customer.email = :customerEmail AND psl.popupStore.storeIdx = :storeIdx")
+    Optional<PopupStoreLike> findByCustomerEmailAndStoreIdx(String customerEmail, Long storeIdx);
 
     @Modifying
     @Query("DELETE FROM PopupStoreLike psl " +
-            "WHERE psl.customer.customerIdx = :customerIdx AND psl.popupStore.storeIdx = :storeIdx")
-    void deleteByCustomerIdxAndStoreIdx(Long customerIdx, Long storeIdx);
+            "WHERE psl.customer.email = :customerEmail AND psl.popupStore.storeIdx = :storeIdx")
+    void deleteByCustomerEmailAndStoreIdx(String customerEmail, Long storeIdx);
 }

@@ -21,6 +21,7 @@ public class PopupStoreImage {
     private Long storeImageIdx;
     @Column(columnDefinition="varchar(255) CHARACTER SET UTF8")
     private String imageUrl;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

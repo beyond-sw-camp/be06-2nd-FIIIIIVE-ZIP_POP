@@ -47,6 +47,8 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_IDX_SUCCESS, response));
     }
 
+    // 게시글 전체 조회
+    // @ExeTimer
     @GetMapping("/search-all")
     public ResponseEntity<BaseResponse<Page<GetPostRes>>> searchAll(
         @RequestParam int page,
@@ -55,15 +57,19 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_ALL_SUCCESS, response));
     }
 
-    @GetMapping("/search-recommend")
-    public ResponseEntity<BaseResponse<List<GetPostRes>>> searchRecommend(
+    // 게시글 키워드 검색
+    // @ExeTimer
+    @GetMapping("/search-keyword")
+    public ResponseEntity<BaseResponse<List<GetPostRes>>> searchKeyword(
         @RequestParam int page,
         @RequestParam int size,
         @RequestParam String keyword) throws BaseException {
-        Page<GetPostRes> response = postService.searchRecommend(page, size, keyword);
+        Page<GetPostRes> response = postService.searchKeyword(keyword, page, size);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_KEYWORD_SUCCESS, response));
     }
 
+    // 고객 기반 게시물 조회
+    // @ExeTimer
     @GetMapping("/search-customer")
     public ResponseEntity<BaseResponse<Page<GetPostRes>>> searchCustomer(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -73,6 +79,7 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_SEARCH_BY_CUSTOMER_SUCCESS, response));
     }
 
+    // 게시글 수정
     @PatchMapping("/update")
     public ResponseEntity<BaseResponse> update(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -84,6 +91,7 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_UPDATE_SUCCESS,response));
     }
 
+    // 게시글 삭제
     @DeleteMapping("/delete")
     public ResponseEntity<BaseResponse> delete(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -92,7 +100,7 @@ public class PostController {
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.POST_DELETE_SUCCESS));
     }
 
-    // 게시글 추천: postLikeCount에 대한 동시성 제어는 자원소모에 비해 중요도가 떨어지므로 고려하지 않는다.
+    // 게시글 좋아요
     @GetMapping("/like")
     public ResponseEntity<BaseResponse> like(
         @AuthenticationPrincipal CustomUserDetails customUserDetails,

@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetPopupReviewRes {
     private Long reviewIdx;
+    private String customerEmail;
     private String reviewTitle;
     private String reviewContent;
     private Integer rating;
