@@ -1,6 +1,7 @@
 package com.fiiiiive.zippop.favorite.model.response;
 
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
+import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
 import lombok.*;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetFavoriteRes {
-    private PopupStore popupStore;
+    private GetPopupStoreRes getPopupStoreRes;
 }

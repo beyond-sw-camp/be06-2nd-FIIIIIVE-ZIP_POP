@@ -33,8 +33,8 @@ public class PopupStore {
     private String storeName;
     private String storeAddress;
     private String storeContent;
-    private LocalDateTime storeStartDate;
-    private LocalDateTime storeEndDate;
+    private String storeStartDate;
+    private String storeEndDate;
     private String category;
     private Integer totalPeople;
     private Integer likeCount;
