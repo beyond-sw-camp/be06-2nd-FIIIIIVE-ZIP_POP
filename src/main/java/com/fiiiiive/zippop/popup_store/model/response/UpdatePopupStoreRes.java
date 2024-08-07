@@ -20,8 +20,8 @@ public class UpdatePopupStoreRes {
     private String category;
     private Integer likeCount;
     private Integer totalPeople;
-    private LocalDateTime storeStartDate;
-    private LocalDateTime storeEndDate;
+    private String storeStartDate;
+    private String storeEndDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<GetPopupStoreImageRes> getPopupStoreImageResList = new ArrayList<>();

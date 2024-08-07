@@ -15,6 +15,6 @@ public class UpdatePopupStoreReq {
     private String storeContent;
     private String category;
     private Integer totalPeople;
-    private LocalDateTime storeStartDate;
-    private LocalDateTime storeEndDate;
+    private String storeStartDate;
+    private String storeEndDate;
 }
