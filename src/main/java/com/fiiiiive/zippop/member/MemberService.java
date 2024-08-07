@@ -9,6 +9,7 @@ import com.fiiiiive.zippop.member.model.request.EditInfoReq;
 import com.fiiiiive.zippop.member.model.request.EditPasswordReq;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
 import com.fiiiiive.zippop.member.model.response.GetPointRes;
+import com.fiiiiive.zippop.member.model.response.GetProfileRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -275,6 +276,10 @@ public class MemberService {
                 .customer_idx(customer.getCustomerIdx())
                 .point(customer.getPoint())
                 .build();
+    }
+    public GetProfileRes getProfile(CustomUserDetails customUserDetails) {
+
+        return new GetProfileRes(customUserDetails.getUsername(), customUserDetails.getEmail());
     }
 
 }

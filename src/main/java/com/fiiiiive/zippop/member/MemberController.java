@@ -7,6 +7,7 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.request.EditInfoReq;
 import com.fiiiiive.zippop.member.model.request.EditPasswordReq;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
+import com.fiiiiive.zippop.member.model.response.GetProfileRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,10 @@ public class MemberController {
         @RequestBody EditPasswordReq dto) throws BaseException {
         memberService.editPassword(customUserDetails, dto);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EDIT_PASSWORD_SUCCESS));
+    }
+    @GetMapping("/profile")
+    public ResponseEntity<BaseResponse<GetProfileRes>> getProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        GetProfileRes profile = memberService.getProfile(customUserDetails);
+        return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_PROFILE_SUCCESS,profile));
     }
 }

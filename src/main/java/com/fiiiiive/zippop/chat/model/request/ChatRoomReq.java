@@ -6,5 +6,5 @@ import lombok.Data;
 public class ChatRoomReq {
 
     private String name;
-
+    private String companyEmail;
 }

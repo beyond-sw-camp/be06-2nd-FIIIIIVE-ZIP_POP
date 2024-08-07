@@ -11,8 +11,6 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,27 +31,18 @@ public class ChatroomController {
     }
 
     @PostMapping("/rooms")
-    public BaseResponse<ChatRoom> createRoom(@RequestBody ChatRoomReq dto, @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
-        String email = customUserDetails.getEmail();
-
-        return chatService.createChatRoom(dto, email);
+    public BaseResponse<ChatRoomDto> createRoom(@RequestBody ChatRoomReq dto, @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
+        String customerEmail = customUserDetails.getEmail();
+        String companyEmail = dto.getCompanyEmail();
+        return chatService.createChatRoom(dto, customerEmail, companyEmail);
     }
 
-    @PostMapping("/rooms/verify")
-    public ResponseEntity<?> createRoomWithVerification(@RequestBody ChatRoomReq dto, @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
-        String role = customUserDetails.getRole();
-        if ("ROLE_COMPANY".equals(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("기업회원은 채팅방을 생성할 수 없습니다.");
-        }
-        String email = customUserDetails.getEmail();
-        BaseResponse<ChatRoom> response = chatService.createChatRoom(dto, email);
-        return ResponseEntity.ok(response);
-    }
 
     @GetMapping("/rooms")
-    public BaseResponse<List<ChatRoom>> getChatRooms(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
+    public BaseResponse<List<ChatRoomDto>> getChatRooms(@AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException {
         String email = customUserDetails.getEmail();
-        return chatService.getChatRooms(email);
+        String role = customUserDetails.getRole();
+        return chatService.getChatRooms(email, role);
     }
 
     @PostMapping("/rooms/{roomName}/messages")
@@ -66,6 +55,7 @@ public class ChatroomController {
     @GetMapping("/rooms/{roomName}/messages")
     public BaseResponse<List<ChatMessage>> getMessagesWithFetchJoin(@PathVariable String roomName) throws BaseException {
         return chatService.getMessagesWithFetchJoin(roomName);
+
     }
 
     @GetMapping("/user")
