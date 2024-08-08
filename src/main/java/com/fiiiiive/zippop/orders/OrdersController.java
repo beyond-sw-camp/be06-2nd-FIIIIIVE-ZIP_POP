@@ -5,6 +5,8 @@ import com.fiiiiive.zippop.common.exception.BaseException;
 import com.fiiiiive.zippop.common.responses.BaseResponse;
 import com.fiiiiive.zippop.common.responses.BaseResponseMessage;
 import com.fiiiiive.zippop.member.model.CustomUserDetails;
+import com.fiiiiive.zippop.orders.model.response.GetCompanyOrdersRes;
+import com.fiiiiive.zippop.orders.model.response.GetCustomerOrdersRes;
 import com.fiiiiive.zippop.orders.model.response.VerifyOrdersRes;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,19 +35,20 @@ public class OrdersController {
         return new BaseResponse(BaseResponseMessage.POPUP_PAY_SUCCESS,response);
     }
 
-//    // 고객 주문 조회
-//    @GetMapping("/search-customer")
-//    public BaseResponse<List<VerifyOrdersRes>> searchCustomer(
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails )throws BaseException {
-//        List<VerifyOrdersRes> response = ordersService.searchCustomer(customUserDetails);
-//        return new BaseResponse(BaseResponseMessage.POPUP_ORDERS_SEARCH_SUCCESS,response);
-//    }
-////
-//    @GetMapping("/search-customer")
-//    public BaseResponse<List<VerifyOrdersRes>> searchCompany(
-//        @AuthenticationPrincipal CustomUserDetails customUserDetails )throws BaseException {
-//        List<VerifyOrdersRes> response = ordersService.searchCompany(customUserDetails);
-//        return new BaseResponse(BaseResponseMessage.POPUP_ORDERS_SEARCH_SUCCESS,response);
-//    }
+    // 고객 주문 조회
+    @GetMapping("/search-customer")
+    public BaseResponse<List<VerifyOrdersRes>> searchCustomer(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails )throws BaseException {
+        List<GetCustomerOrdersRes> response = ordersService.searchCustomer(customUserDetails);
+        return new BaseResponse(BaseResponseMessage.POPUP_ORDERS_SEARCH_SUCCESS,response);
+    }
+
+    // 기업 주문 조회
+    @GetMapping("/search-company")
+    public BaseResponse<List<VerifyOrdersRes>> searchCompany(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails )throws BaseException {
+        List<GetCompanyOrdersRes> response = ordersService.searchCompany(customUserDetails);
+        return new BaseResponse(BaseResponseMessage.POPUP_ORDERS_SEARCH_SUCCESS,response);
+    }
 
 }

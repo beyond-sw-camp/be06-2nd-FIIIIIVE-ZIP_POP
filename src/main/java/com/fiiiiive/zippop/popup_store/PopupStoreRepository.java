@@ -24,7 +24,6 @@ public interface PopupStoreRepository extends JpaRepository<PopupStore, Long> {
     @Query("SELECT ps FROM PopupStore ps " +
             "WHERE ps.storeAddress LIKE %:keyword% " +
             "OR ps.storeName LIKE %:keyword% " +
-            "OR ps.storeAddress LIKE %:keyword% " +
             "OR ps.category LIKE %:keyword% " +
             "OR ps.companyEmail LIKE %:keyword%")
     Optional<Page<PopupStore>> findByKeyword(@Param("keyword") String keyword, Pageable pageable);

@@ -12,11 +12,13 @@ import com.fiiiiive.zippop.orders.model.CompanyOrders;
 import com.fiiiiive.zippop.orders.model.CustomerOrders;
 import com.fiiiiive.zippop.orders.model.CustomerOrdersDetail;
 import com.fiiiiive.zippop.orders.model.CompanyOrdersDetail;
-import com.fiiiiive.zippop.orders.model.response.VerifyOrdersRes;
+import com.fiiiiive.zippop.orders.model.response.*;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsRepository;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import com.fiiiiive.zippop.popup_store.PopupStoreRepository;
 import com.fiiiiive.zippop.popup_store.model.PopupStore;
+import com.fiiiiive.zippop.popup_store.model.response.GetPopupStoreRes;
 import com.google.gson.Gson;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.fiiiiive.zippop.common.responses.BaseResponseMessage.*;
 
@@ -133,7 +136,7 @@ public class OrdersService {
                 for (String key : goodsMap.keySet()) {
                     Integer purchaseGoodsPrice = goodsMap.get(key).intValue();
                     PopupGoods popupGoods = popupGoodsRepository.findByIdx(Long.parseLong(key))
-                            .orElseThrow(() -> new BaseException(POPUP_GOODS_PAY_GOODS_NULL));
+                    .orElseThrow(() -> new BaseException(POPUP_GOODS_PAY_GOODS_NULL));
                     if (purchaseGoodsPrice > popupGoods.getProductAmount()) {
                         throw new BaseException(POPUP_GOODS_PAY_FAIL_EXCEEDED);
                     }
@@ -152,37 +155,42 @@ public class OrdersService {
             }
             else {
                 customerRepository.save(customer);
-                CustomerOrders customerOrders = CustomerOrders.builder()
-                        .impUid(impUid)
-                        .totalPrice(totalPurchasePrice)
-                        .usedPoint(usedPoint)
-                        .customer(customer)
-                        .build();
+                CustomerOrders customerOrders = null;
+                if(operation == 1){
+                    customerOrders = CustomerOrders.builder()
+                            .impUid(impUid)
+                            .totalPrice(totalPurchasePrice)
+                            .orderState("in reserve")
+                            .deliveryCost(0)
+                            .usedPoint(usedPoint)
+                            .customer(customer)
+                            .build();
+                } else {
+                    customerOrders = CustomerOrders.builder()
+                            .impUid(impUid)
+                            .totalPrice(totalPurchasePrice)
+                            .orderState("in delivery")
+                            .deliveryCost(2500)
+                            .usedPoint(usedPoint)
+                            .customer(customer)
+                            .build();
+                }
                 customerOrdersRepository.save(customerOrders);
                 for (String key : goodsMap.keySet()) {
                     Integer purchaseGoodsAmount = goodsMap.get(key).intValue();
-                    PopupGoods popupGoods = popupGoodsRepository.findById(Long.parseLong(key)).orElseThrow(() -> new BaseException(POPUP_GOODS_PAY_GOODS_NULL));
+                    PopupGoods popupGoods = popupGoodsRepository.findById(Long.parseLong(key))
+                    .orElseThrow(() -> new BaseException(POPUP_GOODS_PAY_GOODS_NULL));
                     popupGoods.setProductAmount(popupGoods.getProductAmount() - purchaseGoodsAmount);
                     popupGoodsRepository.save(popupGoods);
-                }
-                for (PopupGoods popupGoods : popupGoodsList) {
-                    if (operation == 1) {
-                        CustomerOrdersDetail customerOrdersDetail = CustomerOrdersDetail.builder()
-                                .orderState("in reserve")
-                                .customerOrders(customerOrders)
-                                .deliveryCost(0)
-                                .popupGoods(popupGoods)
-                                .build();
-                        customerOrdersDetailRepository.save(customerOrdersDetail);
-                    } else {
-                        CustomerOrdersDetail customerOrdersDetail = CustomerOrdersDetail.builder()
-                                .orderState("in delivery")
-                                .customerOrders(customerOrders)
-                                .deliveryCost(2500)
-                                .popupGoods(popupGoods)
-                                .build();
-                        customerOrdersDetailRepository.save(customerOrdersDetail);
-                    }
+                    // 배송지 정보는 없음
+                    String uuid = UUID.randomUUID().toString();
+                    CustomerOrdersDetail customerOrdersDetail = CustomerOrdersDetail.builder()
+                            .eachPrice(popupGoods.getProductPrice() * purchaseGoodsAmount)
+                            .trackingNumber(uuid)
+                            .customerOrders(customerOrders)
+                            .popupGoods(popupGoods)
+                            .build();
+                    customerOrdersDetailRepository.save(customerOrdersDetail);
                 }
                 return VerifyOrdersRes.builder()
                         .impUid(impUid)
@@ -195,12 +203,90 @@ public class OrdersService {
         }
     }
 
-//    public List<VerifyOrdersRes> searchCustomer(CustomUserDetails customUserDetails) throws BaseException {
-//        List<CompanyOrders> companyOrders =
-//    }
-//
-//    public List<VerifyOrdersRes> searchCustomer(CustomUserDetails customUserDetails) throws BaseException {
-//
-//    }
+    public List<GetCustomerOrdersRes> searchCustomer(CustomUserDetails customUserDetails) throws BaseException {
+        Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
+        .orElseThrow(() -> new BaseException(POPUP_PAY_FAIL_NOT_INVALID));
+        List<CustomerOrders> customerOrdersList = customerOrdersRepository.findByCustomerIdx(customUserDetails.getIdx())
+        .orElseThrow(() -> new BaseException(POPUP_PAY_SEARCH_FAIL_NOT_FOUND));
+        List<GetCustomerOrdersRes> getCustomerOrdersResList = new ArrayList<>();
+        for(CustomerOrders customerOrders : customerOrdersList){
+            List<CustomerOrdersDetail> customerOrdersDetailList = customerOrders.getCustomerOrdersDetailList();
+            List<GetCustomerOrdersDetailRes> getCustomerOrdersDetailResList = new ArrayList<>();
+            for(CustomerOrdersDetail customerOrdersDetail : customerOrdersDetailList){
+                PopupGoods popupGoods = customerOrdersDetail.getPopupGoods();
+                GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
+                        .productIdx(popupGoods.getProductIdx())
+                        .productName(popupGoods.getProductName())
+                        .productPrice(popupGoods.getProductPrice())
+                        .productContent(popupGoods.getProductContent())
+                        .productAmount(popupGoods.getProductAmount())
+                        .build();
+                GetCustomerOrdersDetailRes getCustomerOrdersDetailRes = GetCustomerOrdersDetailRes.builder()
+                        .companyOrdersDetailIdx(customerOrdersDetail.getCustomerOrderDetailIdx())
+                        .eachPrice(customerOrdersDetail.getEachPrice())
+                        .trackingNumber(customerOrdersDetail.getTrackingNumber())
+                        .getPopupGoodsRes(getPopupGoodsRes)
+                        .build();
+                getCustomerOrdersDetailResList.add(getCustomerOrdersDetailRes);
+            }
+            GetCustomerOrdersRes getCustomerOrdersRes = GetCustomerOrdersRes.builder()
+                    .customerOrdersIdx(customerOrders.getCustomerOrdersIdx())
+                    .impUid(customerOrders.getImpUid())
+                    .usedPoint(customerOrders.getUsedPoint())
+                    .totalPrice(customerOrders.getTotalPrice())
+                    .orderState(customerOrders.getOrderState())
+                    .deliveryCost(customerOrders.getDeliveryCost())
+                    .createdAt(customerOrders.getCreatedAt())
+                    .updatedAt(customerOrders.getUpdatedAt())
+                    .getCustomerOrdersDetailResList(getCustomerOrdersDetailResList)
+                    .build();
+            getCustomerOrdersResList.add(getCustomerOrdersRes);
+        }
+        return getCustomerOrdersResList;
+    }
+
+    public List<GetCompanyOrdersRes> searchCompany(CustomUserDetails customUserDetails) throws BaseException {
+        Company company = companyRepository.findByCompanyEmail(customUserDetails.getEmail())
+        .orElseThrow(() -> new BaseException(POPUP_PAY_SEARCH_FAIL_INVALID_MEMBER));
+        List<CompanyOrders> companyOrdersList = companyOrdersRepository.findByCompanyIdx(customUserDetails.getIdx())
+        .orElseThrow(() -> new BaseException(POPUP_PAY_SEARCH_FAIL_NOT_FOUND));
+        List<GetCompanyOrdersRes> getCompanyOrdersResList = new ArrayList<>();
+        for(CompanyOrders companyOrders : companyOrdersList){
+            List<CompanyOrdersDetail> companyOrdersDetailList = companyOrders.getCompanyOrdersDetailList();
+            List<GetCompanyOrdersDetailRes> getCompanyOrdersDetailResList = new ArrayList<>();
+            for(CompanyOrdersDetail companyOrdersDetail : companyOrdersDetailList) {
+                PopupStore popupStore = companyOrdersDetail.getPopupStore();
+                GetPopupStoreRes getPopupStoreRes = GetPopupStoreRes.builder()
+                        .storeIdx(popupStore.getStoreIdx())
+                        .companyEmail(popupStore.getCompanyEmail())
+                        .storeName(popupStore.getStoreName())
+                        .storeContent(popupStore.getStoreContent())
+                        .storeAddress(popupStore.getStoreAddress())
+                        .category(popupStore.getCategory())
+                        .likeCount(popupStore.getLikeCount())
+                        .totalPeople(popupStore.getTotalPeople())
+                        .storeStartDate(popupStore.getStoreStartDate())
+                        .storeEndDate(popupStore.getStoreEndDate())
+                        .build();
+                GetCompanyOrdersDetailRes getCompanyOrdersDetailRes = GetCompanyOrdersDetailRes.builder()
+                        .companyOrdersDetailIdx(companyOrdersDetail.getCompanyOrderDetailIdx())
+                        .totalPrice(companyOrdersDetail.getTotalPrice())
+                        .getPopupStoreRes(getPopupStoreRes)
+                        .createdAt(companyOrdersDetail.getCreatedAt())
+                        .updatedAt(companyOrdersDetail.getUpdatedAt())
+                        .build();
+                getCompanyOrdersDetailResList.add(getCompanyOrdersDetailRes);
+            }
+            GetCompanyOrdersRes getCompanyOrdersRes = GetCompanyOrdersRes.builder()
+                    .companyOrdersIdx(companyOrders.getCompanyOrdersIdx())
+                    .impUid(companyOrders.getImpUid())
+                    .createdAt(companyOrders.getCreatedAt())
+                    .updatedAt(companyOrders.getUpdatedAt())
+                    .getCompanyOrdersDetailResList(getCompanyOrdersDetailResList)
+                    .build();
+            getCompanyOrdersResList.add(getCompanyOrdersRes);
+        }
+        return getCompanyOrdersResList;
+    }
 }
 
