@@ -20,6 +20,7 @@ public class GetPostRes {
     private String title;
     private String content;
     private Integer likeCount;
+    private Integer commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<GetPostImageRes> getPostImageResList;

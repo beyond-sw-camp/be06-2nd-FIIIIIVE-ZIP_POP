@@ -21,8 +21,7 @@ public class CustomerOrdersDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerOrderDetailIdx;
-    private String orderState;
-    private Integer deliveryCost;
+    private Integer eachPrice;
     private String trackingNumber;
 
     @CreatedDate

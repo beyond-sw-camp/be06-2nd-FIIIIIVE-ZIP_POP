@@ -27,6 +27,8 @@ public class CustomerOrders {
     private String impUid;
     private Integer usedPoint;
     private Integer totalPrice;
+    private String orderState;
+    private Integer deliveryCost;
 
     @CreatedDate
     private LocalDateTime createdAt;

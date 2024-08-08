@@ -139,8 +139,8 @@ public enum BaseResponseMessage {
     POPUP_GOODS_PAY_FAIL_VALIDATION_ERROR(false, 4404, "결제 금액이 잘못되었습니다."),
     POPUP_GOODS_PAY_FAIL_NOT_FOUND_MEMBER(false, 4408, "결제 정보에 해당하는 유저가 없습니다."),
     POPUP_ORDERS_SEARCH_SUCCESS(true, 4409, "결제 내역 조회에 성공했습니다."),
-
-
+    POPUP_PAY_SEARCH_FAIL_INVALID_MEMBER(false, 4410, "해당 사용자를 찾을 수 없어 결제 내역을 불러올 수 없습니다."),
+    POPUP_PAY_SEARCH_FAIL_NOT_FOUND(false, 4411, "결제 내역 조회를 불러올 수 없습니다."),
 
 
     // ========================================================================================================================

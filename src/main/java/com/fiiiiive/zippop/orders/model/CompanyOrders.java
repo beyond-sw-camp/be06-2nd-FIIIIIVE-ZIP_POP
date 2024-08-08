@@ -37,5 +37,4 @@ public class CompanyOrders {
     private Company company;
     @OneToMany(mappedBy = "companyOrders")
     private List<CompanyOrdersDetail> companyOrdersDetailList = new ArrayList<>();
-
 }
