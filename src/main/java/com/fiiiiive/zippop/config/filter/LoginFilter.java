@@ -62,6 +62,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 //        out.println("{\"role\":\"" + role + "\", \"isSuccess\": true, \"accessToken\": \"" + token + "\"}");
         String token = jwtUtil.createToken(idx, username, role);
 //        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+
+
+        // JSON 응답으로 토큰과 역할 정보를 함께 전송
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.print("{\"token\": \"" + token + "\", \"role\": \"" + role + "\"}");
+        writer.flush();
+
+
         Cookie aToken = new Cookie("ATOKEN", token);
         aToken.setHttpOnly(true);
         aToken.setSecure(true);
