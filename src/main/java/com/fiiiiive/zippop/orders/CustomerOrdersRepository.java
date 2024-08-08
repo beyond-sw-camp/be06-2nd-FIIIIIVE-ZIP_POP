@@ -11,6 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerOrdersRepository extends JpaRepository<CustomerOrders, Long> {
-    @Query("SELECT co FROM customerOrders co JOIN FETCH co.customer c WHERE c.customerIdx = :customerIdx")
+    @Query("SELECT co FROM CustomerOrders co JOIN FETCH co.customer c WHERE c.customerIdx = :customerIdx")
     Optional<List<CustomerOrders>> findByCustomerIdx(Long customerIdx);
 }
