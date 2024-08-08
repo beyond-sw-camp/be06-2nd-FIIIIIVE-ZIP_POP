@@ -54,29 +54,24 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         CustomUserDetails member = (CustomUserDetails)authResult.getPrincipal();
         Long idx = member.getIdx();
-        String username = member.getUsername();
+        String email = member.getEmail();
+        String name = member.getName();
         String role = member.getRole();
-        log.info(idx + " " + role + " " + username);
-//        response.addHeader("Authorization", "Bearer " + token);
-//        PrintWriter out = response.getWriter();
-//        out.println("{\"role\":\"" + role + "\", \"isSuccess\": true, \"accessToken\": \"" + token + "\"}");
-        String token = jwtUtil.createToken(idx, username, role);
-//        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-
-
-        // JSON 응답으로 토큰과 역할 정보를 함께 전송
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter writer = response.getWriter();
-        writer.print("{\"token\": \"" + token + "\", \"role\": \"" + role + "\"}");
-        writer.flush();
-
-
-        Cookie aToken = new Cookie("ATOKEN", token);
+        log.info(idx + " " + role + " " + email);
+        String aTokenString = jwtUtil.createToken(idx, email, role);
+        Cookie aToken = new Cookie("ATOKEN", aTokenString);
         aToken.setHttpOnly(true);
         aToken.setSecure(true);
         aToken.setPath("/");
         aToken.setMaxAge(60 * 60 * 1);
         response.addCookie(aToken);
+        String combinedValue = name + "|" + role;
+        System.out.println(combinedValue);
+        Cookie uToken = new Cookie("UTOKEN", combinedValue);
+        uToken.setHttpOnly(false);
+        uToken.setSecure(false);
+        uToken.setPath("/");
+        uToken.setMaxAge(60 * 60 * 1); // 여기도 1시간으로 설정
+        response.addCookie(uToken);
     }
 }

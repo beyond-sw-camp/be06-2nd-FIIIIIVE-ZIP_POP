@@ -15,6 +15,7 @@ public class CustomUserDetails implements UserDetails {
     @Getter
     private final Long idx;
     private final String email;
+    private final String name;
     private final String password;
     private final String role;
     private final Boolean enabled;
@@ -23,6 +24,7 @@ public class CustomUserDetails implements UserDetails {
         this.idx = idx;
         this.email = email;
         this.role = role;
+        this.name = null;
         this.password = null;
         this.enabled = null;
     }
@@ -38,6 +40,7 @@ public class CustomUserDetails implements UserDetails {
         });
         return collection;
     }
+    public String getName(){ return name; }
 
     @Override
     public String getPassword() {

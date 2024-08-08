@@ -36,14 +36,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         aToken.setMaxAge(60 * 60 * 1);
         response.addCookie(aToken);
         super.onAuthenticationSuccess(request, response, authentication);
-//        getRedirectStrategy().sendRedirect(request, response, "http://localhost/test.html");
-        if ("ROLE_COMPANY".equals(role)) {
-            getRedirectStrategy().sendRedirect(request, response, "/managermypage");
-        } else if ("ROLE_CUSTOMER".equals(role)) {
-            getRedirectStrategy().sendRedirect(request, response, "/mypage");
-        } else {
-            getRedirectStrategy().sendRedirect(request, response, "/");
-        }
     }
-    }
+}
 

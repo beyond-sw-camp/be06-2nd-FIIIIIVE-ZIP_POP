@@ -23,6 +23,7 @@ public class CustomUserDetailService implements UserDetailsService {
             Customer customer = resultCustomer.get();
             return CustomUserDetails.builder()
                     .idx(customer.getCustomerIdx())
+                    .name(customer.getName())
                     .email(customer.getEmail())
                     .password(customer.getPassword())
                     .role(customer.getRole())
@@ -34,6 +35,7 @@ public class CustomUserDetailService implements UserDetailsService {
                 Company company = resultCompany.get();
                 return CustomUserDetails.builder()
                         .idx(company.getCompanyIdx())
+                        .name(company.getName())
                         .email(company.getEmail())
                         .password(company.getPassword())
                         .role(company.getRole())
