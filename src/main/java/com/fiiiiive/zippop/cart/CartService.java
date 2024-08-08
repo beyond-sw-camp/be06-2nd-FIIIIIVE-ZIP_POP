@@ -12,6 +12,7 @@ import com.fiiiiive.zippop.member.model.CustomUserDetails;
 import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.popup_goods.PopupGoodsRepository;
 import com.fiiiiive.zippop.popup_goods.model.PopupGoods;
+import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsImageRes;
 import com.fiiiiive.zippop.popup_goods.model.response.GetPopupGoodsRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -31,9 +33,9 @@ public class CartService {
 
     public CreateCartRes register(CustomUserDetails customUserDetails, CreateCartReq dto) throws BaseException {
         Customer customer = customerRepository.findByCustomerEmail(customUserDetails.getEmail())
-        .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_REGISTER_FAIL_MEMBER_NOT_FOUND)));
+                .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_REGISTER_FAIL_MEMBER_NOT_FOUND)));
         PopupGoods popupGoods = popupGoodsRepository.findById(dto.getProductIdx())
-        .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_REGISTER_FAIL_GOODS_NOT_FOUND)));
+                .orElseThrow(() -> (new BaseException(BaseResponseMessage.CART_REGISTER_FAIL_GOODS_NOT_FOUND)));
         Optional<Cart> result = cartRepository.findByCustomerEmailAndProductIdx(customUserDetails.getEmail(), dto.getProductIdx());
         if(result.isPresent()){ throw new BaseException(BaseResponseMessage.CART_REGISTER_FAIL_EXIST); }
         Cart cart = Cart.builder()
@@ -52,23 +54,39 @@ public class CartService {
                 .build();
     }
 
+
     public List<GetCartRes> searchAll(CustomUserDetails customUserDetails) throws BaseException {
         List<Cart> cartList = cartRepository.findAllByCustomerEmail(customUserDetails.getEmail())
-        .orElseThrow(() -> new BaseException(BaseResponseMessage.CART_SEARCH_FAIL));
+                .orElseThrow(() -> new BaseException(BaseResponseMessage.CART_SEARCH_FAIL));
         List<GetCartRes> getCartResList = new ArrayList<>();
         for(Cart cart: cartList){
+            PopupGoods popupGoods = cart.getPopupGoods();
+            List<GetPopupGoodsImageRes> imageResList = popupGoods.getPopupGoodsImageList().stream()
+                    .map(image -> GetPopupGoodsImageRes.builder()
+                            .productImageIdx(image.getPopupGoodsImageIdx())
+                            .imageUrl(image.getImageUrl())
+                            .createdAt(image.getCreatedAt())
+                            .updatedAt(image.getUpdatedAt())
+                            .build())
+                    .collect(Collectors.toList());
+
             GetPopupGoodsRes getPopupGoodsRes = GetPopupGoodsRes.builder()
-                    .productIdx(cart.getPopupGoods().getProductIdx())
-                    .productName(cart.getPopupGoods().getProductName())
-                    .productPrice(cart.getPopupGoods().getProductPrice())
-                    .productContent(cart.getPopupGoods().getProductContent())
-                    .productAmount(cart.getPopupGoods().getProductAmount())
+                    .productIdx(popupGoods.getProductIdx())
+                    .productName(popupGoods.getProductName())
+                    .productPrice(popupGoods.getProductPrice())
+                    .productContent(popupGoods.getProductContent())
+                    .productAmount(popupGoods.getProductAmount())
+                    .createdAt(popupGoods.getCreatedAt())
+                    .updatedAt(popupGoods.getUpdatedAt())
+                    .getPopupGoodsImageResList(imageResList)
                     .build();
+
             GetCartRes getCartRes = GetCartRes.builder()
                     .cartIdx(cart.getCartIdx())
                     .getPopupGoodsRes(getPopupGoodsRes)
                     .itemCount(cart.getItemCount())
                     .itemPrice(cart.getItemPrice())
+
                     .build();
             getCartResList.add(getCartRes);
         }

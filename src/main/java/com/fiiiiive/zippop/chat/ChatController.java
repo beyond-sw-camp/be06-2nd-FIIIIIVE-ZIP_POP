@@ -1,3 +1,4 @@
+
 package com.fiiiiive.zippop.chat;
 
 import com.fiiiiive.zippop.chat.chatmessage.ChatMessage;
@@ -51,3 +52,4 @@ public class ChatController {
         return chatMessage;
     }
 }
+

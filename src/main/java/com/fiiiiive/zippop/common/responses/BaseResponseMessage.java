@@ -46,7 +46,9 @@ public enum BaseResponseMessage {
     MEMBER_EDIT_PASSWORD_SUCCESS(true, 2050, "계정 비밀번호 변경에 성공했습니다."),
     MEMBER_EDIT_PASSWORD_FAIL(false, 2051, "계정 비밀번호 변경에 실패했습니다."),
     MEMBER_EDIT_PASSWORD_FAIL_PASSWORD_NOT_MATCH(false, 2052, "계정 비밃번호가 틀립니다."),
-
+    // 프로필 정보 2070
+    MEMBER_PROFILE_SUCCESS(true,2070,"프로필 조회에 성공했습니다"),
+    MEMBER_PROFILE_FAIL(true,2071,"프로필 조회에 실패했습니다"),
     // ========================================================================================================================
     // 팝업 스토어 3000
     // 팝업 스토어 등록 3000
