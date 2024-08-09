@@ -10,6 +10,10 @@ import com.fiiiiive.zippop.member.model.request.PostSignupReq;
 import com.fiiiiive.zippop.member.model.response.GetProfileRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +72,7 @@ public class MemberController {
         memberService.editPassword(customUserDetails, dto);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_EDIT_PASSWORD_SUCCESS));
     }
+
     @GetMapping("/profile")
     public ResponseEntity<BaseResponse<GetProfileRes>> getProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
         GetProfileRes profile = memberService.getProfile(customUserDetails);

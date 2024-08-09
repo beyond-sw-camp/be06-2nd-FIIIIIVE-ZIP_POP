@@ -66,7 +66,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         aToken.setMaxAge(60 * 60 * 1);
         response.addCookie(aToken);
         String combinedValue = name + "|" + role;
-        System.out.println(combinedValue);
+        log.info(combinedValue);
         Cookie uToken = new Cookie("UTOKEN", combinedValue);
         uToken.setHttpOnly(false);
         uToken.setSecure(false);
