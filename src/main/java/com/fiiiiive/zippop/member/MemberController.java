@@ -74,7 +74,8 @@ public class MemberController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<BaseResponse<GetProfileRes>> getProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+    public ResponseEntity<BaseResponse<GetProfileRes>> getProfile(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) throws BaseException{
         GetProfileRes profile = memberService.getProfile(customUserDetails);
         return ResponseEntity.ok(new BaseResponse(BaseResponseMessage.MEMBER_PROFILE_SUCCESS,profile));
     }

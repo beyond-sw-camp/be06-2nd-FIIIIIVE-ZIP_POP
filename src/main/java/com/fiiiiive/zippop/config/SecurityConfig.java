@@ -54,7 +54,6 @@ public class SecurityConfig {
         );
         http.addFilter(corsFilter());
         http.oauth2Login((config) -> {
-            config.loginProcessingUrl("api/v1/oauth/kakao");
             config.successHandler(oAuth2AuthenticationSuccessHandler);
             config.userInfoEndpoint((endpoint) -> endpoint.userService(customOAuth2Service));
         });
