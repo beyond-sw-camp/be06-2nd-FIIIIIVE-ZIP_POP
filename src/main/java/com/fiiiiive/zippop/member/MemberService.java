@@ -8,27 +8,17 @@ import com.fiiiiive.zippop.member.model.Customer;
 import com.fiiiiive.zippop.member.model.request.EditInfoReq;
 import com.fiiiiive.zippop.member.model.request.EditPasswordReq;
 import com.fiiiiive.zippop.member.model.request.PostSignupReq;
-import com.fiiiiive.zippop.member.model.response.GetPointRes;
 import com.fiiiiive.zippop.member.model.response.GetProfileRes;
 import com.fiiiiive.zippop.member.model.response.PostSignupRes;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -270,16 +260,28 @@ public class MemberService {
             }
         }
     }
-    public GetPointRes getUserPoints(Long customerIdx) {
-        Customer customer = customerRepository.findById(customerIdx).orElseThrow(() -> new RuntimeException("User not found"));
-        return GetPointRes.builder()
-                .customer_idx(customer.getCustomerIdx())
-                .point(customer.getPoint())
-                .build();
-    }
-    public GetProfileRes getProfile(CustomUserDetails customUserDetails) {
 
-        return new GetProfileRes(customUserDetails.getUsername(), customUserDetails.getEmail());
+    public GetProfileRes getProfile(CustomUserDetails customUserDetails) throws BaseException {
+        if(Objects.equals(customUserDetails.getRole(), "ROLE_CUSTOMER")){
+            Customer customer = customerRepository.findById(customUserDetails.getIdx())
+            .orElseThrow(() -> new BaseException(BaseResponseMessage.MEMBER_PROFILE_FAIL));
+            return GetProfileRes.builder()
+                    .name(customer.getName())
+                    .point(customer.getPoint())
+                    .email(customer.getEmail())
+                    .phoneNumber(customer.getPhoneNumber())
+                    .address(customer.getAddress())
+                    .build();
+        } else{
+            Company company = companyRepository.findById(customUserDetails.getIdx())
+            .orElseThrow(() -> new BaseException(BaseResponseMessage.MEMBER_PROFILE_FAIL));
+            return GetProfileRes.builder()
+                    .name(company.getName())
+                    .crn(company.getCrn())
+                    .email(company.getEmail())
+                    .phoneNumber(company.getPhoneNumber())
+                    .address(company.getAddress())
+                    .build();
+        }
     }
-
 }
