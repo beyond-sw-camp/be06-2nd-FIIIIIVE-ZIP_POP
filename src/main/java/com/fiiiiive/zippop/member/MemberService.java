@@ -34,12 +34,12 @@ public class MemberService {
     private final EmailVerifyRepository emailVerifyRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public PostSignupRes signup(PostSignupReq request) throws BaseException {
-        if(request.getCrn() != null && Objects.equals(request.getRole(), "ROLE_COMPANY")){
-            if(customerRepository.findByCustomerEmail(request.getEmail()).isPresent()) {
+    public PostSignupRes signup(PostSignupReq dto) throws BaseException {
+        if(dto.getCrn() != null && Objects.equals(dto.getRole(), "ROLE_COMPANY")){
+            if(customerRepository.findByCustomerEmail(dto.getEmail()).isPresent()) {
                 throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_CUSTOMER);
             }
-            Optional<Company> result = companyRepository.findByCompanyEmail(request.getEmail());
+            Optional<Company> result = companyRepository.findByCompanyEmail(dto.getEmail());
             if(result.isPresent()){
                 Company company = result.get();
                 if(!company.getEnabled() && company.getInactive()) {
@@ -55,28 +55,30 @@ public class MemberService {
                 }
             } else{
                 Company company = Company.builder()
-                        .email(request.getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .name(request.getName())
-                        .crn(request.getCrn())
-                        .role(request.getRole())
+                        .email(dto.getEmail())
+                        .password(passwordEncoder.encode(dto.getPassword()))
+                        .name(dto.getName())
+                        .crn(dto.getCrn())
+                        .role(dto.getRole())
+                        .address(dto.getAddress())
+                        .phoneNumber(dto.getPhoneNumber())
                         .enabled(false)
                         .inactive(false)
                         .build();
                 companyRepository.save(company);
                 return PostSignupRes.builder()
                         .idx(company.getCompanyIdx())
-                        .role(request.getRole())
+                        .role(dto.getRole())
                         .enabled(company.getEnabled())
                         .inactive(company.getInactive())
-                        .email(request.getEmail())
+                        .email(dto.getEmail())
                         .build();
             }
         } else {
-            if(companyRepository.findByCompanyEmail(request.getEmail()).isPresent()) {
+            if(companyRepository.findByCompanyEmail(dto.getEmail()).isPresent()) {
                 throw new BaseException(BaseResponseMessage.MEMBER_REGISTER_FAIL_ALREADY_REGISTER_AS_COMPANY);
             }
-            Optional<Customer> result = customerRepository.findByCustomerEmail(request.getEmail());
+            Optional<Customer> result = customerRepository.findByCustomerEmail(dto.getEmail());
             if(result.isPresent()){
                 Customer customer = result.get();
                 if(!customer.getEnabled() && customer.getInactive()){
@@ -93,10 +95,12 @@ public class MemberService {
                 }
             } else {
                 Customer customer = Customer.builder()
-                        .email(request.getEmail())
-                        .password(passwordEncoder.encode(request.getPassword()))
-                        .name(request.getName())
-                        .role(request.getRole())
+                        .email(dto.getEmail())
+                        .password(passwordEncoder.encode(dto.getPassword()))
+                        .name(dto.getName())
+                        .role(dto.getRole())
+                        .address(dto.getAddress())
+                        .phoneNumber(dto.getPhoneNumber())
                         .point(3000)
                         .enabled(false)
                         .inactive(false)
