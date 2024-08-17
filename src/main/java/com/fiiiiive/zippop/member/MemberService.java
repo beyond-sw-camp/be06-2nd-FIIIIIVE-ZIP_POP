@@ -186,6 +186,7 @@ public class MemberService {
             if(result.isPresent()) {
                 Customer customer = result.get();
                 customer.setEnabled(false);
+                customer.setInactive(true);
                 if(customer.getPassword() == null){
                     customerRepository.save(customer);
                 } else {
